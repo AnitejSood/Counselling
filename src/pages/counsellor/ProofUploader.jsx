@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useData } from '../../context/DataContext';
 import {
   ShieldCheck, Upload, CheckCircle2, Award, FileText,
-  Plus, Trash2, ExternalLink, AlertCircle, Eye
+  Plus, Trash2, ExternalLink, AlertCircle, Eye, Hash
 } from 'lucide-react';
 import { PageHeader } from '../../components/ui/PageHeader';
 import { EmptyState } from '../../components/ui/EmptyState';
@@ -76,36 +76,38 @@ export const ProofUploader = () => {
     showMsg('Document added to student record!');
   };
 
-  const myDocs = documents; // All docs counsellor manages
+  const verifiedCount = verifiedProofs.length;
 
   return (
-    <div className="space-y-8 max-w-5xl mx-auto animate-fade-in">
+    <div className="space-y-8 max-w-5xl mx-auto font-sans">
       <PageHeader
-        eyebrow="Placement Verification"
-        title="Offer Letter Audit & Proof Centre"
-        subtitle="Upload verified offer letters to grow your verified placement count. Manage all student documents."
+        eyebrow="Placement Verification & Proof Counter"
+        title="Offer Letter Audit & Verified Proof Counter"
+        subtitle="Upload verified offer letters to grow your verified placement count."
       />
 
+      {/* Proof Counter Banner */}
+      <div className="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm flex items-center justify-between">
+        <div className="flex items-center gap-4">
+          <div className="w-14 h-14 rounded-2xl bg-emerald-100 border border-emerald-200 text-emerald-700 flex items-center justify-center font-black text-xl">
+            {verifiedCount}
+          </div>
+          <div>
+            <span className="text-[10px] font-extrabold uppercase text-emerald-700 tracking-wider">Verified Placement Proof Counter</span>
+            <h3 className="text-lg font-bold text-slate-900">{verifiedCount} Official Offer Letters Verified</h3>
+            <p className="text-xs text-slate-500">Displayed on your public marketplace profile badge.</p>
+          </div>
+        </div>
+        <span className="px-3 py-1 bg-emerald-50 text-emerald-800 rounded-full text-xs font-bold border border-emerald-200">
+          Audit Verified Active
+        </span>
+      </div>
+
       {notice && (
-        <div className="flex items-center gap-2 p-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-bold animate-fade-in">
+        <div className="flex items-center gap-2 p-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-bold animate-in fade-in">
           <CheckCircle2 className="w-4 h-4" /> {notice}
         </div>
       )}
-
-      {/* Why This Matters */}
-      <div className="card p-5 bg-gradient-to-r from-emerald-50 to-teal-50 border-emerald-100 flex items-start gap-4">
-        <div className="w-10 h-10 rounded-2xl bg-emerald-100 border border-emerald-200 flex items-center justify-center shrink-0">
-          <Award className="w-5 h-5 text-emerald-600" />
-        </div>
-        <div>
-          <h3 className="text-sm font-bold text-slate-900">Why submit proof?</h3>
-          <p className="text-xs text-slate-600 mt-1 leading-relaxed">
-            Every verified placement proof increases your public <strong>"Verified Placements"</strong> badge count, 
-            boosts your marketplace ranking, and builds student trust. Students can see verified outcomes on your profile — 
-            this is your most powerful credibility signal.
-          </p>
-        </div>
-      </div>
 
       {/* Tabs */}
       <div className="flex gap-2">
@@ -113,8 +115,8 @@ export const ProofUploader = () => {
           <button
             key={tab}
             onClick={() => setActiveTab(tab)}
-            className={`px-4 py-2 rounded-xl text-[11px] font-bold capitalize transition ${
-              activeTab === tab ? 'bg-emerald-600 text-white' : 'bg-white border border-slate-200 text-slate-600 hover:border-emerald-300'
+            className={`px-4 py-2 rounded-xl text-xs font-bold capitalize transition ${
+              activeTab === tab ? 'bg-emerald-600 text-white shadow-md' : 'bg-white border border-slate-200 text-slate-600 hover:border-emerald-300'
             }`}
           >
             {tab === 'upload' ? 'Upload Proof' : tab === 'documents' ? 'Student Documents' : 'Proof History'}
@@ -124,33 +126,33 @@ export const ProofUploader = () => {
 
       {/* ─── Upload Proof Tab ─── */}
       {activeTab === 'upload' && (
-        <div className="card p-7 space-y-6">
+        <div className="bg-white rounded-3xl p-7 border border-slate-200 shadow-sm space-y-6">
           <h2 className="text-sm font-bold text-slate-900">Submit New Offer Letter / Admission Proof</h2>
           <form onSubmit={handleUploadProof} className="space-y-5">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
               <div>
-                <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-1.5">Student Full Name *</label>
+                <label className="block text-[11px] font-bold uppercase text-slate-500 mb-1.5">Student Full Name *</label>
                 <input required type="text" value={proofForm.studentName}
                   onChange={e => setProofForm(p => ({ ...p, studentName: e.target.value }))}
-                  placeholder="e.g. Rohan Mehta" className="input" />
+                  placeholder="e.g. Rohan Mehta" className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200" />
               </div>
               <div>
-                <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-1.5">University / Institution *</label>
+                <label className="block text-[11px] font-bold uppercase text-slate-500 mb-1.5">University / Institution *</label>
                 <input required type="text" value={proofForm.universityName}
                   onChange={e => setProofForm(p => ({ ...p, universityName: e.target.value }))}
-                  placeholder="e.g. Imperial College London" className="input" />
+                  placeholder="e.g. Imperial College London" className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200" />
               </div>
               <div>
-                <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-1.5">Program & Degree *</label>
+                <label className="block text-[11px] font-bold uppercase text-slate-500 mb-1.5">Program & Degree *</label>
                 <input required type="text" value={proofForm.program}
                   onChange={e => setProofForm(p => ({ ...p, program: e.target.value }))}
-                  placeholder="e.g. MS in Artificial Intelligence" className="input" />
+                  placeholder="e.g. MS in Artificial Intelligence" className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200" />
               </div>
               <div>
-                <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-1.5">Intake Year</label>
+                <label className="block text-[11px] font-bold uppercase text-slate-500 mb-1.5">Intake Year</label>
                 <input type="text" value={proofForm.intakeYear}
                   onChange={e => setProofForm(p => ({ ...p, intakeYear: e.target.value }))}
-                  placeholder="e.g. Fall 2026" className="input" />
+                  placeholder="e.g. Fall 2026" className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200" />
               </div>
             </div>
 
@@ -160,15 +162,7 @@ export const ProofUploader = () => {
               onChange={v => setProofForm(p => ({ ...p, fileName: v }))}
             />
 
-            <div className="p-4 rounded-2xl bg-amber-50 border border-amber-200 flex items-start gap-3">
-              <AlertCircle className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
-              <p className="text-xs text-amber-700">
-                Documents submitted here go to the <strong>AspirantHQ Verification Desk</strong> for audit within 24–48 hours.
-                After verification, your public profile's "Verified Placements" count increases automatically.
-              </p>
-            </div>
-
-            <button type="submit" className="btn btn-primary w-full justify-center text-sm py-3">
+            <button type="submit" className="w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-bold text-xs shadow-md transition flex items-center justify-center gap-2">
               <ShieldCheck className="w-4 h-4" /> Submit for Verification Audit
             </button>
           </form>
@@ -177,57 +171,20 @@ export const ProofUploader = () => {
 
       {/* ─── Student Documents Tab ─── */}
       {activeTab === 'documents' && (
-        <div className="card overflow-hidden">
-          <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100">
-            <h2 className="text-sm font-bold text-slate-900">Student Document Records ({myDocs.length})</h2>
-            <button onClick={() => setShowDocForm(!showDocForm)} className="btn btn-secondary py-1.5 px-3 text-[11px]">
-              <Plus className="w-3.5 h-3.5" /> Add Document Record
+        <div className="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden">
+          <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 bg-slate-50">
+            <h2 className="text-sm font-bold text-slate-900">Student Document Records ({documents.length})</h2>
+            <button onClick={() => setShowDocForm(!showDocForm)} className="px-3 py-1.5 bg-slate-900 text-white rounded-xl text-xs font-bold">
+              + Add Document Record
             </button>
           </div>
 
-          {showDocForm && (
-            <form onSubmit={handleAddDoc} className="border-b border-slate-200 p-5 bg-emerald-50/30 space-y-3 animate-slide-up">
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                <div>
-                  <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-1">Document Name *</label>
-                  <input required type="text" value={docForm.name} onChange={e => setDocForm(p => ({ ...p, name: e.target.value }))} className="input" placeholder="e.g. B.Tech Transcript" />
-                </div>
-                <div>
-                  <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-1">Category</label>
-                  <select value={docForm.category} onChange={e => setDocForm(p => ({ ...p, category: e.target.value }))} className="input">
-                    <option>Offer Letter</option>
-                    <option>Academic Transcript</option>
-                    <option>SOP Draft</option>
-                    <option>LOR</option>
-                    <option>Visa Documents</option>
-                    <option>Scholarship Letter</option>
-                    <option>Other</option>
-                  </select>
-                </div>
-                <div>
-                  <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-1">Student Name</label>
-                  <input type="text" value={docForm.studentName} onChange={e => setDocForm(p => ({ ...p, studentName: e.target.value }))} className="input" placeholder="Student name" />
-                </div>
-              </div>
-              <div className="flex justify-end gap-2">
-                <button type="button" onClick={() => setShowDocForm(false)} className="btn btn-ghost">Cancel</button>
-                <button type="submit" className="btn btn-primary">Add Record</button>
-              </div>
-            </form>
-          )}
-
           <div className="divide-y divide-slate-100">
-            {myDocs.length === 0 && (
-              <EmptyState icon={FileText} title="No documents" message="Add student document records above." />
-            )}
-            {myDocs.map(doc => (
+            {documents.map(doc => (
               <div key={doc.id} className="px-6 py-4 flex items-center justify-between gap-3">
                 <div>
-                  <p className="text-xs font-bold text-slate-900">{doc.name}</p>
+                  <p className="text-xs font-bold text-slate-900">{doc.title || doc.name}</p>
                   <p className="text-[11px] text-slate-500">{doc.category} · {doc.uploadedAt}</p>
-                  {doc.counsellorComment && (
-                    <p className="text-[11px] text-indigo-700 bg-indigo-50 rounded-lg px-2 py-1 mt-1">{doc.counsellorComment}</p>
-                  )}
                 </div>
                 <div className="flex items-center gap-2">
                   <select
@@ -238,7 +195,6 @@ export const ProofUploader = () => {
                     <option>Under Review</option>
                     <option>Verified</option>
                     <option>Changes Required</option>
-                    <option>Rejected</option>
                   </select>
                 </div>
               </div>
@@ -249,28 +205,23 @@ export const ProofUploader = () => {
 
       {/* ─── History Tab ─── */}
       {activeTab === 'history' && (
-        <div className="card overflow-hidden">
-          <div className="px-6 py-4 border-b border-slate-100">
+        <div className="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden">
+          <div className="px-6 py-4 border-b border-slate-100 bg-slate-50">
             <h2 className="text-sm font-bold text-slate-900">Verified Proof Audit History ({verifiedProofs.length})</h2>
           </div>
-          {verifiedProofs.length === 0 ? (
-            <EmptyState icon={ShieldCheck} title="No verified proofs yet" message="Submit your first offer letter above to start building your track record." />
-          ) : (
-            <div className="divide-y divide-slate-100">
-              {verifiedProofs.map(prf => (
-                <div key={prf.id} className="px-6 py-4 flex items-center justify-between gap-3">
-                  <div>
-                    <p className="text-xs font-bold text-slate-900">{prf.studentName} → {prf.universityName}</p>
-                    <p className="text-[11px] text-slate-500">{prf.program} · Uploaded {prf.uploadedAt}</p>
-                    <p className="text-[10px] text-slate-400 mt-0.5">Verified by: {prf.verifiedBy}</p>
-                  </div>
-                  <span className="badge badge-emerald">
-                    <ShieldCheck className="w-3 h-3" /> {prf.verificationStatus}
-                  </span>
+          <div className="divide-y divide-slate-100">
+            {verifiedProofs.map(prf => (
+              <div key={prf.id} className="px-6 py-4 flex items-center justify-between gap-3 text-xs">
+                <div>
+                  <p className="font-bold text-slate-900">{prf.studentName} → {prf.universityName}</p>
+                  <p className="text-[11px] text-slate-500">{prf.program} · Uploaded {prf.uploadedAt}</p>
                 </div>
-              ))}
-            </div>
-          )}
+                <span className="px-3 py-1 bg-emerald-100 text-emerald-800 rounded-full font-bold">
+                  {prf.verificationStatus}
+                </span>
+              </div>
+            ))}
+          </div>
         </div>
       )}
     </div>

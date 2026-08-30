@@ -117,13 +117,56 @@ export const MOCK_ESCROW_BOOKINGS = [
     studentName: "Rohan Mehta",
     counsellorId: "counsellor_01",
     counsellorName: "Arti Sood",
-    serviceTitle: "1-on-1 University Strategy & Shortlist",
-    amount: 25000,
-    escrowStatus: "HELD_IN_ESCROW",
+    serviceTitle: "Comprehensive End-to-End Admissions Package",
+    amount: 65000,
+    platformCut: 6500,
+    counsellorPayout: 58500,
+    escrowStatus: "RELEASE_REQUESTED",
+    maxSessions: 5,
+    completedSessionsCount: 3,
+    requestNotes: "Completed Stage 1-3 milestones and 3 1-on-1 strategy sessions.",
     sessionDate: "2026-08-10",
     sessionTime: "11:00 AM",
-    meetingLink: "https://meet.jit.si/AspirantHQ_Session_901",
+    meetingLink: "https://meet.google.com/aspiranthq-1on1-meet",
     createdAt: "2026-08-04"
+  },
+  {
+    id: "bk_902",
+    studentId: "std_102",
+    studentName: "Simran Kaur",
+    counsellorId: "counsellor_01",
+    counsellorName: "Arti Sood",
+    serviceTitle: "SOP & Essay Mentorship Package",
+    amount: 15000,
+    platformCut: 1500,
+    counsellorPayout: 13500,
+    escrowStatus: "HELD_IN_ESCROW",
+    maxSessions: 3,
+    completedSessionsCount: 1,
+    requestNotes: null,
+    sessionDate: "2026-08-15",
+    sessionTime: "04:00 PM",
+    meetingLink: "https://meet.google.com/aspiranthq-sop-review",
+    createdAt: "2026-08-02"
+  },
+  {
+    id: "bk_903",
+    studentId: "std_103",
+    studentName: "Ananya Sharma",
+    counsellorId: "counsellor_01",
+    counsellorName: "Arti Sood",
+    serviceTitle: "1-on-1 Hourly Strategy & Profile Audit",
+    amount: 25000,
+    platformCut: 2500,
+    counsellorPayout: 22500,
+    escrowStatus: "RELEASED_TO_COUNSELLOR",
+    maxSessions: 4,
+    completedSessionsCount: 4,
+    requestNotes: "All 4 sessions delivered successfully.",
+    sessionDate: "2026-07-28",
+    sessionTime: "02:00 PM",
+    meetingLink: "https://meet.google.com/aspiranthq-completed",
+    createdAt: "2026-07-15"
   }
 ];
 
@@ -181,9 +224,23 @@ export const MOCK_PIPELINE_STUDENTS = [
     needsAttention: true,
     profileCompletion: 85,
     lastContact: "2026-08-04",
+    personalInfo: { fullName: "Rohan Mehta", phone: "+91 98200 11223", city: "Mumbai", state: "Maharashtra", nationality: "Indian" },
+    academicBackground: { degreeName: "B.Tech Computer Engineering", institutionName: "IIT Bombay", graduationYear: "2026", gpaOrPercentage: "8.85 / 10.0" },
+    interestsAndGoals: { preferredIntake: "Fall 2027", budgetRangeAnnual: "$45,000 - $60,000", preferredCountries: ["United States", "United Kingdom", "Canada"] },
+    assignedTests: ['riasec', 'bigFive', 'learningStyle'],
+    milestones: [
+      { id: "m1_101", stageNumber: 1, title: "Initial Profile Assessment & Goal Alignment", status: "COMPLETED", dueDate: "2026-06-15", notes: "Review career interests & academic GPA.", tasks: ["Complete Intake Form", "Upload Class 10/12 Marksheets"] },
+      { id: "m2_101", stageNumber: 2, title: "RIASEC & Psychometric Career Evaluation", status: "COMPLETED", dueDate: "2026-06-25", notes: "Complete RIASEC & Big Five personality tests.", tasks: ["Take RIASEC Quiz", "Review Holland Code IRC"] },
+      { id: "m3_101", stageNumber: 3, title: "Target Country & Program Fit Scoring", status: "COMPLETED", dueDate: "2026-07-10", notes: "Analyze tuition budget & post-study work permits.", tasks: ["Select US/Canada/UK preference", "Set $50k budget ceiling"] },
+      { id: "m4_101", stageNumber: 4, title: "Upload Academic Transcripts & SOP Draft 1", status: "IN_PROGRESS", dueDate: "2026-07-25", notes: "Counsellor Arti Sood requested 6th-sem transcript & SOP outline.", tasks: ["Upload B.Tech Semester 1-6 Transcripts", "Submit SOP Draft Outline for review", "Schedule 1-on-1 strategy call"] }
+    ],
     applications: [
-      { school: "Carnegie Mellon University", program: "MS in CS", deadline: "2026-08-12", status: "In Progress", fitScore: "Dream (92%)" },
-      { school: "Imperial College London", program: "MS AI", deadline: "2026-07-30", status: "Admitted", fitScore: "Target (94%)", proofVerified: true }
+      { id: "app_101_1", universityName: "Carnegie Mellon University", courseName: "MS in Computer Science", country: "United States", applicationDeadline: "2026-08-12", status: "In Progress" },
+      { id: "app_101_2", universityName: "Imperial College London", courseName: "MS in Artificial Intelligence", country: "United Kingdom", applicationDeadline: "2026-07-30", status: "Admitted" }
+    ],
+    recommendations: [
+      { id: "rec_101_1", name: "Stanford University — M.S. Artificial Intelligence", category: "Dream School", description: "World-class NLP & computer vision research labs." },
+      { id: "rec_101_2", name: "University of Toronto — M.Sc. Applied Computing", category: "Target School", description: "Top AI faculty with 3-year PGWP work visa." }
     ]
   },
   {
@@ -207,8 +264,155 @@ export const MOCK_PIPELINE_STUDENTS = [
     needsAttention: false,
     profileCompletion: 70,
     lastContact: "2026-08-02",
+    personalInfo: { fullName: "Simran Kaur", phone: "+91 98111 44556", city: "Delhi", state: "Delhi NCR", nationality: "Indian" },
+    academicBackground: { degreeName: "B.Com Honors (Finance)", institutionName: "Delhi University (SRCC)", graduationYear: "2025", gpaOrPercentage: "8.20 / 10.0" },
+    interestsAndGoals: { preferredIntake: "Fall 2027", budgetRangeAnnual: "£35,000 - £50,000", preferredCountries: ["United Kingdom", "France"] },
+    assignedTests: ['bigFive', 'workValues', 'eqLeadership'],
+    milestones: [
+      { id: "m1_102", stageNumber: 1, title: "GMAT Score Verification (720 Target)", status: "COMPLETED", dueDate: "2026-06-01", notes: "Official GMAT 720 score verified.", tasks: ["Submit GMAT Official Report", "Submit Work Resume"] },
+      { id: "m2_102", stageNumber: 2, title: "LBS & INSEAD Leadership Essays", status: "IN_PROGRESS", dueDate: "2026-08-10", notes: "Draft short-term & long-term career goal essays.", tasks: ["Draft Essay 1: Global Leadership Journey", "Draft Essay 2: Career Impact"] }
+    ],
     applications: [
-      { school: "London Business School", program: "MFA", deadline: "2026-08-25", status: "Under Review", fitScore: "Dream (88%)" }
+      { id: "app_102_1", universityName: "London Business School", courseName: "Masters in Financial Analysis", country: "United Kingdom", applicationDeadline: "2026-08-25", status: "Under Review" }
+    ],
+    recommendations: [
+      { id: "rec_102_1", name: "INSEAD — Master in Management", category: "Dream School", description: "Top global business school with dual Europe & Asia campus." },
+      { id: "rec_102_2", name: "HEC Paris — MSc International Finance", category: "Target School", description: "#1 ranked finance master's program in Europe." }
+    ]
+  },
+  {
+    id: "std_103",
+    studentId: "std_103",
+    fullName: "Ananya Sharma",
+    name: "Ananya Sharma",
+    email: "ananya.sharma@example.com",
+    phone: "+91 98765 11223",
+    avatarUrl: "https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&q=80&w=400",
+    targetGoal: "B.S. Data Science & FinTech",
+    targetTrack: "Study abroad admissions",
+    targetIntake: "Fall 2027",
+    targetDegree: "Bachelor of Science",
+    targetCountries: "US, Australia",
+    currentStage: "Document Verification",
+    deadlineUrgency: "High (Due in 3 days)",
+    schoolsCount: 5,
+    submittedCount: 3,
+    admitsCount: 2,
+    needsAttention: true,
+    profileCompletion: 92,
+    lastContact: "2026-08-05",
+    personalInfo: { fullName: "Ananya Sharma", phone: "+91 98765 11223", city: "Bengaluru", state: "Karnataka", nationality: "Indian" },
+    academicBackground: { degreeName: "Class 12 CBSE (PCM)", institutionName: "National Public School", graduationYear: "2026", gpaOrPercentage: "95.4%" },
+    interestsAndGoals: { preferredIntake: "Fall 2027", budgetRangeAnnual: "$50,000 - $70,000", preferredCountries: ["United States", "Australia"] },
+    assignedTests: ['riasec', 'learningStyle', 'workValues'],
+    milestones: [
+      { id: "m1_103", stageNumber: 1, title: "SAT Score & High School Transcript Verification", status: "COMPLETED", dueDate: "2026-05-20", notes: "1520 SAT Score verified.", tasks: ["Verify SAT report", "Upload 11th & 12th mid-term transcripts"] },
+      { id: "m2_103", stageNumber: 2, title: "Common App Essay & Supplemental Submissions", status: "COMPLETED", dueDate: "2026-07-01", notes: "Main Common App essay approved by counsellor.", tasks: ["Finalize Common App Main Essay", "Submit UC Berkeley supplements"] }
+    ],
+    applications: [
+      { id: "app_103_1", universityName: "UC Berkeley", courseName: "B.S. Data Science", country: "United States", applicationDeadline: "2026-11-30", status: "Submitted" },
+      { id: "app_103_2", universityName: "University of Melbourne", courseName: "Bachelor of Computer Science", country: "Australia", applicationDeadline: "2026-08-01", status: "Admitted" }
+    ],
+    recommendations: [
+      { id: "rec_103_1", name: "University of Sydney — B.S. Advanced Computing", category: "Safety School", description: "Direct admission with $10k Merit Scholarship." }
+    ]
+  },
+  {
+    id: "std_104",
+    studentId: "std_104",
+    fullName: "Aarav Patel",
+    name: "Aarav Patel",
+    email: "aarav.patel@example.com",
+    phone: "+91 97234 88990",
+    avatarUrl: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=400",
+    targetGoal: "M.S. Mechanical & Robotics",
+    targetTrack: "Study abroad admissions",
+    targetIntake: "Fall 2027",
+    targetDegree: "M.Sc. Mechanical Engineering",
+    targetCountries: "Germany, Netherlands",
+    currentStage: "APS Certificate & University Shortlist",
+    deadlineUrgency: "Low (Due in 30 days)",
+    schoolsCount: 7,
+    submittedCount: 0,
+    admitsCount: 0,
+    needsAttention: false,
+    profileCompletion: 60,
+    lastContact: "2026-08-01",
+    personalInfo: { fullName: "Aarav Patel", phone: "+91 97234 88990", city: "Ahmedabad", state: "Gujarat", nationality: "Indian" },
+    academicBackground: { degreeName: "B.E. Mechanical Engineering", institutionName: "Nirma University", graduationYear: "2026", gpaOrPercentage: "7.95 / 10.0" },
+    interestsAndGoals: { preferredIntake: "Fall 2027", budgetRangeAnnual: "€10,000 - €20,000", preferredCountries: ["Germany", "Netherlands"] },
+    assignedTests: ['riasec', 'bigFive', 'eqLeadership'],
+    milestones: [
+      { id: "m1_104", stageNumber: 1, title: "APS Certificate India Verification & German A2 Exam", status: "IN_PROGRESS", dueDate: "2026-09-15", notes: "Gather university module syllabus & transcripts.", tasks: ["Apply for APS India Verification", "Complete Goethe Institute A2 Exam"] }
+    ],
+    applications: [
+      { id: "app_104_1", universityName: "TU Munich", courseName: "M.Sc. Robotics & Autonomous Systems", country: "Germany", applicationDeadline: "2026-09-30", status: "In Progress" }
+    ],
+    recommendations: [
+      { id: "rec_104_1", name: "RWTH Aachen — M.Sc. Mechanical Engineering", category: "Dream School", description: "#1 ranked engineering university in Germany with zero tuition fees." },
+      { id: "rec_104_2", name: "TU Delft — M.Sc. Robotics", category: "Target School", description: "Leading European polytechnic with strong industry ties." }
+    ]
+  }
+];
+
+export const INITIAL_COUNSELLOR_SERVICES = [
+  {
+    id: "srv_01",
+    title: "Comprehensive End-to-End Admissions Package",
+    description: "Complete 6-month guidance covering profile building, university shortlisting, 12 strategy calls, SOP/LOR drafting, and visa support.",
+    price: 45000,
+    duration: "6 Months",
+    maxSessions: 12,
+    track: "Study abroad admissions",
+    features: [
+      "12 One-on-One Strategy Sessions",
+      "Unlimited SOP & Essay Revisions",
+      "8 University Application Shortlists",
+      "LOR & Resume Proofreading",
+      "Visa & Mock Interview Prep"
+    ]
+  },
+  {
+    id: "srv_02",
+    title: "SOP & Essay Mentorship Package",
+    description: "Dedicated essay strategy focused on personal statements, supplemental essays, and storytelling for top-tier universities.",
+    price: 15000,
+    duration: "1 Month",
+    maxSessions: 3,
+    track: "Study abroad admissions",
+    features: [
+      "3 Iterations of Main SOP / Personal Statement",
+      "Brainstorming Session for Supplemental Essays",
+      "Plagiarism & Grammar Audit",
+      "Final Polish by Ivy League Editor"
+    ]
+  },
+  {
+    id: "srv_03",
+    title: "1-on-1 Hourly Strategy & Profile Audit",
+    description: "Single intensive 45-minute consultation to evaluate your GPA, test scores, target fit, and application strategy.",
+    price: 3500,
+    duration: "45 Minutes",
+    maxSessions: 1,
+    track: "Study abroad admissions",
+    features: [
+      "Live Profile Evaluation & Gap Analysis",
+      "Target University Level Recommendation (Dream/Target/Safety)",
+      "Action Plan PDF Provided Post-Call"
+    ]
+  },
+  {
+    id: "srv_04",
+    title: "University Shortlist & Scholarship Audit",
+    description: "Personalized audit of 8 target universities matching your academic profile, budget, post-study work visa goals, and scholarship options.",
+    price: 8000,
+    duration: "2 Weeks",
+    maxSessions: 2,
+    track: "Study abroad admissions",
+    features: [
+      "Customized 8 University Fit Matrix",
+      "Scholarship & Assistantship Eligibility Report",
+      "Post-Study Work Permit Country Comparison"
     ]
   }
 ];
@@ -280,6 +484,8 @@ export const INITIAL_APPOINTMENTS = [
     id: "apt_101",
     studentId: "std_101",
     studentName: "Rohan Mehta",
+    counsellorId: "counsellor_01",
+    counsellorName: "Arti Sood",
     consultationType: "1-on-1 University Strategy",
     date: "2026-08-10",
     timeSlot: "11:00 AM",
@@ -287,7 +493,47 @@ export const INITIAL_APPOINTMENTS = [
     status: "UPCOMING",
     meetingMode: "Google Meet Video Call",
     meetingLink: "https://meet.google.com/aspiranthq-1on1-meet",
-    studentNotes: "Discussing Fall 2027 shortlisting."
+    studentNotes: "Discussing Fall 2027 shortlisting.",
+    counsellorNotes: "Meeting link generated."
+  },
+  {
+    id: "apt_102",
+    studentId: "std_102",
+    studentName: "Simran Kaur",
+    counsellorId: "counsellor_01",
+    counsellorName: "Arti Sood",
+    consultationType: "SOP & Essay Mentorship",
+    date: "2026-08-12",
+    timeSlot: "03:00 PM",
+    durationMinutes: 45,
+    status: "PENDING_APPROVAL",
+    suggestedDate: "2026-08-12",
+    suggestedTimeSlot: "03:00 PM",
+    meetingMode: "Video Call (Pending Link)",
+    meetingLink: null,
+    studentNotes: "Looking to get feedback on LBS Leadership Essay draft.",
+    counsellorNotes: null
+  },
+  {
+    id: "apt_103",
+    studentId: "std_104",
+    studentName: "Aarav Patel",
+    counsellorId: "counsellor_01",
+    counsellorName: "Arti Sood",
+    consultationType: "German APS & TU Shortlisting Call",
+    date: "2026-08-14",
+    timeSlot: "05:00 PM",
+    durationMinutes: 45,
+    status: "TIME_SUGGESTED",
+    meetingMode: "Video Call",
+    meetingLink: null,
+    suggestedTimes: [
+      { date: "2026-08-15", timeSlot: "04:00 PM" },
+      { date: "2026-08-16", timeSlot: "11:00 AM" },
+      { date: "2026-08-17", timeSlot: "06:00 PM" }
+    ],
+    studentNotes: "APS document validation questions.",
+    counsellorNotes: "Counsellor was unavailable on initial time, proposed 3 alternative slots."
   }
 ];
 

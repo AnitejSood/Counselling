@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { X, Scale, Star, ShieldCheck, Clock, Check, AlertTriangle, ArrowRight } from 'lucide-react';
+import { X, Scale, Star, ShieldCheck, Clock, AlertTriangle, ArrowRight, CheckCircle2 } from 'lucide-react';
 import { useData } from '../../context/DataContext';
 
 export const CompareDrawer = () => {
@@ -9,7 +9,7 @@ export const CompareDrawer = () => {
 
   if (compareList.length === 0) return null;
 
-  // Check if counsellors are from different tracks (apples-to-oranges check)
+  // Check if counsellors are from different tracks
   const tracks = [...new Set(compareList.map(c => c.track))];
   const hasTrackMismatch = tracks.length > 1;
 
@@ -73,8 +73,8 @@ export const CompareDrawer = () => {
                   <Scale className="w-5 h-5" />
                 </div>
                 <div>
-                  <h2 className="text-xl font-bold text-slate-900">Side-by-Side Comparison</h2>
-                  <p className="text-xs text-slate-500">Compare verified outcomes, ratings, and transparent session rates</p>
+                  <h2 className="text-xl font-bold text-slate-900">Side-by-Side Counsellor Comparison</h2>
+                  <p className="text-xs text-slate-500">Compare verified track specializations, outcome records, and package rates</p>
                 </div>
               </div>
               <button 
@@ -90,7 +90,7 @@ export const CompareDrawer = () => {
               <div className="bg-amber-50 border-b border-amber-200 px-8 py-3 flex items-center gap-3 text-xs text-amber-900">
                 <AlertTriangle className="w-4 h-4 text-amber-600 flex-shrink-0" />
                 <span>
-                  <strong>Note:</strong> You are comparing counsellors across different specialized tracks ({tracks.join(', ')}). Requirements and outcome expectations differ by track.
+                  <strong>Track Diversity Notice:</strong> You are comparing counsellors across different specialization tracks ({tracks.join(', ')}).
                 </span>
               </div>
             )}
@@ -103,12 +103,12 @@ export const CompareDrawer = () => {
                 <div className="hidden md:block space-y-6 pt-24 text-xs font-semibold text-slate-500">
                   <div className="h-10 flex items-center border-b border-slate-100">Verified Placements</div>
                   <div className="h-10 flex items-center border-b border-slate-100">Rating & Reviews</div>
-                  <div className="h-10 flex items-center border-b border-slate-100">Starting Rate</div>
+                  <div className="h-10 flex items-center border-b border-slate-100">Starting Rate / Package</div>
                   <div className="h-10 flex items-center border-b border-slate-100">Specialty Track</div>
                   <div className="h-10 flex items-center border-b border-slate-100">Experience</div>
-                  <div className="h-10 flex items-center border-b border-slate-100">Response Speed</div>
+                  <div className="h-10 flex items-center border-b border-slate-100">Escrow Guarantee</div>
                   <div className="h-20 flex items-center border-b border-slate-100">Destinations Covered</div>
-                  <div className="h-24 flex items-center">Key Tags</div>
+                  <div className="h-24 flex items-center">Key Specialization Tags</div>
                 </div>
 
                 {/* Counsellor Columns */}
@@ -133,34 +133,34 @@ export const CompareDrawer = () => {
                       <div className="space-y-6 text-xs text-slate-800">
                         <div className="h-10 flex items-center font-bold text-emerald-700 bg-emerald-50/80 px-3 rounded-lg border border-emerald-100">
                           <ShieldCheck className="w-4 h-4 text-emerald-600 mr-1.5" />
-                          {counsellor.verifiedPlacementsCount}+ Verified
+                          {counsellor.verifiedPlacementsCount}+ Verified Placements
                         </div>
                         <div className="h-10 flex items-center font-bold text-slate-900">
                           <Star className="w-4 h-4 fill-amber-400 text-amber-400 mr-1.5" />
                           {counsellor.rating} <span className="text-slate-400 font-normal ml-1">({counsellor.reviewCount} reviews)</span>
                         </div>
                         <div className="h-10 flex items-center font-bold text-indigo-900">
-                          ₹{counsellor.pricePerSession.toLocaleString('en-IN')} / session
+                          Starting ₹{counsellor.pricePerSession ? (counsellor.pricePerSession).toLocaleString('en-IN') : '25,000'} / package
                         </div>
                         <div className="h-10 flex items-center text-slate-700 font-medium truncate">
                           {counsellor.track}
                         </div>
                         <div className="h-10 flex items-center text-slate-700">
-                          {counsellor.experienceYears} Years
+                          {counsellor.experienceYears} Years Experience
                         </div>
-                        <div className="h-10 flex items-center text-indigo-700 font-medium">
-                          <Clock className="w-3.5 h-3.5 text-indigo-500 mr-1.5" />
-                          {counsellor.responseTime}
+                        <div className="h-10 flex items-center text-emerald-700 font-medium bg-emerald-50 px-2 rounded-lg">
+                          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 mr-1.5" />
+                          2-Wk / 3-Session Guarantee
                         </div>
                         <div className="h-20 flex flex-wrap gap-1 items-center border-b border-slate-200/60">
-                          {counsellor.destinations.map((d, i) => (
+                          {counsellor.destinations?.map((d, i) => (
                             <span key={i} className="bg-white border border-slate-200 px-2 py-0.5 rounded text-[11px]">
                               {d}
                             </span>
                           ))}
                         </div>
                         <div className="h-24 flex flex-wrap gap-1.5 items-start pt-2">
-                          {counsellor.tags.map((t, i) => (
+                          {counsellor.tags?.map((t, i) => (
                             <span key={i} className="bg-indigo-50 text-indigo-700 px-2 py-0.5 rounded text-[10px] font-medium">
                               {t}
                             </span>

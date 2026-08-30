@@ -1,9 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { useData } from '../../context/DataContext';
-import { Send, Phone, Video, MoreHorizontal, Check, CheckCheck } from 'lucide-react';
+import { Send, Paperclip, FileText, CheckCheck, X } from 'lucide-react';
 import { getInitials } from '../../lib/formatters';
-import { PageHeader } from '../../components/ui/PageHeader';
 import { EmptyState } from '../../components/ui/EmptyState';
 
 const COUNSELLOR_INFO = {
@@ -17,7 +16,9 @@ export const Messaging = () => {
   const { currentUser } = useAuth();
   const { messages, sendMessage } = useData();
   const [inputText, setInputText] = useState('');
+  const [attachedFile, setAttachedFile] = useState(null);
   const endRef = useRef(null);
+  const fileInputRef = useRef(null);
 
   useEffect(() => {
     endRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -25,15 +26,28 @@ export const Messaging = () => {
 
   const handleSend = (e) => {
     e.preventDefault();
-    if (!inputText.trim()) return;
-    sendMessage('STUDENT', currentUser?.fullName || 'Rohan Mehta', inputText.trim());
+    if (!inputText.trim() && !attachedFile) return;
+    sendMessage(
+      'STUDENT',
+      currentUser?.fullName || 'Rohan Mehta',
+      inputText.trim(),
+      attachedFile ? attachedFile.name : null
+    );
     setInputText('');
+    setAttachedFile(null);
+  };
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setAttachedFile(file);
+    }
   };
 
   const unreadCount = messages.filter(m => m.senderRole === 'COUNSELLOR' && m.unread).length;
 
   return (
-    <div className="max-w-4xl mx-auto flex flex-col h-[calc(100vh-8rem)] gap-0 animate-fade-in">
+    <div className="max-w-4xl mx-auto flex flex-col h-[calc(100vh-8rem)] gap-0 font-sans">
 
       {/* Chat Header */}
       <div className="bg-white rounded-t-3xl border border-slate-200 px-6 py-4 flex items-center justify-between shadow-sm">
@@ -59,15 +73,6 @@ export const Messaging = () => {
             </span>
           )}
         </div>
-
-        <div className="flex items-center gap-2">
-          <button className="p-2.5 rounded-xl bg-slate-50 hover:bg-slate-100 text-slate-500 hover:text-slate-700 transition border border-slate-200">
-            <Phone className="w-4 h-4" />
-          </button>
-          <button className="p-2.5 rounded-xl bg-slate-50 hover:bg-slate-100 text-slate-500 hover:text-slate-700 transition border border-slate-200">
-            <Video className="w-4 h-4" />
-          </button>
-        </div>
       </div>
 
       {/* Messages Area */}
@@ -81,10 +86,10 @@ export const Messaging = () => {
 
         {messages.map((msg) => {
           const isMe = msg.senderRole === 'STUDENT';
-          const msgText = msg.content || msg.text || ''; // ← FIXED: handle both fields
+          const msgText = msg.content || msg.text || '';
 
           return (
-            <div key={msg.id} className={`flex gap-3 animate-fade-in ${isMe ? 'flex-row-reverse' : 'flex-row'}`}>
+            <div key={msg.id} className={`flex gap-3 animate-in fade-in ${isMe ? 'flex-row-reverse' : 'flex-row'}`}>
               {/* Avatar */}
               {!isMe && (
                 <img
@@ -101,12 +106,20 @@ export const Messaging = () => {
 
               {/* Bubble */}
               <div className={`max-w-sm group ${isMe ? 'items-end' : 'items-start'} flex flex-col gap-1`}>
-                <div className={`px-4 py-3 rounded-2xl text-xs leading-relaxed font-medium shadow-sm ${
+                <div className={`px-4 py-3 rounded-2xl text-xs leading-relaxed font-medium shadow-sm space-y-1.5 ${
                   isMe
                     ? 'bg-indigo-600 text-white rounded-tr-none'
                     : 'bg-white text-slate-800 border border-slate-200 rounded-tl-none'
                 }`}>
-                  {msgText}
+                  {msgText && <p>{msgText}</p>}
+                  {msg.fileAttachment && (
+                    <div className={`p-2 rounded-xl border flex items-center gap-2 text-[11px] ${
+                      isMe ? 'bg-indigo-700/60 border-indigo-500 text-white' : 'bg-slate-100 border-slate-200 text-slate-800'
+                    }`}>
+                      <FileText className="w-4 h-4 shrink-0" />
+                      <span className="font-semibold truncate">{msg.fileAttachment}</span>
+                    </div>
+                  )}
                 </div>
                 <div className={`flex items-center gap-1 text-[10px] text-slate-400 ${isMe ? 'flex-row-reverse' : ''}`}>
                   <span>{msg.timestamp}</span>
@@ -121,22 +134,51 @@ export const Messaging = () => {
         <div ref={endRef} />
       </div>
 
+      {/* Attachment Preview Banner */}
+      {attachedFile && (
+        <div className="bg-indigo-50 px-6 py-2 border-x border-t border-indigo-100 flex items-center justify-between text-xs text-indigo-900 font-medium">
+          <div className="flex items-center gap-2">
+            <FileText className="w-4 h-4 text-indigo-600" />
+            <span>Attachment: <strong>{attachedFile.name}</strong></span>
+          </div>
+          <button onClick={() => setAttachedFile(null)} className="p-1 text-slate-400 hover:text-slate-600">
+            <X className="w-4 h-4" />
+          </button>
+        </div>
+      )}
+
       {/* Input Area */}
       <form
         onSubmit={handleSend}
         className="bg-white rounded-b-3xl border border-t-0 border-slate-200 px-4 py-4 flex items-center gap-3 shadow-sm"
       >
         <input
+          type="file"
+          ref={fileInputRef}
+          onChange={handleFileChange}
+          className="hidden"
+          accept=".pdf,.doc,.docx,.png,.jpg,.jpeg"
+        />
+        <button
+          type="button"
+          onClick={() => fileInputRef.current?.click()}
+          title="Attach document or transcript"
+          className="p-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-600 transition"
+        >
+          <Paperclip className="w-4 h-4" />
+        </button>
+
+        <input
           type="text"
           placeholder={`Message ${COUNSELLOR_INFO.name}...`}
           value={inputText}
           onChange={(e) => setInputText(e.target.value)}
-          className="flex-1 input"
+          className="flex-1 px-4 py-2.5 rounded-xl border border-slate-200 text-xs focus:outline-none focus:border-indigo-500"
           autoComplete="off"
         />
         <button
           type="submit"
-          disabled={!inputText.trim()}
+          disabled={!inputText.trim() && !attachedFile}
           className="p-3 rounded-xl bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed text-white transition shadow-sm"
         >
           <Send className="w-4 h-4" />

@@ -18,7 +18,7 @@ import { useData } from '../../context/DataContext';
 
 export const CounsellorProfile = () => {
   const { id } = useParams();
-  const { counsellors, reviews } = useData();
+  const { counsellors, reviews, counsellorServices } = useData();
 
   // Find counsellor by URL param or default to Arti Sood
   const counsellor = counsellors.find(c => c.id === id) || counsellors[0];
@@ -160,11 +160,23 @@ export const CounsellorProfile = () => {
             <div className="bg-white rounded-3xl p-8 shadow-sm border border-slate-200">
               <h2 className="text-lg font-bold text-slate-900 mb-6">Services & Transparent Fixed Pricing</h2>
               <div className="space-y-4">
-                {counsellor.services.map(srv => (
+                {(counsellorServices || counsellor.services).map(srv => (
                   <div key={srv.id} className="bg-slate-50 border border-slate-200/80 rounded-2xl p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                     <div>
+                      <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-indigo-100 text-indigo-800 uppercase inline-block mb-1">
+                        {srv.duration || 'Package'}
+                      </span>
                       <h3 className="font-bold text-slate-900 text-base mb-1">{srv.title}</h3>
-                      <p className="text-xs text-slate-600 mb-2">{srv.desc}</p>
+                      <p className="text-xs text-slate-600 mb-2">{srv.description || srv.desc}</p>
+                      {(srv.features || []).length > 0 && (
+                        <div className="flex flex-wrap gap-1.5 mb-2">
+                          {srv.features.map((f, i) => (
+                            <span key={i} className="text-[10px] text-slate-700 bg-white px-2 py-0.5 rounded border border-slate-200">
+                              ✓ {f}
+                            </span>
+                          ))}
+                        </div>
+                      )}
                       <span className="text-[10px] text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-100 font-semibold">
                         ✓ No hidden agency fees
                       </span>

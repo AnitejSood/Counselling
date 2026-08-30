@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Star, ShieldCheck, CheckSquare, Clock, ArrowRight, Zap, Crown } from 'lucide-react';
+import { Star, ShieldCheck, Clock, ArrowRight, Zap, Crown } from 'lucide-react';
 import { useData } from '../../context/DataContext';
 
 export const CounsellorCard = ({ counsellor }) => {
@@ -35,16 +35,6 @@ export const CounsellorCard = ({ counsellor }) => {
             Sponsored Partner
           </span>
           <span className="text-[10px] text-amber-700 bg-amber-100/80 px-2 py-0.5 rounded-full font-mono">Featured</span>
-        </div>
-      )}
-
-      {counsellor.verificationStatus === 'LIMITED_VISIBILITY' && !counsellor.isBoosted && (
-        <div className="bg-indigo-50 border-b border-indigo-100 px-4 py-1.5 flex items-center justify-between text-xs font-medium text-indigo-700">
-          <span className="flex items-center gap-1.5">
-            <ShieldCheck className="w-3.5 h-3.5 text-indigo-500" />
-            New to Marketplace
-          </span>
-          <span className="text-[10px] bg-indigo-100 px-2 py-0.5 rounded-full">Approved</span>
         </div>
       )}
 
@@ -125,12 +115,12 @@ export const CounsellorCard = ({ counsellor }) => {
         </div>
       </div>
 
-      {/* Footer / Price & Actions */}
+      {/* Footer / Package Rate & Actions */}
       <div className="bg-slate-50 px-6 py-4 border-t border-slate-100 flex items-center justify-between">
         <div>
-          <span className="text-[10px] text-slate-400 uppercase tracking-wider block">Starts from</span>
-          <span className="text-lg font-bold text-slate-900">₹{counsellor.pricePerSession.toLocaleString('en-IN')}</span>
-          <span className="text-xs text-slate-500 font-normal"> / session</span>
+          <span className="text-[10px] text-slate-400 uppercase tracking-wider block">Starting rate</span>
+          <span className="text-base font-extrabold text-slate-900">₹{(counsellor.pricePerSession || 25000).toLocaleString('en-IN')}</span>
+          <span className="text-xs text-slate-500 font-normal"> / package</span>
         </div>
 
         <div className="flex items-center gap-2">

@@ -1,75 +1,168 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useData } from '../../context/DataContext';
-import { Users, Search, AlertCircle, PlusCircle, ChevronRight } from 'lucide-react';
+import { Users, Search, Plus, Trash2, ChevronRight, CheckCircle2, UserPlus, Eye } from 'lucide-react';
 
 export const StudentsList = () => {
-  const { adminStudentsList = [] } = useData();
+  const { usersList, addUser, deleteUser, pipelineStudents, counsellors } = useData();
   const [searchTerm, setSearchTerm] = useState('');
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [notice, setNotice] = useState('');
   const navigate = useNavigate();
 
-  const filtered = (adminStudentsList || []).filter(s => {
-    const nameStr = (s.fullName || s.name || '').toLowerCase();
-    const goalStr = (s.targetGoal || s.targetDegree || '').toLowerCase();
+  const [form, setForm] = useState({ name: '', email: '', role: 'STUDENT' });
+
+  const showMsg = (msg) => { setNotice(msg); setTimeout(() => setNotice(''), 3000); };
+
+  const handleAddSubmit = (e) => {
+    e.preventDefault();
+    if (!form.name || !form.email) return;
+    addUser(form);
+    setShowAddModal(false);
+    setForm({ name: '', email: '', role: 'STUDENT' });
+    showMsg(`Added new ${form.role.toLowerCase()} account for ${form.name}!`);
+  };
+
+  const handleDelete = (userId, name) => {
+    deleteUser(userId);
+    showMsg(`Deleted user account: ${name}`);
+  };
+
+  const filteredUsers = (usersList || []).filter(u => {
+    const nameStr = (u.name || u.fullName || '').toLowerCase();
+    const emailStr = (u.email || '').toLowerCase();
     const query = searchTerm.toLowerCase();
-    return nameStr.includes(query) || goalStr.includes(query);
+    return nameStr.includes(query) || emailStr.includes(query);
   });
 
   return (
-    <div className="space-y-8 max-w-6xl mx-auto">
+    <div className="space-y-8 max-w-6xl mx-auto font-sans">
       
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <span className="text-xs font-bold uppercase tracking-wider text-purple-600">Student CRM Directory</span>
-          <h1 className="text-2xl font-extrabold text-slate-900">Student Profiles ({adminStudentsList.length})</h1>
+          <span className="text-xs font-bold uppercase tracking-wider text-purple-600 bg-purple-50 px-3 py-1 rounded-full border border-purple-100">
+            User Account Governance
+          </span>
+          <h1 className="text-2xl font-black text-slate-900 mt-1">Platform Users & CRM ({usersList.length})</h1>
         </div>
 
-        <div className="relative w-full sm:w-72">
-          <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-3.5" />
-          <input
-            type="text"
-            placeholder="Search students..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-white border border-slate-200 text-xs font-medium focus:outline-none focus:border-purple-500"
-          />
+        <div className="flex items-center gap-3 w-full sm:w-auto">
+          <div className="relative flex-1 sm:w-64">
+            <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-3.5" />
+            <input
+              type="text"
+              placeholder="Search students & counsellors..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-white border border-slate-200 text-xs font-medium focus:outline-none focus:border-purple-500"
+            />
+          </div>
+
+          <button
+            onClick={() => setShowAddModal(true)}
+            className="px-4 py-2.5 bg-purple-600 hover:bg-purple-700 text-white rounded-xl text-xs font-bold shadow-md flex items-center gap-1.5 shrink-0 transition"
+          >
+            <UserPlus className="w-4 h-4" /> Add User Account
+          </button>
         </div>
       </div>
 
-      <div className="bg-white rounded-3xl p-6 border border-slate-200/80 shadow-sm space-y-4">
-        <div className="space-y-3">
-          {filtered.map((student) => (
+      {notice && (
+        <div className="flex items-center gap-2 p-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-bold animate-in fade-in">
+          <CheckCircle2 className="w-4 h-4" /> {notice}
+        </div>
+      )}
+
+      {/* Add User Modal */}
+      {showAddModal && (
+        <div className="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm space-y-4 max-w-lg">
+          <h3 className="text-sm font-bold text-slate-900">Add New User Account (Student or Counsellor)</h3>
+          <form onSubmit={handleAddSubmit} className="space-y-4 text-xs">
+            <div>
+              <label className="block font-bold text-slate-700 uppercase mb-1">Account Role</label>
+              <select
+                value={form.role}
+                onChange={e => setForm(p => ({ ...p, role: e.target.value }))}
+                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 font-semibold focus:outline-none"
+              >
+                <option value="STUDENT">Student Account</option>
+                <option value="COUNSELLOR">Counsellor Account</option>
+              </select>
+            </div>
+            <div>
+              <label className="block font-bold text-slate-700 uppercase mb-1">Full Name</label>
+              <input
+                type="text"
+                required
+                placeholder="e.g. Simran Kaur"
+                value={form.name}
+                onChange={e => setForm(p => ({ ...p, name: e.target.value }))}
+                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 font-semibold focus:outline-none"
+              />
+            </div>
+            <div>
+              <label className="block font-bold text-slate-700 uppercase mb-1">Email Address</label>
+              <input
+                type="email"
+                required
+                placeholder="e.g. simran@example.com"
+                value={form.email}
+                onChange={e => setForm(p => ({ ...p, email: e.target.value }))}
+                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 font-semibold focus:outline-none"
+              />
+            </div>
+            <div className="flex justify-end gap-2 pt-2">
+              <button type="button" onClick={() => setShowAddModal(false)} className="px-4 py-2 bg-slate-100 rounded-xl text-xs font-bold">Cancel</button>
+              <button type="submit" className="px-5 py-2 bg-purple-600 text-white rounded-xl text-xs font-bold shadow-md">Create Account</button>
+            </div>
+          </form>
+        </div>
+      )}
+
+      {/* Users List */}
+      <div className="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm space-y-4">
+        <div className="divide-y divide-slate-100">
+          {filteredUsers.map((user) => (
             <div
-              key={student.id || student.studentId}
-              onClick={() => navigate(`/admin/students/${student.id || student.studentId}`)}
-              className="p-5 rounded-2xl bg-slate-50 border border-slate-200/80 hover:bg-purple-50/50 hover:border-purple-200 transition cursor-pointer flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4"
+              key={user.id}
+              className="py-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4"
             >
               <div className="flex items-center gap-3">
-                <img
-                  src={student.avatarUrl || "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&q=80&w=400"}
-                  alt={student.fullName || student.name}
-                  className="w-11 h-11 rounded-full object-cover border border-purple-300"
-                />
+                <div className={`w-10 h-10 rounded-2xl flex items-center justify-center font-bold text-xs ${
+                  user.role === 'STUDENT' ? 'bg-indigo-100 text-indigo-700' : 'bg-emerald-100 text-emerald-700'
+                }`}>
+                  {user.role === 'STUDENT' ? 'STD' : 'CNS'}
+                </div>
                 <div>
                   <div className="flex items-center gap-2">
-                    <h3 className="text-base font-bold text-slate-900">{student.fullName || student.name}</h3>
-                    {student.needsAttention && (
-                      <span className="px-2 py-0.5 rounded-full bg-rose-100 text-rose-800 text-[10px] font-bold">
-                        Attention Required
-                      </span>
-                    )}
+                    <h3 className="text-sm font-bold text-slate-900">{user.name || user.fullName}</h3>
+                    <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
+                      user.role === 'STUDENT' ? 'bg-indigo-50 text-indigo-700' : 'bg-emerald-50 text-emerald-700'
+                    }`}>
+                      {user.role}
+                    </span>
                   </div>
-                  <p className="text-xs text-slate-600">{student.targetGoal || student.targetDegree} • {student.targetCountries || 'US, UK'}</p>
-                  <p className="text-[11px] text-slate-400">{student.email || 'student@example.com'} • {student.phone || '+91 98200 11223'}</p>
+                  <p className="text-xs text-slate-500">{user.email} · Joined {user.joinedDate || '2026-06-01'}</p>
                 </div>
               </div>
 
-              <div className="flex items-center gap-4">
-                <div className="text-right text-xs">
-                  <span className="font-bold text-purple-600 block">{student.profileCompletion || 85}% Profile</span>
-                  <span className="text-slate-400 text-[10px]">Last Contact: {student.lastContact || 'Recent'}</span>
-                </div>
-                <ChevronRight className="w-5 h-5 text-slate-400" />
+              <div className="flex items-center gap-3">
+                {user.role === 'COUNSELLOR' && (
+                  <Link
+                    to={`/admin/counsellors/${user.id || 'counsellor_01'}`}
+                    className="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-semibold flex items-center gap-1"
+                  >
+                    <Eye className="w-3.5 h-3.5" /> Background View
+                  </Link>
+                )}
+
+                <button
+                  onClick={() => handleDelete(user.id, user.name || user.fullName)}
+                  title="Delete user account"
+                  className="p-2 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-600 transition"
+                >
+                  <Trash2 className="w-4 h-4" />
+                </button>
               </div>
             </div>
           ))}

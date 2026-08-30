@@ -113,6 +113,7 @@ export const AuthProvider = ({ children }) => {
 
   const logout = () => {
     setCurrentUser(null);
+    setRole(null);
     localStorage.removeItem('counselling_auth_user');
   };
 

@@ -2,20 +2,18 @@ import React, { useState } from 'react';
 import { useData } from '../../context/DataContext';
 import { Star, ShieldCheck, DollarSign, MessageSquare, TrendingUp, Send, CheckCircle2, Zap, Crown, ArrowRight } from 'lucide-react';
 import { BoostManager } from '../../features/counsellor/components/BoostManager';
-import { SubscriptionTierModal } from '../../features/billing/components/SubscriptionTierModal';
-import { SUBSCRIPTION_TIERS } from '../../config/subscriptionTiers';
+import { COUNSELLOR_SUBSCRIPTION_TIERS } from '../../config/subscriptionConfig';
 
 export const CounsellorAnalytics = () => {
-  const { counsellors, reviews, replyToReview, escrowBookings } = useData();
+  const { counsellors, reviews, replyToReview, escrowBookings, upgradeCounsellorTier } = useData();
   const counsellor = counsellors[0];
   const counsellorReviews = reviews.filter(r => r.counsellorId === counsellor.id);
 
   const [activeReplyId, setActiveReplyId] = useState(null);
   const [replyText, setReplyText] = useState('');
   const [replySuccess, setReplySuccess] = useState(false);
-  const [showTierModal, setShowTierModal] = useState(false);
 
-  const currentTierConfig = SUBSCRIPTION_TIERS[counsellor.subscriptionTier] || SUBSCRIPTION_TIERS.PRO;
+  const currentTierConfig = COUNSELLOR_SUBSCRIPTION_TIERS[counsellor.subscriptionTier] || COUNSELLOR_SUBSCRIPTION_TIERS.PRO;
 
   const handleReplySubmit = (e, reviewId) => {
     e.preventDefault();
@@ -27,46 +25,21 @@ export const CounsellorAnalytics = () => {
   };
 
   const totalEarnings = escrowBookings.reduce((sum, b) => sum + b.amount, 0);
-  const platformFeeAmount = totalEarnings * currentTierConfig.commissionRate;
-  const netEarnings = totalEarnings - platformFeeAmount;
 
   return (
-    <div className="space-y-8 max-w-5xl mx-auto">
+    <div className="space-y-8 max-w-5xl mx-auto font-sans">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <span className="text-xs font-bold uppercase tracking-wider text-emerald-600">Counsellor Step 8</span>
-          <h1 className="text-2xl font-extrabold text-slate-900">Ratings, Right-of-Reply & Subscription Tier</h1>
-        </div>
-
-        {/* Tier Upgrade Button */}
-        <button 
-          onClick={() => setShowTierModal(true)}
-          className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs px-5 py-2.5 rounded-xl shadow-md flex items-center gap-2"
-        >
-          <Crown className="w-4 h-4" />
-          Subscription: {currentTierConfig.name}
-        </button>
-      </div>
-
-      {/* Subscription & Fee Breakdown Banner */}
-      <div className="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-        <div>
-          <div className="flex items-center gap-2 mb-1">
-            <span className="font-extrabold text-slate-900 text-base">Active Tier: {currentTierConfig.name}</span>
-            <span className="bg-emerald-100 text-emerald-800 text-[10px] font-bold px-2.5 py-0.5 rounded-full border border-emerald-200">
-              {(currentTierConfig.commissionRate * 100)}% Low Escrow Fee Rate
-            </span>
-          </div>
-          <p className="text-xs text-slate-500">
-            Net Earnings after {(currentTierConfig.commissionRate * 100)}% platform commission: <strong>₹{netEarnings.toLocaleString('en-IN')}</strong> (Gross: ₹{totalEarnings.toLocaleString('en-IN')})
-          </p>
+          <span className="text-xs font-bold uppercase tracking-wider text-emerald-600">Performance & Growth</span>
+          <h1 className="text-2xl font-black text-slate-900">Analytics & Hero Boost Page</h1>
         </div>
 
         <button 
-          onClick={() => setShowTierModal(true)}
-          className="text-xs font-bold text-indigo-600 hover:text-indigo-700 bg-indigo-50 border border-indigo-100 px-4 py-2 rounded-xl flex items-center gap-1"
+          onClick={() => upgradeCounsellorTier(counsellor.id, 'PREMIUM_BOOST')}
+          className="bg-amber-500 hover:bg-amber-400 text-slate-950 font-extrabold text-xs px-5 py-2.5 rounded-xl shadow-md flex items-center gap-2"
         >
-          Manage Tier & Perks <ArrowRight className="w-3.5 h-3.5" />
+          <Zap className="w-4 h-4 fill-slate-950" />
+          Feature on Marketplace ($99/mo)
         </button>
       </div>
 
@@ -82,7 +55,7 @@ export const CounsellorAnalytics = () => {
 
       {/* Analytics Metric Cards Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
-        <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+        <div className="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm">
           <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">Overall Rating</span>
           <div className="flex items-center gap-2 mt-1">
             <span className="text-2xl font-extrabold text-slate-900">{counsellor.rating}</span>
@@ -91,7 +64,7 @@ export const CounsellorAnalytics = () => {
           <span className="text-xs text-slate-500 font-medium">From {counsellor.reviewCount} verified reviews</span>
         </div>
 
-        <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+        <div className="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm">
           <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">Verified Placements</span>
           <div className="flex items-center gap-2 mt-1">
             <span className="text-2xl font-extrabold text-emerald-700">{counsellor.verifiedPlacementsCount}+</span>
@@ -100,7 +73,7 @@ export const CounsellorAnalytics = () => {
           <span className="text-xs text-emerald-800 font-medium">Audited offer letters</span>
         </div>
 
-        <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+        <div className="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm">
           <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">Gross Escrow Volume</span>
           <div className="text-2xl font-extrabold text-slate-900 mt-1">
             ₹{totalEarnings.toLocaleString('en-IN')}
@@ -108,14 +81,14 @@ export const CounsellorAnalytics = () => {
           <span className="text-xs text-slate-500 font-medium">Held & released post-session</span>
         </div>
 
-        <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+        <div className="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm">
           <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">Conversion Rate</span>
           <div className="text-2xl font-extrabold text-indigo-600 mt-1">18.4%</div>
           <span className="text-xs text-slate-500 font-medium">Profile views → Bookings</span>
         </div>
       </div>
 
-      {/* Reviews & Right-of-Reply Feed */}
+      {/* Reviews Feed */}
       <div className="bg-white rounded-3xl p-8 border border-slate-200 shadow-sm space-y-6">
         <h2 className="text-lg font-bold text-slate-900 border-b border-slate-100 pb-3">Student Reviews & Right-of-Reply Portal</h2>
 
@@ -135,7 +108,6 @@ export const CounsellorAnalytics = () => {
 
               <p className="text-xs text-slate-700">{rev.content}</p>
 
-              {/* Display existing reply or reply form */}
               {rev.counsellorReply ? (
                 <div className="bg-white border-l-2 border-indigo-600 p-3 rounded-r-xl text-xs">
                   <span className="font-bold text-slate-900 block mb-1">Your Published Reply:</span>
@@ -180,15 +152,6 @@ export const CounsellorAnalytics = () => {
           ))}
         </div>
       </div>
-
-      {/* Subscription Tier Upgrade Modal */}
-      {showTierModal && (
-        <SubscriptionTierModal 
-          currentTier={counsellor.subscriptionTier}
-          counsellorId={counsellor.id}
-          onClose={() => setShowTierModal(false)}
-        />
-      )}
     </div>
   );
 };

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useData } from '../../context/DataContext';
+import { SupportModal } from '../common/SupportModal';
 import {
   LayoutDashboard,
   User,
@@ -13,18 +14,19 @@ import {
   Calendar,
   MessageSquare,
   Briefcase,
-  Bell,
   Settings,
   LogOut,
   Menu,
   X,
   ChevronRight,
   GraduationCap,
-  Brain
+  Brain,
+  HelpCircle
 } from 'lucide-react';
 
 export const StudentLayout = ({ children }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [supportModalOpen, setSupportModalOpen] = useState(false);
   const { currentUser, logout, switchRole } = useAuth();
   const { studentProfile, messages, appointments } = useData();
   const location = useLocation();
@@ -45,8 +47,6 @@ export const StudentLayout = ({ children }) => {
     { name: 'Documents', path: '/dashboard/documents', icon: FolderOpen },
     { name: 'Appointments', path: '/dashboard/appointments', icon: Calendar, badge: upcomingAppts.length > 0 ? upcomingAppts.length : null },
     { name: 'Messages', path: '/dashboard/messages', icon: MessageSquare, badge: unreadMessagesCount > 0 ? unreadMessagesCount : null },
-    { name: 'Services', path: '/dashboard/services', icon: Briefcase },
-    { name: 'Notifications', path: '/dashboard/notifications', icon: Bell },
     { name: 'Settings', path: '/dashboard/settings', icon: Settings },
   ];
 
@@ -102,7 +102,7 @@ export const StudentLayout = ({ children }) => {
           </div>
 
           {/* Nav List */}
-          <nav className="px-3 space-y-1 overflow-y-auto max-h-[calc(100vh-280px)] pt-1">
+          <nav className="px-3 space-y-1 overflow-y-auto max-h-[calc(100vh-320px)] pt-1">
             {studentNavItems.map((item) => {
               const Icon = item.icon;
               const isActive = item.path === '/dashboard'
@@ -143,14 +143,14 @@ export const StudentLayout = ({ children }) => {
         {/* Bottom Actions */}
         <div className="p-4 border-t border-slate-800 space-y-2 bg-slate-950/40">
           <button
-            onClick={() => { switchRole('ADMIN'); navigate('/admin'); }}
-            className="w-full flex items-center justify-between px-3 py-2 rounded-xl bg-purple-950/40 text-purple-300 border border-purple-800/40 text-xs font-semibold hover:bg-purple-900/40 transition cursor-pointer"
+            onClick={() => setSupportModalOpen(true)}
+            className="w-full flex items-center gap-2 px-3 py-2 rounded-xl bg-indigo-950/40 text-indigo-300 border border-indigo-800/40 text-xs font-semibold hover:bg-indigo-900/40 transition cursor-pointer"
           >
-            <span>Switch to Executive Control</span>
-            <ChevronRight className="w-3.5 h-3.5" />
+            <HelpCircle className="w-4 h-4 text-indigo-400" />
+            <span>Get Support</span>
           </button>
           <button
-            onClick={logout}
+            onClick={() => { logout(); navigate('/login'); }}
             className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-slate-400 hover:text-rose-400 hover:bg-slate-800 text-xs font-semibold transition cursor-pointer"
           >
             <LogOut className="w-4 h-4 text-slate-500" />
@@ -165,6 +165,15 @@ export const StudentLayout = ({ children }) => {
           {children}
         </div>
       </main>
+
+      {/* Shared Support Modal */}
+      <SupportModal
+        isOpen={supportModalOpen}
+        onClose={() => setSupportModalOpen(false)}
+        userRole="STUDENT"
+        userName={currentUser?.fullName || 'Rohan Mehta'}
+        userEmail={currentUser?.email || 'rohan.mehta@example.com'}
+      />
     </div>
   );
 };

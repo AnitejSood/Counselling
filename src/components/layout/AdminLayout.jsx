@@ -21,23 +21,28 @@ import {
   ShieldCheck,
   ChevronRight,
   UserCheck,
-  Building2
+  DollarSign,
+  Zap,
+  Lock
 } from 'lucide-react';
 
 export const AdminLayout = ({ children }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const { currentUser, logout, switchRole } = useAuth();
-  const { platformConfig, adminStudentsList, documents, appointments } = useData();
+  const { verificationApps, escrowBookings, usersList } = useData();
   const location = useLocation();
   const navigate = useNavigate();
 
-  const studentsNeedingAttention = (adminStudentsList || []).filter(s => s.needsAttention).length;
-  const pendingDocsCount = (documents || []).filter(d => d.status === 'Under Review').length;
+  const pendingVerifications = verificationApps.filter(a => a.status === 'PENDING_REVIEW').length;
+  const activeEscrowPending = escrowBookings.filter(b => b.escrowStatus === 'HELD_IN_ESCROW').length;
 
   const adminNavItems = [
-    { name: 'Executive Dashboard', path: '/admin', icon: LayoutDashboard },
-    { name: 'Student Directory', path: '/admin/students', icon: Users, badge: studentsNeedingAttention > 0 ? `${studentsNeedingAttention} Attention` : `${adminStudentsList.length}` },
-    { name: 'Appointments Ledger', path: '/admin/appointments', icon: Calendar, badge: (appointments || []).length },
+    { name: 'Dashboard & Ratings', path: '/admin', icon: LayoutDashboard },
+    { name: 'User Management', path: '/admin/students', icon: Users, badge: `${usersList.length}` },
+    { name: 'Verification & Credentials', path: '/admin/verifications', icon: ShieldCheck, badge: pendingVerifications > 0 ? `${pendingVerifications} Pending` : null },
+    { name: 'Escrow & Billing Ledger', path: '/admin/billing', icon: DollarSign, badge: activeEscrowPending > 0 ? `${activeEscrowPending} Escrow` : null },
+    { name: 'Counsellor Boost Manager', path: '/admin/boosts', icon: Zap },
+    { name: 'Appointments Ledger', path: '/admin/appointments', icon: Calendar },
     { name: 'Support Tickets', path: '/admin/messages', icon: MessageSquare },
     { name: 'System Settings', path: '/admin/settings', icon: Settings }
   ];
@@ -85,12 +90,12 @@ export const AdminLayout = ({ children }) => {
             </div>
             <div className="flex-1 min-w-0">
               <p className="text-xs font-bold text-white truncate">Platform Executive</p>
-              <p className="text-[10px] text-purple-300 truncate">Chandigarh HQ Desk</p>
+              <p className="text-[10px] text-purple-300 truncate">Governance & Escrow Control</p>
             </div>
           </div>
 
           {/* Nav Links */}
-          <nav className="px-3 space-y-1 overflow-y-auto max-h-[calc(100vh-280px)] pt-1">
+          <nav className="px-3 space-y-1 overflow-y-auto max-h-[calc(100vh-300px)] pt-1">
             {adminNavItems.map((item) => {
               const Icon = item.icon;
               const isActive = location.pathname === item.path;
@@ -134,7 +139,7 @@ export const AdminLayout = ({ children }) => {
             <ChevronRight className="w-3.5 h-3.5" />
           </button>
           <button
-            onClick={logout}
+            onClick={() => { logout(); navigate('/login'); }}
             className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-slate-400 hover:text-rose-400 hover:bg-slate-900 text-xs font-semibold transition cursor-pointer"
           >
             <LogOut className="w-4 h-4 text-slate-500" />
@@ -150,13 +155,13 @@ export const AdminLayout = ({ children }) => {
           <div>
             <span className="text-xs text-purple-600 font-bold uppercase tracking-wider">AspirantHQ Corporate Oversight</span>
             <h1 className="text-lg font-extrabold text-slate-900">
-              Welcome Back, Platform Executive
+              Platform Executive Control Desk
             </h1>
           </div>
           <div className="flex items-center gap-4">
             <span className="px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 text-xs font-semibold border border-emerald-200 flex items-center gap-1.5">
               <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-              Chandigarh HQ Active
+              Escrow Engine Operational
             </span>
             <button
               onClick={() => { switchRole('STUDENT'); navigate('/dashboard'); }}
