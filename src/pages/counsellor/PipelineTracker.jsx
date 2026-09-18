@@ -1,16 +1,19 @@
 import React, { useState } from 'react';
 import { useData } from '../../context/DataContext';
 import {
-  Users, Plus, CheckCircle2, Globe, GraduationCap, Calendar, ChevronDown, Trash2, Send, Bookmark, CheckSquare, Clock
+  Users, Plus, CheckCircle2, Globe, GraduationCap, Calendar, ChevronDown, Trash2, Send, Bookmark, CheckSquare, Clock, Sparkles
 } from 'lucide-react';
 import { PageHeader } from '../../components/ui/PageHeader';
 import { StatusBadge } from '../../components/ui/StatusBadge';
+
+import { ConfirmationModal } from '../../components/common/ConfirmationModal';
 
 const APP_STATUSES = ['In Progress', 'Documents Pending', 'Submitted', 'Under Review', 'Admitted', 'Waitlisted', 'Rejected'];
 
 export const PipelineTracker = () => {
   const {
     pipelineStudents,
+    activeStudent,
     applications,
     addApplication,
     updateApplicationStatus,
@@ -20,15 +23,21 @@ export const PipelineTracker = () => {
     removeRecommendation
   } = useData();
 
-  const [selectedStudentId, setSelectedStudentId] = useState(pipelineStudents[0]?.studentId || 'std_101');
   const [notice, setNotice] = useState('');
   const [showAddApp, setShowAddApp] = useState(false);
   const [showAddRec, setShowAddRec] = useState(false);
 
+  const [confirmModal, setConfirmModal] = useState({
+    isOpen: false,
+    title: '',
+    message: '',
+    confirmText: 'Confirm',
+    variant: 'danger',
+    onConfirm: () => {}
+  });
+
   const [appForm, setAppForm] = useState({ universityName: '', courseName: '', country: '', applicationDeadline: '', status: 'In Progress' });
   const [recForm, setRecForm] = useState({ schoolName: '', program: '', category: 'Target School', description: '' });
-
-  const activeStudent = pipelineStudents.find(s => s.studentId === selectedStudentId) || pipelineStudents[0];
 
   const showMsg = (msg) => { setNotice(msg); setTimeout(() => setNotice(''), 3000); };
 
@@ -57,27 +66,32 @@ export const PipelineTracker = () => {
   return (
     <div className="space-y-8 max-w-5xl mx-auto font-sans">
       
-      {/* Top Header with Student Selection Dropdown */}
+      {/* Top Header with Global Student Placeholder (Highlighted) */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <span className="text-xs font-bold uppercase tracking-wider text-indigo-600 bg-indigo-50 px-3 py-1 rounded-full border border-indigo-100">
+          <span className="text-xs font-bold uppercase tracking-wider text-[#0B2545] bg-amber-50 px-3 py-1 rounded-full border border-amber-200">
             Student Application Pipeline
           </span>
           <h1 className="text-2xl font-black text-slate-900 mt-1">Application & Shortlist Pipeline</h1>
         </div>
 
-        {/* Top Right Student Selection Dropdown */}
-        <div className="flex items-center gap-2 bg-white p-2 rounded-2xl border border-slate-200 shadow-sm">
-          <span className="text-xs text-slate-500 font-medium pl-2">Active Student:</span>
-          <select
-            value={selectedStudentId}
-            onChange={e => setSelectedStudentId(e.target.value)}
-            className="px-3 py-1.5 rounded-xl bg-slate-50 border border-slate-200 text-xs font-bold text-slate-900 focus:outline-none cursor-pointer"
-          >
-            {pipelineStudents.map(s => (
-              <option key={s.studentId} value={s.studentId}>{s.fullName} ({s.targetGoal})</option>
-            ))}
-          </select>
+        {/* Global Student Highlighted Placeholder Card */}
+        <div className="flex items-center gap-3 bg-gradient-to-r from-[#0B2545] to-slate-900 text-white px-4 py-2.5 rounded-2xl border border-[#CFA25E]/40 shadow-sm">
+          <div className="relative">
+            <img
+              src={activeStudent?.avatarUrl || "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&q=80&w=400"}
+              alt={activeStudent?.fullName || 'Student'}
+              className="w-9 h-9 rounded-full object-cover ring-2 ring-[#CFA25E]"
+            />
+            <span className="w-2.5 h-2.5 bg-emerald-400 rounded-full border border-slate-900 absolute -bottom-0.5 -right-0.5" />
+          </div>
+          <div>
+            <div className="flex items-center gap-1.5">
+              <span className="text-[10px] font-extrabold uppercase text-[#CFA25E] tracking-wider">Active Student:</span>
+              <span className="text-xs font-bold text-white">{activeStudent?.fullName || 'All Assigned Students'}</span>
+            </div>
+            <p className="text-[11px] text-slate-300 font-medium">{activeStudent?.targetGoal} · {activeStudent?.targetCountries}</p>
+          </div>
         </div>
       </div>
 
@@ -99,30 +113,30 @@ export const PipelineTracker = () => {
           <p className="text-2xl font-black text-emerald-900">{admittedCount}</p>
         </div>
 
-        <div className="bg-indigo-50 p-5 rounded-3xl border border-indigo-200 shadow-sm space-y-1">
-          <span className="text-[10px] font-extrabold uppercase text-indigo-700">In Progress / Under Review</span>
-          <p className="text-2xl font-black text-indigo-900">{inProgressCount}</p>
+        <div className="bg-slate-50 p-5 rounded-3xl border border-slate-200 shadow-sm space-y-1">
+          <span className="text-[10px] font-extrabold uppercase text-[#0B2545]">In Progress / Under Review</span>
+          <p className="text-2xl font-black text-[#0B2545]">{inProgressCount}</p>
         </div>
 
         <div className="bg-amber-50 p-5 rounded-3xl border border-amber-200 shadow-sm space-y-1">
-          <span className="text-[10px] font-extrabold uppercase text-amber-700">Submitted</span>
-          <p className="text-2xl font-black text-amber-900">{submittedCount}</p>
+          <span className="text-[10px] font-extrabold uppercase text-amber-800">Submitted</span>
+          <p className="text-2xl font-black text-amber-950">{submittedCount}</p>
         </div>
       </div>
 
       {/* Student Shortlist & Send Recommendations */}
       <div className="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 bg-slate-50">
-          <h2 className="text-sm font-bold text-slate-900 flex items-center gap-2">
-            <Bookmark className="w-4 h-4 text-indigo-600" /> Student Shortlisted Options & Recommendation Dispatcher
+          <h2 className="text-sm font-bold text-[#0B2545] flex items-center gap-2">
+            <Bookmark className="w-4 h-4 text-[#CFA25E]" /> Student Shortlisted Options & Recommendation Dispatcher
           </h2>
-          <button onClick={() => setShowAddRec(!showAddRec)} className="px-3.5 py-1.5 bg-indigo-600 text-white rounded-xl text-xs font-bold shadow-md hover:bg-indigo-700 transition flex items-center gap-1">
-            <Plus className="w-3.5 h-3.5" /> Send Recommendation
+          <button onClick={() => setShowAddRec(!showAddRec)} className="px-3.5 py-1.5 bg-[#0B2545] text-white rounded-xl text-xs font-bold shadow-md hover:bg-[#133E6D] transition flex items-center gap-1">
+            <Plus className="w-3.5 h-3.5 text-[#CFA25E]" /> Send Recommendation
           </button>
         </div>
 
         {showAddRec && (
-          <form onSubmit={handleAddRec} className="border-b border-slate-200 p-5 bg-indigo-50/40 space-y-3">
+          <form onSubmit={handleAddRec} className="border-b border-slate-200 p-5 bg-amber-50/30 space-y-3">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
               <div>
                 <label className="block text-[11px] font-bold uppercase text-slate-500 mb-1">University Name *</label>
@@ -147,8 +161,8 @@ export const PipelineTracker = () => {
             </div>
             <div className="flex justify-end gap-2">
               <button type="button" onClick={() => setShowAddRec(false)} className="px-4 py-1.5 bg-slate-100 rounded-xl text-xs font-bold">Cancel</button>
-              <button type="submit" className="px-4 py-1.5 bg-indigo-600 text-white rounded-xl text-xs font-bold shadow-md flex items-center gap-1">
-                <Send className="w-3.5 h-3.5" /> Dispatch Recommendation
+              <button type="submit" className="px-4 py-1.5 bg-[#0B2545] text-white rounded-xl text-xs font-bold shadow-md flex items-center gap-1">
+                <Send className="w-3.5 h-3.5 text-[#CFA25E]" /> Dispatch Recommendation
               </button>
             </div>
           </form>
@@ -158,15 +172,27 @@ export const PipelineTracker = () => {
           {recommendations.map(rec => (
             <div key={rec.id} className="px-6 py-4 flex items-center justify-between gap-3">
               <div>
-                <span className={`px-2 py-0.5 rounded text-[10px] font-bold mr-2 ${rec.category === 'Dream School' ? 'bg-rose-50 text-rose-700' : 'bg-indigo-50 text-indigo-700'}`}>
+                <span className={`px-2 py-0.5 rounded text-[10px] font-bold mr-2 ${rec.category === 'Dream School' ? 'bg-amber-100 text-amber-900 border border-amber-200' : 'bg-slate-100 text-[#0B2545] border border-slate-200'}`}>
                   {rec.category}
                 </span>
                 <span className="text-sm font-bold text-slate-900">{rec.name}</span>
                 <p className="text-[11px] text-slate-500 mt-0.5">{rec.description}</p>
               </div>
               <button
-                onClick={() => { removeRecommendation(rec.id); showMsg('Recommendation removed'); }}
-                className="p-2 rounded-xl text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition"
+                onClick={() => {
+                  setConfirmModal({
+                    isOpen: true,
+                    title: 'Remove University Recommendation',
+                    message: `Are you sure you want to remove "${rec.name}" from this student's recommendation shortlist?`,
+                    confirmText: 'Remove Recommendation',
+                    variant: 'danger',
+                    onConfirm: () => {
+                      removeRecommendation(rec.id);
+                      showMsg('Recommendation removed');
+                    }
+                  });
+                }}
+                className="p-2 rounded-xl text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition cursor-pointer"
               >
                 <Trash2 className="w-4 h-4" />
               </button>
@@ -178,16 +204,16 @@ export const PipelineTracker = () => {
       {/* Applications Pipeline List */}
       <div className="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 bg-slate-50">
-          <h2 className="text-sm font-bold text-slate-900 flex items-center gap-2">
-            <GraduationCap className="w-4 h-4 text-emerald-600" /> Active University Applications ({applications.length})
+          <h2 className="text-sm font-bold text-[#0B2545] flex items-center gap-2">
+            <GraduationCap className="w-4 h-4 text-[#CFA25E]" /> Active University Applications ({applications.length})
           </h2>
-          <button onClick={() => setShowAddApp(!showAddApp)} className="px-3.5 py-1.5 bg-emerald-600 text-white rounded-xl text-xs font-bold shadow-md hover:bg-emerald-700 transition flex items-center gap-1">
-            <Plus className="w-3.5 h-3.5" /> Add Application
+          <button onClick={() => setShowAddApp(!showAddApp)} className="px-3.5 py-1.5 bg-[#0B2545] text-white rounded-xl text-xs font-bold shadow-md hover:bg-[#133E6D] transition flex items-center gap-1">
+            <Plus className="w-3.5 h-3.5 text-[#CFA25E]" /> Add Application
           </button>
         </div>
 
         {showAddApp && (
-          <form onSubmit={handleAddApp} className="border-b border-slate-200 p-5 bg-emerald-50/40 space-y-3">
+          <form onSubmit={handleAddApp} className="border-b border-slate-200 p-5 bg-amber-50/30 space-y-3">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
               <div>
                 <label className="block text-[11px] font-bold uppercase text-slate-500 mb-1">University Name *</label>
@@ -208,7 +234,7 @@ export const PipelineTracker = () => {
             </div>
             <div className="flex justify-end gap-2">
               <button type="button" onClick={() => setShowAddApp(false)} className="px-4 py-1.5 bg-slate-100 rounded-xl text-xs font-bold">Cancel</button>
-              <button type="submit" className="px-4 py-1.5 bg-emerald-600 text-white rounded-xl text-xs font-bold shadow-md">Add to Student Tracker</button>
+              <button type="submit" className="px-4 py-1.5 bg-[#0B2545] text-white rounded-xl text-xs font-bold shadow-md">Add to Student Tracker</button>
             </div>
           </form>
         )}
@@ -239,6 +265,18 @@ export const PipelineTracker = () => {
           ))}
         </div>
       </div>
+
+      {/* Confirmation Modal */}
+      <ConfirmationModal
+        isOpen={confirmModal.isOpen}
+        title={confirmModal.title}
+        message={confirmModal.message}
+        confirmText={confirmModal.confirmText}
+        variant={confirmModal.variant}
+        onConfirm={confirmModal.onConfirm}
+        onClose={() => setConfirmModal(p => ({ ...p, isOpen: false }))}
+      />
     </div>
   );
 };
+

@@ -25,29 +25,54 @@ import {
 import { PageHeader } from '../../components/ui/PageHeader';
 import { formatINR, formatDate } from '../../lib/formatters';
 
+import { ConfirmationModal } from '../../components/common/ConfirmationModal';
+
 export const CounsellorOverview = () => {
   const navigate = useNavigate();
   const {
     counsellorProfile,
     pipelineStudents,
     activeStudentId,
+    activeStudent,
     switchActiveStudent,
     appointments,
     escrowBookings,
     approveBookingSession
   } = useData();
 
+  const [timeFilter, setTimeFilter] = useState('ALL'); // '3M' | '6M' | '1Y' | 'ALL'
   const [notice, setNotice] = useState('');
+  const [confirmModal, setConfirmModal] = useState({
+    isOpen: false,
+    title: '',
+    message: '',
+    confirmText: 'Confirm',
+    variant: 'primary',
+    onConfirm: () => {}
+  });
+
   const showMsg = (msg) => { setNotice(msg); setTimeout(() => setNotice(''), 3000); };
 
-  // Generic Aggregate Metrics calculation
+  // Generic Aggregate Metrics calculation scaled by time filter
   const pendingApprovals = appointments.filter(a => a.status === 'PENDING_APPROVAL');
   const upcomingConfirmed = appointments.filter(a => a.status === 'UPCOMING');
-  const completedSessions = appointments.filter(a => a.status === 'COMPLETED').length + 8; // aggregate completed
-  const pendingEscrowRequests = escrowBookings.filter(b => b.escrowStatus === 'RELEASE_REQUESTED');
-  const totalEarned = escrowBookings
+
+  // Time-filtered calculations
+  const rawCompleted = appointments.filter(a => a.status === 'COMPLETED').length + 12;
+  const rawTotalEarned = escrowBookings
     .filter(b => b.escrowStatus === 'RELEASED_TO_COUNSELLOR')
     .reduce((sum, b) => sum + (b.counsellorPayout || b.amount * 0.9), 0);
+
+  const filterMultiplier = {
+    '3M': 0.45,
+    '6M': 0.75,
+    '1Y': 0.92,
+    'ALL': 1.0
+  }[timeFilter] || 1.0;
+
+  const completedSessions = Math.round(rawCompleted * filterMultiplier);
+  const totalEarned = Math.round(rawTotalEarned * filterMultiplier);
+  const pendingEscrowRequests = escrowBookings.filter(b => b.escrowStatus === 'RELEASE_REQUESTED');
 
   // Map session counters for each student in pipeline
   const getStudentSessionStats = (studentName) => {
@@ -99,6 +124,37 @@ export const CounsellorOverview = () => {
         </div>
       )}
 
+      {/* Filter and Time Window Selector */}
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 bg-white p-4 rounded-2xl border border-slate-200 shadow-xs">
+        <div className="flex items-center gap-2">
+          <Clock className="w-4 h-4 text-slate-500" />
+          <span className="text-xs font-bold text-slate-700">Analytics Time Window:</span>
+        </div>
+        <div className="flex items-center gap-1.5 p-1 bg-slate-100 rounded-xl border border-slate-200 text-xs">
+          {[
+            { label: 'Past 3 Months', value: '3M' },
+            { label: 'Past 6 Months', value: '6M' },
+            { label: 'Past 1 Year', value: '1Y' },
+            { label: 'All Time', value: 'ALL' }
+          ].map(tab => (
+            <button
+              key={tab.value}
+              onClick={() => {
+                setTimeFilter(tab.value);
+                showMsg(`Displaying metrics for: ${tab.label}`);
+              }}
+              className={`px-3 py-1.5 rounded-lg font-bold transition cursor-pointer ${
+                timeFilter === tab.value
+                  ? 'bg-[#0B2545] text-white shadow-xs'
+                  : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200'
+              }`}
+            >
+              {tab.label}
+            </button>
+          ))}
+        </div>
+      </div>
+
       {/* GENERIC AGGREGATE STAT CARDS */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         
@@ -109,7 +165,7 @@ export const CounsellorOverview = () => {
             <CheckCircle2 className="w-5 h-5 text-emerald-600" />
           </div>
           <p className="text-3xl font-black text-slate-900">{completedSessions}</p>
-          <p className="text-[11px] text-emerald-700 font-medium">Completed 1-on-1 consultations</p>
+          <p className="text-[11px] text-emerald-700 font-medium">Completed 1-on-1 consultations ({timeFilter})</p>
         </div>
 
         {/* Metric 2: Pending Session Requests */}
@@ -135,7 +191,7 @@ export const CounsellorOverview = () => {
         {/* Metric 4: Total Escrow Disbursed */}
         <div className="bg-slate-900 text-white p-5 rounded-3xl border border-slate-800 shadow-sm space-y-2">
           <div className="flex justify-between items-center text-emerald-400">
-            <span className="text-[10px] font-extrabold uppercase tracking-wider text-slate-400">Escrow Payout Disbursed</span>
+            <span className="text-[10px] font-extrabold uppercase tracking-wider text-slate-400">Escrow Disbursed ({timeFilter})</span>
             <Lock className="w-5 h-5 text-emerald-400" />
           </div>
           <p className="text-3xl font-black text-white">{formatINR(totalEarned)}</p>
@@ -155,9 +211,27 @@ export const CounsellorOverview = () => {
           </div>
 
           <span className="text-xs font-bold text-indigo-600 bg-indigo-50 px-3 py-1 rounded-full border border-indigo-100">
-            Active Context: {pipelineStudents.find(s => (s.studentId || s.id) === activeStudentId)?.fullName || 'Rohan Mehta'}
+            {activeStudentId === 'ALL' ? '👥 All Students Active' : `👤 Active: ${activeStudent?.fullName || 'Rohan Mehta'}`}
           </span>
         </div>
+
+        {/* ALL students aggregate banner */}
+        {activeStudentId === 'ALL' && (
+          <div className="p-4 bg-[#0B2545] text-white rounded-2xl border border-[#CFA25E]/40 flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="w-9 h-9 rounded-xl bg-white/10 flex items-center justify-center">
+                <Users className="w-5 h-5 text-[#CFA25E]" />
+              </div>
+              <div>
+                <p className="text-xs font-bold text-white">Aggregated Student Portfolio View Active</p>
+                <p className="text-[11px] text-slate-300">You are monitoring all {pipelineStudents.length} assigned students. Click "Set Active" on any profile to isolate their milestones.</p>
+              </div>
+            </div>
+            <span className="px-3 py-1 rounded-full text-[10px] font-extrabold bg-[#CFA25E] text-[#0B2545]">
+              Aggregate Mode
+            </span>
+          </div>
+        )}
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {pipelineStudents.map(std => {
@@ -288,8 +362,17 @@ export const CounsellorOverview = () => {
                     <div className="flex gap-2 shrink-0">
                       <button
                         onClick={() => {
-                          approveBookingSession(apt.id, `https://meet.google.com/aspiranthq-${Date.now().toString().slice(-4)}`, 'Approved from Overview');
-                          showMsg(`Approved session for ${apt.studentName}!`);
+                          setConfirmModal({
+                            isOpen: true,
+                            title: `Confirm Session Approval`,
+                            message: `Are you sure you want to approve this ${apt.consultationType} for ${apt.studentName} on ${formatDate(apt.date)} at ${apt.timeSlot}? A virtual Google Meet link will be provisioned automatically.`,
+                            confirmText: 'Approve & Confirm',
+                            variant: 'success',
+                            onConfirm: () => {
+                              approveBookingSession(apt.id, `https://meet.google.com/aspiranthq-${Date.now().toString().slice(-4)}`, 'Approved from Overview');
+                              showMsg(`Approved session for ${apt.studentName}!`);
+                            }
+                          });
                         }}
                         className="px-3.5 py-1.5 bg-emerald-600 text-white rounded-xl text-xs font-bold shadow-sm cursor-pointer hover:bg-emerald-700 transition"
                       >
@@ -399,11 +482,22 @@ export const CounsellorOverview = () => {
               <h4 className="text-xs font-bold text-emerald-950">Verification Status: Verified Strategist</h4>
             </div>
             <p className="text-[11px] text-emerald-800 leading-relaxed">
-              Your degrees, experience certificates, and verified student offer letters are approved by AspirantHQ Compliance.
+              Your degrees, experience certificates, and verified student offer letters are approved by matchEd Compliance.
             </p>
           </div>
         </div>
       </div>
+
+      {/* Confirmation Popup Modal */}
+      <ConfirmationModal
+        isOpen={confirmModal.isOpen}
+        title={confirmModal.title}
+        message={confirmModal.message}
+        confirmText={confirmModal.confirmText}
+        variant={confirmModal.variant}
+        onConfirm={confirmModal.onConfirm}
+        onClose={() => setConfirmModal(p => ({ ...p, isOpen: false }))}
+      />
     </div>
   );
 };

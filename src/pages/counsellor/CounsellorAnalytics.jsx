@@ -3,6 +3,7 @@ import { useData } from '../../context/DataContext';
 import { Star, ShieldCheck, DollarSign, MessageSquare, TrendingUp, Send, CheckCircle2, Zap, Crown, ArrowRight } from 'lucide-react';
 import { BoostManager } from '../../features/counsellor/components/BoostManager';
 import { COUNSELLOR_SUBSCRIPTION_TIERS } from '../../config/subscriptionConfig';
+import { MatchEdLogo } from '../../components/common/MatchEdLogo';
 
 export const CounsellorAnalytics = () => {
   const { counsellors, reviews, replyToReview, escrowBookings, upgradeCounsellorTier } = useData();
@@ -28,18 +29,27 @@ export const CounsellorAnalytics = () => {
 
   return (
     <div className="space-y-8 max-w-5xl mx-auto font-sans">
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-        <div>
-          <span className="text-xs font-bold uppercase tracking-wider text-emerald-600">Performance & Growth</span>
-          <h1 className="text-2xl font-black text-slate-900">Analytics & Hero Boost Page</h1>
+      {/* matchEd Brand Header Banner */}
+      <div className="bg-[#0B2545] p-6 rounded-3xl border border-[#CFA25E]/40 text-white flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-md">
+        <div className="flex items-center gap-4">
+          <div className="p-2 bg-white/10 rounded-2xl border border-white/20">
+            <MatchEdLogo variant="light" size="lg" />
+          </div>
+          <div>
+            <span className="text-[10px] font-extrabold uppercase tracking-widest text-[#CFA25E] block">
+              matchEd Intelligence & Growth
+            </span>
+            <h1 className="text-xl font-black text-white">Advisor Analytics & Hero Spotlight</h1>
+            <p className="text-xs text-slate-300 mt-0.5">Real-time marketplace metrics, profile conversion performance, and review feedback.</p>
+          </div>
         </div>
 
         <button 
           onClick={() => upgradeCounsellorTier(counsellor.id, 'PREMIUM_BOOST')}
-          className="bg-amber-500 hover:bg-amber-400 text-slate-950 font-extrabold text-xs px-5 py-2.5 rounded-xl shadow-md flex items-center gap-2"
+          className="bg-[#CFA25E] hover:bg-[#b88c49] text-[#0B2545] font-extrabold text-xs px-5 py-2.5 rounded-xl shadow-md flex items-center gap-2 cursor-pointer shrink-0"
         >
-          <Zap className="w-4 h-4 fill-slate-950" />
-          Feature on Marketplace ($99/mo)
+          <Zap className="w-4 h-4 fill-[#0B2545]" />
+          Feature on Marketplace (₹7,999/mo)
         </button>
       </div>
 
@@ -67,10 +77,10 @@ export const CounsellorAnalytics = () => {
         <div className="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm">
           <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">Verified Placements</span>
           <div className="flex items-center gap-2 mt-1">
-            <span className="text-2xl font-extrabold text-emerald-700">{counsellor.verifiedPlacementsCount}+</span>
+            <span className="text-2xl font-extrabold text-[#0B2545]">{counsellor.verifiedPlacementsCount}+</span>
             <ShieldCheck className="w-5 h-5 text-emerald-600" />
           </div>
-          <span className="text-xs text-emerald-800 font-medium">Audited offer letters</span>
+          <span className="text-xs text-slate-500 font-medium">Audited offer letters</span>
         </div>
 
         <div className="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm">
@@ -83,7 +93,7 @@ export const CounsellorAnalytics = () => {
 
         <div className="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm">
           <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">Conversion Rate</span>
-          <div className="text-2xl font-extrabold text-indigo-600 mt-1">18.4%</div>
+          <div className="text-2xl font-extrabold text-[#0B2545] mt-1">18.4%</div>
           <span className="text-xs text-slate-500 font-medium">Profile views → Bookings</span>
         </div>
       </div>
@@ -109,8 +119,8 @@ export const CounsellorAnalytics = () => {
               <p className="text-xs text-slate-700">{rev.content}</p>
 
               {rev.counsellorReply ? (
-                <div className="bg-white border-l-2 border-indigo-600 p-3 rounded-r-xl text-xs">
-                  <span className="font-bold text-slate-900 block mb-1">Your Published Reply:</span>
+                <div className="bg-white border-l-2 border-[#0B2545] p-3 rounded-r-xl text-xs">
+                  <span className="font-bold text-[#0B2545] block mb-1">Your Published Reply:</span>
                   <p className="text-slate-600">{rev.counsellorReply}</p>
                 </div>
               ) : activeReplyId === rev.id ? (
@@ -127,24 +137,24 @@ export const CounsellorAnalytics = () => {
                     <button 
                       type="button"
                       onClick={() => setActiveReplyId(null)}
-                      className="px-3 py-1.5 bg-slate-200 text-slate-700 font-bold text-xs rounded-lg"
+                      className="px-3 py-1.5 bg-slate-200 text-slate-700 font-bold text-xs rounded-lg cursor-pointer"
                     >
                       Cancel
                     </button>
                     <button 
                       type="submit"
-                      className="px-4 py-1.5 bg-indigo-600 text-white font-bold text-xs rounded-lg flex items-center gap-1"
+                      className="px-4 py-1.5 bg-[#0B2545] text-white font-bold text-xs rounded-lg flex items-center gap-1 cursor-pointer"
                     >
-                      <Send className="w-3.5 h-3.5" /> Publish Reply
+                      <Send className="w-3.5 h-3.5 text-[#CFA25E]" /> Publish Reply
                     </button>
                   </div>
                 </form>
               ) : (
                 <button 
                   onClick={() => setActiveReplyId(rev.id)}
-                  className="text-xs text-indigo-600 hover:text-indigo-700 font-bold flex items-center gap-1"
+                  className="text-xs text-[#0B2545] hover:text-[#133E6D] font-bold flex items-center gap-1 cursor-pointer"
                 >
-                  <MessageSquare className="w-3.5 h-3.5" />
+                  <MessageSquare className="w-3.5 h-3.5 text-[#CFA25E]" />
                   Add Right-of-Reply
                 </button>
               )}
@@ -155,3 +165,4 @@ export const CounsellorAnalytics = () => {
     </div>
   );
 };
+

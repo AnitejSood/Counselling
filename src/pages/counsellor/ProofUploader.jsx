@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useData } from '../../context/DataContext';
 import {
   ShieldCheck, Upload, CheckCircle2, Award, FileText,
-  Plus, Trash2, ExternalLink, AlertCircle, Eye, Hash
+  Plus, Trash2, ExternalLink, AlertCircle, Eye, Hash, Sparkles
 } from 'lucide-react';
 import { PageHeader } from '../../components/ui/PageHeader';
 import { EmptyState } from '../../components/ui/EmptyState';
@@ -17,9 +17,9 @@ const UploadBox = ({ label, hint, onChange }) => {
   return (
     <div>
       <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-1.5">{label}</label>
-      <label className="flex flex-col items-center justify-center border-2 border-dashed border-slate-200 hover:border-emerald-400 bg-slate-50 rounded-2xl p-5 text-center cursor-pointer transition-colors group">
+      <label className="flex flex-col items-center justify-center border-2 border-dashed border-slate-200 hover:border-[#CFA25E] bg-slate-50 rounded-2xl p-5 text-center cursor-pointer transition-colors group">
         <input type="file" accept=".pdf,.jpg,.jpeg,.png" onChange={handleChange} className="hidden" />
-        <Upload className="w-6 h-6 text-slate-400 group-hover:text-emerald-500 transition mb-1.5" />
+        <Upload className="w-6 h-6 text-slate-400 group-hover:text-[#0B2545] transition mb-1.5" />
         {fileName ? (
           <span className="text-xs font-bold text-emerald-700 flex items-center gap-1">
             <CheckCircle2 className="w-3.5 h-3.5" /> {fileName}
@@ -81,25 +81,25 @@ export const ProofUploader = () => {
   return (
     <div className="space-y-8 max-w-5xl mx-auto font-sans">
       <PageHeader
-        eyebrow="Placement Verification & Proof Counter"
+        eyebrow="matchEd Placement Audit & Proof Counter"
         title="Offer Letter Audit & Verified Proof Counter"
-        subtitle="Upload verified offer letters to grow your verified placement count."
+        subtitle="Upload verified student offer letters to audit your admissions credentials and grow your public verified placement count badge."
       />
 
       {/* Proof Counter Banner */}
-      <div className="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm flex items-center justify-between">
+      <div className="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div className="flex items-center gap-4">
-          <div className="w-14 h-14 rounded-2xl bg-emerald-100 border border-emerald-200 text-emerald-700 flex items-center justify-center font-black text-xl">
+          <div className="w-14 h-14 rounded-2xl bg-amber-50 border border-amber-200 text-[#0B2545] flex items-center justify-center font-black text-xl shadow-inner">
             {verifiedCount}
           </div>
           <div>
-            <span className="text-[10px] font-extrabold uppercase text-emerald-700 tracking-wider">Verified Placement Proof Counter</span>
+            <span className="text-[10px] font-extrabold uppercase text-[#0B2545] tracking-wider">Verified Placement Proof Counter</span>
             <h3 className="text-lg font-bold text-slate-900">{verifiedCount} Official Offer Letters Verified</h3>
-            <p className="text-xs text-slate-500">Displayed on your public marketplace profile badge.</p>
+            <p className="text-xs text-slate-500">Displayed on your public matchEd marketplace profile badge.</p>
           </div>
         </div>
-        <span className="px-3 py-1 bg-emerald-50 text-emerald-800 rounded-full text-xs font-bold border border-emerald-200">
-          Audit Verified Active
+        <span className="px-3.5 py-1.5 bg-emerald-50 text-emerald-800 rounded-full text-xs font-bold border border-emerald-200 flex items-center gap-1.5 shadow-sm">
+          <ShieldCheck className="w-4 h-4 text-emerald-600" /> Audit Verified Active
         </span>
       </div>
 
@@ -116,7 +116,7 @@ export const ProofUploader = () => {
             key={tab}
             onClick={() => setActiveTab(tab)}
             className={`px-4 py-2 rounded-xl text-xs font-bold capitalize transition ${
-              activeTab === tab ? 'bg-emerald-600 text-white shadow-md' : 'bg-white border border-slate-200 text-slate-600 hover:border-emerald-300'
+              activeTab === tab ? 'bg-[#0B2545] text-white shadow-md' : 'bg-white border border-slate-200 text-slate-600 hover:border-amber-300'
             }`}
           >
             {tab === 'upload' ? 'Upload Proof' : tab === 'documents' ? 'Student Documents' : 'Proof History'}
@@ -134,25 +134,25 @@ export const ProofUploader = () => {
                 <label className="block text-[11px] font-bold uppercase text-slate-500 mb-1.5">Student Full Name *</label>
                 <input required type="text" value={proofForm.studentName}
                   onChange={e => setProofForm(p => ({ ...p, studentName: e.target.value }))}
-                  placeholder="e.g. Rohan Mehta" className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200" />
+                  placeholder="e.g. Rohan Mehta" className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 focus:outline-none" />
               </div>
               <div>
                 <label className="block text-[11px] font-bold uppercase text-slate-500 mb-1.5">University / Institution *</label>
                 <input required type="text" value={proofForm.universityName}
                   onChange={e => setProofForm(p => ({ ...p, universityName: e.target.value }))}
-                  placeholder="e.g. Imperial College London" className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200" />
+                  placeholder="e.g. Imperial College London" className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 focus:outline-none" />
               </div>
               <div>
                 <label className="block text-[11px] font-bold uppercase text-slate-500 mb-1.5">Program & Degree *</label>
                 <input required type="text" value={proofForm.program}
                   onChange={e => setProofForm(p => ({ ...p, program: e.target.value }))}
-                  placeholder="e.g. MS in Artificial Intelligence" className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200" />
+                  placeholder="e.g. MS in Artificial Intelligence" className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 focus:outline-none" />
               </div>
               <div>
                 <label className="block text-[11px] font-bold uppercase text-slate-500 mb-1.5">Intake Year</label>
                 <input type="text" value={proofForm.intakeYear}
                   onChange={e => setProofForm(p => ({ ...p, intakeYear: e.target.value }))}
-                  placeholder="e.g. Fall 2026" className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200" />
+                  placeholder="e.g. Fall 2026" className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 focus:outline-none" />
               </div>
             </div>
 
@@ -162,8 +162,8 @@ export const ProofUploader = () => {
               onChange={v => setProofForm(p => ({ ...p, fileName: v }))}
             />
 
-            <button type="submit" className="w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-bold text-xs shadow-md transition flex items-center justify-center gap-2">
-              <ShieldCheck className="w-4 h-4" /> Submit for Verification Audit
+            <button type="submit" className="w-full py-3 bg-[#0B2545] hover:bg-[#133E6D] text-white rounded-xl font-bold text-xs shadow-md transition flex items-center justify-center gap-2">
+              <ShieldCheck className="w-4 h-4 text-[#CFA25E]" /> Submit for Verification Audit
             </button>
           </form>
         </div>
@@ -174,7 +174,7 @@ export const ProofUploader = () => {
         <div className="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden">
           <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 bg-slate-50">
             <h2 className="text-sm font-bold text-slate-900">Student Document Records ({documents.length})</h2>
-            <button onClick={() => setShowDocForm(!showDocForm)} className="px-3 py-1.5 bg-slate-900 text-white rounded-xl text-xs font-bold">
+            <button onClick={() => setShowDocForm(!showDocForm)} className="px-3.5 py-1.5 bg-[#0B2545] text-white rounded-xl text-xs font-bold shadow-sm">
               + Add Document Record
             </button>
           </div>
@@ -190,7 +190,7 @@ export const ProofUploader = () => {
                   <select
                     value={doc.status}
                     onChange={e => { updateDocumentStatus(doc.id, e.target.value); showMsg('Status updated!'); }}
-                    className="text-[11px] font-bold border border-slate-200 bg-white rounded-xl px-3 py-1.5 focus:outline-none"
+                    className="text-[11px] font-bold border border-slate-200 bg-white rounded-xl px-3 py-1.5 focus:outline-none cursor-pointer"
                   >
                     <option>Under Review</option>
                     <option>Verified</option>
@@ -207,7 +207,7 @@ export const ProofUploader = () => {
       {activeTab === 'history' && (
         <div className="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden">
           <div className="px-6 py-4 border-b border-slate-100 bg-slate-50">
-            <h2 className="text-sm font-bold text-slate-900">Verified Proof Audit History ({verifiedProofs.length})</h2>
+            <h2 className="text-sm font-bold text-[#0B2545]">Verified Proof Audit History ({verifiedProofs.length})</h2>
           </div>
           <div className="divide-y divide-slate-100">
             {verifiedProofs.map(prf => (
@@ -227,3 +227,4 @@ export const ProofUploader = () => {
     </div>
   );
 };
+

@@ -106,7 +106,7 @@ export const CompareDrawer = () => {
                   <div className="h-10 flex items-center border-b border-slate-100">Starting Rate / Package</div>
                   <div className="h-10 flex items-center border-b border-slate-100">Specialty Track</div>
                   <div className="h-10 flex items-center border-b border-slate-100">Experience</div>
-                  <div className="h-10 flex items-center border-b border-slate-100">Escrow Guarantee</div>
+                  <div className="h-10 flex items-center border-b border-slate-100">matchEd Guarantee</div>
                   <div className="h-20 flex items-center border-b border-slate-100">Destinations Covered</div>
                   <div className="h-24 flex items-center">Key Specialization Tags</div>
                 </div>
@@ -117,29 +117,38 @@ export const CompareDrawer = () => {
                     <div>
                       {/* Top Info */}
                       <div className="text-center mb-6 border-b border-slate-200 pb-4">
-                        <img src={counsellor.photoUrl} alt={counsellor.fullName} className="w-20 h-20 rounded-2xl object-cover mx-auto mb-3 shadow-md ring-2 ring-white" />
+                        <img src={counsellor.photoUrl} alt={counsellor.fullName} className="w-20 h-20 rounded-2xl object-cover mx-auto mb-3 shadow-md ring-2 ring-[#CFA25E]" />
                         <h3 className="font-bold text-slate-900 text-base">{counsellor.fullName}</h3>
-                        <p className="text-xs text-indigo-600 font-medium mb-3">{counsellor.track}</p>
-                        <Link 
-                          to={`/book?counsellorId=${counsellor.id}`}
-                          onClick={() => setIsOpen(false)}
-                          className="inline-flex items-center justify-center w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-xs py-2 rounded-xl shadow-md transition-all"
-                        >
-                          Book Session
-                        </Link>
+                        <p className="text-xs text-[#0B2545] font-semibold mb-3">{counsellor.track}</p>
+                        <div className="space-y-1.5">
+                          <Link 
+                            to={`/book?counsellorId=${counsellor.id}`}
+                            onClick={() => setIsOpen(false)}
+                            className="inline-flex items-center justify-center w-full bg-[#0B2545] hover:bg-slate-800 text-white font-bold text-xs py-2 rounded-xl shadow-md transition-all cursor-pointer"
+                          >
+                            Book Package
+                          </Link>
+                          <Link 
+                            to={`/book?counsellorId=${counsellor.id}&type=free`}
+                            onClick={() => setIsOpen(false)}
+                            className="inline-flex items-center justify-center w-full bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-300 font-bold text-[11px] py-1.5 rounded-xl transition-all cursor-pointer"
+                          >
+                            15-Min Free Call
+                          </Link>
+                        </div>
                       </div>
 
                       {/* Values */}
                       <div className="space-y-6 text-xs text-slate-800">
                         <div className="h-10 flex items-center font-bold text-emerald-700 bg-emerald-50/80 px-3 rounded-lg border border-emerald-100">
                           <ShieldCheck className="w-4 h-4 text-emerald-600 mr-1.5" />
-                          {counsellor.verifiedPlacementsCount}+ Verified Placements
+                          {counsellor.verifiedPlacementsCount}+ Placements
                         </div>
                         <div className="h-10 flex items-center font-bold text-slate-900">
                           <Star className="w-4 h-4 fill-amber-400 text-amber-400 mr-1.5" />
                           {counsellor.rating} <span className="text-slate-400 font-normal ml-1">({counsellor.reviewCount} reviews)</span>
                         </div>
-                        <div className="h-10 flex items-center font-bold text-indigo-900">
+                        <div className="h-10 flex items-center font-bold text-[#0B2545]">
                           Starting ₹{counsellor.pricePerSession ? (counsellor.pricePerSession).toLocaleString('en-IN') : '25,000'} / package
                         </div>
                         <div className="h-10 flex items-center text-slate-700 font-medium truncate">
@@ -148,9 +157,9 @@ export const CompareDrawer = () => {
                         <div className="h-10 flex items-center text-slate-700">
                           {counsellor.experienceYears} Years Experience
                         </div>
-                        <div className="h-10 flex items-center text-emerald-700 font-medium bg-emerald-50 px-2 rounded-lg">
-                          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 mr-1.5" />
-                          2-Wk / 3-Session Guarantee
+                        <div className="h-10 flex items-center text-amber-900 font-bold bg-amber-50 px-2 rounded-lg border border-amber-200">
+                          <CheckCircle2 className="w-3.5 h-3.5 text-amber-600 mr-1.5" />
+                          1-Month Switch Guarantee
                         </div>
                         <div className="h-20 flex flex-wrap gap-1 items-center border-b border-slate-200/60">
                           {counsellor.destinations?.map((d, i) => (
@@ -161,7 +170,7 @@ export const CompareDrawer = () => {
                         </div>
                         <div className="h-24 flex flex-wrap gap-1.5 items-start pt-2">
                           {counsellor.tags?.map((t, i) => (
-                            <span key={i} className="bg-indigo-50 text-indigo-700 px-2 py-0.5 rounded text-[10px] font-medium">
+                            <span key={i} className="bg-slate-100 text-[#0B2545] border border-slate-200 px-2 py-0.5 rounded text-[10px] font-medium">
                               {t}
                             </span>
                           ))}

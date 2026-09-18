@@ -50,14 +50,28 @@ export const CounsellorProfile = () => {
             
             {/* Left: Photo & Info */}
             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6">
-              <img 
-                src={counsellor.photoUrl} 
-                alt={counsellor.fullName}
-                className="w-28 h-28 rounded-3xl object-cover ring-4 ring-indigo-50 shadow-lg" 
-              />
+              <div className="relative">
+                <img 
+                  src={counsellor.photoUrl} 
+                  alt={counsellor.fullName}
+                  className="w-28 h-28 rounded-3xl object-cover ring-4 ring-amber-100 shadow-lg border-2 border-[#CFA25E]" 
+                />
+                {counsellor.hasBlueTick && (
+                  <span className="absolute -top-2 -right-2 bg-white rounded-full p-1 shadow-md">
+                    <UserCheck className="w-5 h-5 text-sky-600 fill-sky-100" />
+                  </span>
+                )}
+              </div>
               <div>
                 <div className="flex items-center gap-3 flex-wrap mb-1">
-                  <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900">{counsellor.fullName}</h1>
+                  <h1 className="text-2xl sm:text-3xl font-extrabold text-[#0B2545] flex items-center gap-2">
+                    {counsellor.fullName}
+                    {counsellor.hasBlueTick && (
+                      <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-bold bg-sky-100 text-sky-800 border border-sky-300">
+                        Blue Tick Verified
+                      </span>
+                    )}
+                  </h1>
                   {counsellor.verificationStatus === 'VERIFIED' && (
                     <span className="inline-flex items-center gap-1 bg-emerald-100 border border-emerald-200 text-emerald-800 text-xs font-bold px-3 py-1 rounded-full">
                       <ShieldCheck className="w-4 h-4 text-emerald-600 fill-emerald-50" />
@@ -66,7 +80,7 @@ export const CounsellorProfile = () => {
                   )}
                 </div>
 
-                <p className="text-sm font-semibold text-indigo-600 mb-2">{counsellor.title}</p>
+                <p className="text-sm font-semibold text-[#0B2545] mb-2">{counsellor.title}</p>
                 <p className="text-xs text-slate-600 max-w-2xl mb-4 leading-relaxed">{counsellor.credentials}</p>
 
                 <div className="flex items-center gap-4 text-xs font-medium text-slate-600 flex-wrap">
@@ -78,8 +92,8 @@ export const CounsellorProfile = () => {
                   <span>•</span>
                   <span>{counsellor.experienceYears} Years Experience</span>
                   <span>•</span>
-                  <span className="flex items-center gap-1 text-indigo-700 font-semibold">
-                    <Clock className="w-3.5 h-3.5 text-indigo-500" />
+                  <span className="flex items-center gap-1 text-slate-700 font-semibold">
+                    <Clock className="w-3.5 h-3.5 text-[#CFA25E]" />
                     Response time: {counsellor.responseTime}
                   </span>
                 </div>
@@ -87,20 +101,31 @@ export const CounsellorProfile = () => {
             </div>
 
             {/* Right: Quick Booking CTA Card */}
-            <div className="w-full md:w-auto bg-slate-50 border border-slate-200 rounded-2xl p-5 text-center min-w-[260px]">
-              <span className="text-[11px] uppercase font-bold tracking-wider text-slate-400 block mb-1">Session Pricing</span>
-              <div className="text-3xl font-extrabold text-slate-900 mb-1">
+            <div className="w-full md:w-auto bg-slate-50 border border-slate-200 rounded-3xl p-5 text-center min-w-[280px]">
+              <span className="text-[11px] uppercase font-bold tracking-wider text-slate-500 block mb-1">Transparent Pricing</span>
+              <div className="text-3xl font-extrabold text-[#0B2545] mb-0.5">
                 ₹{counsellor.pricePerSession.toLocaleString('en-IN')}
               </div>
-              <span className="text-xs text-slate-500 block mb-4">45-Minute 1-on-1 Session</span>
+              <span className="text-xs text-slate-500 font-semibold block mb-4">Starting rate per package</span>
 
-              <Link 
-                to={`/book?counsellorId=${counsellor.id}`}
-                className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs py-3 px-6 rounded-xl shadow-lg shadow-indigo-600/30 flex items-center justify-center gap-2 transition-all"
-              >
-                Book Session (Escrow)
-                <ArrowRight className="w-4 h-4" />
-              </Link>
+              <div className="space-y-2">
+                <Link 
+                  to={`/book?counsellorId=${counsellor.id}`}
+                  className="w-full bg-[#0B2545] hover:bg-slate-800 text-white font-bold text-xs py-3 px-6 rounded-xl shadow-lg shadow-slate-900/10 flex items-center justify-center gap-2 transition-all cursor-pointer"
+                >
+                  Book Full Package (Escrow)
+                  <ArrowRight className="w-4 h-4 text-[#CFA25E]" />
+                </Link>
+
+                <Link 
+                  to={`/book?counsellorId=${counsellor.id}&type=free`}
+                  className="w-full bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-300 font-bold text-xs py-2.5 px-6 rounded-xl flex items-center justify-center gap-1.5 transition-all cursor-pointer"
+                >
+                  Book 15-Min Free Discovery Call
+                </Link>
+              </div>
+
+              <span className="block text-[10px] text-slate-400 mt-2">1-Month Switch Guarantee included</span>
             </div>
 
           </div>

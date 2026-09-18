@@ -3,15 +3,18 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useData } from '../../context/DataContext';
 import { SupportModal } from '../common/SupportModal';
+import { MatchEdLogo } from '../common/MatchEdLogo';
+import { NotificationBellPopup } from '../common/NotificationBellPopup';
 import {
   Briefcase, UserCheck, Calendar, Compass, Users, ShieldCheck, BarChart2,
-  LogOut, Menu, X, ChevronRight, MessageSquare, Settings, Lock, Sparkles, HelpCircle, ArrowUpRight, User, Layers, LayoutDashboard, Bell
+  LogOut, Menu, X, ChevronRight, MessageSquare, Settings, Lock, Sparkles, HelpCircle, ArrowUpRight, Award, CheckCircle2
 } from 'lucide-react';
 
 const navItems = [
-  { name: 'Counsellor Overview', path: '/counsellor', icon: LayoutDashboard },
-  { name: 'My Profile & Services', path: '/counsellor/profile', icon: Briefcase },
+  { name: 'Counsellor Overview', path: '/counsellor', icon: Briefcase },
+  { name: 'My Profile & Services', path: '/counsellor/profile', icon: Users },
   { name: 'Session Bookings & Slots', path: '/counsellor/bookings', icon: Calendar },
+  { name: 'Student Messages', path: '/counsellor/messages', icon: MessageSquare },
   { name: 'Student Intake', path: '/counsellor/intake', icon: UserCheck },
   { name: 'Roadmap & Milestones', path: '/counsellor/roadmap', icon: Compass },
   { name: 'Application Pipeline', path: '/counsellor/pipeline', icon: Users },
@@ -23,7 +26,7 @@ const navItems = [
 export const CounsellorLayout = ({ children }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [supportModalOpen, setSupportModalOpen] = useState(false);
-  const { currentUser, logout, switchRole } = useAuth();
+  const { logout } = useAuth();
   const { 
     counsellorProfile, 
     hasPortalAccess, 
@@ -38,51 +41,47 @@ export const CounsellorLayout = ({ children }) => {
   const navigate = useNavigate();
 
   const isAccessGranted = hasPortalAccess(counsellorProfile);
-  const currentTier = counsellorProfile?.subscriptionTier || 'FREE';
+  const currentTier = counsellorProfile?.subscriptionTier || 'PRO';
 
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col md:flex-row font-sans">
 
       {/* Mobile Top Bar */}
-      <div className="md:hidden bg-slate-900 text-white px-4 py-3 flex justify-between items-center sticky top-0 z-40 shadow-md">
-        <div className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-lg bg-emerald-600 flex items-center justify-center">
-            <Briefcase className="w-4 h-4" />
-          </div>
-          <span className="font-bold text-sm">Counsellor Portal</span>
+      <div className="md:hidden bg-[#0B2545] text-white px-4 py-3 flex justify-between items-center sticky top-0 z-40 shadow-md">
+        <MatchEdLogo variant="light" size="sm" />
+        <div className="flex items-center gap-3">
+          <NotificationBellPopup />
+          <button onClick={() => setSidebarOpen(!sidebarOpen)} className="p-2 rounded-lg bg-slate-800">
+            {sidebarOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+          </button>
         </div>
-        <button onClick={() => setSidebarOpen(!sidebarOpen)} className="p-2 rounded-lg bg-slate-800">
-          {sidebarOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-        </button>
       </div>
 
       {/* Sidebar */}
       <aside className={`
-        fixed md:sticky top-0 inset-y-0 left-0 z-40 w-64 bg-slate-900 text-slate-300 flex flex-col justify-between border-r border-slate-800 transition-transform duration-200 h-screen
+        fixed md:sticky top-0 inset-y-0 left-0 z-40 w-64 bg-[#0B2545] text-slate-300 flex flex-col justify-between border-r border-slate-800 transition-transform duration-200 h-screen
         ${sidebarOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
       `}>
         <div>
           {/* Brand */}
-          <div className="p-5 border-b border-slate-800/80 flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-emerald-600 flex items-center justify-center text-white shadow-md shadow-emerald-600/20">
-              <Briefcase className="w-5 h-5" />
-            </div>
-            <div>
-              <span className="text-sm font-extrabold text-white block">AspirantHQ</span>
-              <span className="text-xs text-emerald-400 font-semibold block">Counsellor Portal</span>
-            </div>
+          <div className="p-5 border-b border-white/10 flex items-center justify-between">
+            <MatchEdLogo variant="light" size="md" />
           </div>
 
           {/* Advisor Profile Card */}
-          <div className="p-4 mx-3 my-3 rounded-xl bg-slate-800/70 border border-slate-700/50 flex items-center gap-3">
-            <img
-              src={counsellorProfile?.photoUrl || "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=400"}
-              alt={counsellorProfile?.fullName || "Arti Sood"}
-              className="w-10 h-10 rounded-full object-cover border border-emerald-500/40"
-            />
+          <div className="p-3 mx-3 my-3 rounded-xl bg-white/5 border border-white/10 flex items-center gap-3">
+            <div className="relative">
+              <img
+                src={counsellorProfile?.photoUrl || "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=400"}
+                alt={counsellorProfile?.fullName || "Arti Sood"}
+                className="w-10 h-10 rounded-full object-cover border border-[#CFA25E]"
+              />
+            </div>
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-bold text-white truncate">{counsellorProfile?.fullName || "Arti Sood"}</p>
               <div className="flex items-center gap-1">
+                <p className="text-xs font-bold text-white truncate">{counsellorProfile?.fullName || "Arti Sood"}</p>
+              </div>
+              <div className="flex items-center gap-1 mt-0.5">
                 <span className={`px-2 py-0.5 rounded text-[9px] font-extrabold uppercase ${
                   currentTier === 'FREE' ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30' : 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'
                 }`}>
@@ -92,14 +91,20 @@ export const CounsellorLayout = ({ children }) => {
             </div>
           </div>
 
-          {/* Sidebar Active Student Dropdown Widget */}
-          <div className="mx-3 my-2 p-3 bg-indigo-950/80 rounded-xl border border-indigo-800/60 space-y-1.5">
-            <span className="text-[10px] font-bold text-indigo-300 uppercase tracking-wider block">Active Student Context:</span>
+          {/* Global Authoritative Student Context Selector */}
+          <div className="mx-3 my-2 p-3 bg-white/5 rounded-xl border border-white/10 space-y-1.5">
+            <div className="flex items-center justify-between">
+              <span className="text-[10px] font-bold text-[#CFA25E] uppercase tracking-wider block">Student Context:</span>
+              <span className="text-[9px] px-1.5 py-0.2 rounded-full bg-emerald-500/20 text-emerald-300 font-bold border border-emerald-500/30">
+                {activeStudentId === 'ALL' ? 'Aggregate' : 'Individual'}
+              </span>
+            </div>
             <select
               value={activeStudentId}
               onChange={(e) => switchActiveStudent(e.target.value)}
-              className="w-full px-2.5 py-1.5 rounded-lg bg-slate-900 text-white text-xs font-bold border border-indigo-700 focus:outline-none cursor-pointer"
+              className="w-full px-2.5 py-1.5 rounded-lg bg-[#07172B] text-white text-xs font-bold border border-[#CFA25E]/50 focus:outline-none focus:ring-1 focus:ring-[#CFA25E] cursor-pointer"
             >
+              <option value="ALL">👥 All Assigned Students (Aggregate)</option>
               {(allStudentsList || []).map(s => (
                 <option key={s.studentId || s.id} value={s.studentId || s.id}>
                   👤 {s.fullName || s.name} ({s.targetGoal ? s.targetGoal.split('/')[0] : 'Student'})
@@ -120,15 +125,15 @@ export const CounsellorLayout = ({ children }) => {
                   onClick={() => setSidebarOpen(false)}
                   className={`flex items-center justify-between px-3 py-2 rounded-xl text-xs font-semibold transition-all ${
                     isActive
-                      ? 'bg-emerald-600 text-white shadow-sm shadow-emerald-600/30'
-                      : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
-                  }`}
+                      ? 'bg-[#CFA25E] text-[#0B2545] font-bold shadow-sm shadow-[#CFA25E]/30'
+                      : 'text-slate-300 hover:text-white hover:bg-white/10'
+                  } ${item.highlight && !isActive ? 'border border-[#CFA25E]/40 text-[#CFA25E]' : ''}`}
                 >
                   <div className="flex items-center gap-3">
-                    <Icon className={`w-4 h-4 ${isActive ? 'text-white' : 'text-slate-400'}`} />
+                    <Icon className={`w-4 h-4 ${isActive ? 'text-[#0B2545]' : item.highlight ? 'text-[#CFA25E]' : 'text-slate-400'}`} />
                     <span>{item.name}</span>
                   </div>
-                  <ChevronRight className={`w-3.5 h-3.5 ${isActive ? 'text-white/50' : 'text-slate-700'}`} />
+                  <ChevronRight className={`w-3.5 h-3.5 ${isActive ? 'text-[#0B2545]' : 'text-slate-600'}`} />
                 </Link>
               );
             })}
@@ -136,19 +141,19 @@ export const CounsellorLayout = ({ children }) => {
         </div>
 
         {/* Bottom Actions */}
-        <div className="p-4 border-t border-slate-800 space-y-2 bg-slate-950/40">
+        <div className="p-4 border-t border-white/10 space-y-2 bg-black/20">
           <button
             onClick={() => setSupportModalOpen(true)}
-            className="w-full flex items-center gap-2 px-3 py-2 rounded-xl bg-emerald-950/40 text-emerald-300 border border-emerald-800/40 text-xs font-semibold hover:bg-emerald-900/40 transition cursor-pointer"
+            className="w-full flex items-center justify-center gap-2 px-3 py-2 rounded-xl bg-[#CFA25E]/15 text-[#CFA25E] border border-[#CFA25E]/30 text-xs font-semibold hover:bg-[#CFA25E]/25 transition cursor-pointer"
           >
-            <HelpCircle className="w-4 h-4 text-emerald-400" />
+            <HelpCircle className="w-4 h-4 text-[#CFA25E]" />
             <span>Get Support</span>
           </button>
           <button
             onClick={() => { logout(); navigate('/login'); }}
-            className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-slate-400 hover:text-rose-400 hover:bg-slate-800 text-xs font-semibold transition cursor-pointer"
+            className="w-full flex items-center justify-center gap-2 px-3 py-2 rounded-xl text-slate-400 hover:text-rose-400 hover:bg-white/5 text-xs font-semibold transition cursor-pointer"
           >
-            <LogOut className="w-4 h-4 text-slate-500" />
+            <LogOut className="w-4 h-4 text-slate-400" />
             <span>Sign Out</span>
           </button>
         </div>
@@ -159,11 +164,15 @@ export const CounsellorLayout = ({ children }) => {
 
         {/* Top Header */}
         <header className="hidden md:flex bg-white border-b border-slate-200 px-8 py-3.5 justify-between items-center sticky top-0 z-30 shadow-xs">
-          <div>
-            <span className="text-xs text-emerald-600 font-bold uppercase tracking-wider">AspirantHQ Verified Counsellor Portal</span>
-            <h1 className="text-base font-extrabold text-slate-900">{counsellorProfile?.fullName || 'Arti Sood'} — Career Strategist</h1>
-          </div>
           <div className="flex items-center gap-3">
+            <span className="text-xs text-[#0B2545] font-bold uppercase tracking-wider">matchEd Counsellor Workspace</span>
+            <div className="h-4 w-px bg-slate-200"></div>
+            <h1 className="text-sm font-extrabold text-slate-900 flex items-center gap-1.5">
+              {counsellorProfile?.fullName || 'Arti Sood'}
+            </h1>
+          </div>
+          <div className="flex items-center gap-4">
+            <NotificationBellPopup />
             {currentTier === 'FREE' ? (
               <button
                 onClick={() => upgradeCounsellorTier(counsellorProfile?.id || 'counsellor_01', 'PRO')}
@@ -181,39 +190,36 @@ export const CounsellorLayout = ({ children }) => {
           </div>
         </header>
 
-        {/* Top Active Student Context Banner */}
-        <div className="bg-gradient-to-r from-slate-900 via-indigo-950 to-purple-950 text-white px-6 py-3 border-b border-indigo-900/60 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-inner">
+        {/* Global Highlighted Student Context Banner (Single Authoritative View) */}
+        <div className="bg-[#0B2545] text-white px-6 py-2.5 border-b border-[#CFA25E]/30 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-sm">
           <div className="flex items-center gap-3">
             <div className="relative">
               <img
                 src={activeStudent?.avatarUrl || "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&q=80&w=400"}
-                alt={activeStudent?.fullName || 'Rohan Mehta'}
-                className="w-9 h-9 rounded-full object-cover ring-2 ring-indigo-400 shadow-md"
+                alt={activeStudent?.fullName || 'Active Student'}
+                className="w-8 h-8 rounded-full object-cover ring-2 ring-[#CFA25E] shadow-sm"
               />
-              <span className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-emerald-400 rounded-full border border-slate-900" />
+              <span className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-emerald-400 rounded-full border border-[#0B2545]" />
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <span className="text-[10px] uppercase tracking-wider font-extrabold text-indigo-300">Active Student:</span>
-                <span className="text-xs font-black text-white">{activeStudent?.fullName || 'Rohan Mehta'}</span>
+                <span className="text-[10px] uppercase tracking-wider font-extrabold text-[#CFA25E]">Current View:</span>
+                <span className="text-xs font-black text-white">{activeStudent?.fullName}</span>
+                {activeStudentId === 'ALL' && (
+                  <span className="px-1.5 py-0.5 text-[9px] bg-amber-400/20 text-amber-200 rounded font-bold border border-amber-400/30">
+                    Aggregate Portfolio
+                  </span>
+                )}
               </div>
-              <p className="text-[11px] text-indigo-200 font-medium">Target: {activeStudent?.targetGoal} · {activeStudent?.targetCountries}</p>
+              <p className="text-[11px] text-slate-300 font-medium">Target: {activeStudent?.targetGoal} · {activeStudent?.targetCountries}</p>
             </div>
           </div>
 
-          <div className="flex items-center gap-2 bg-slate-900/80 px-3 py-1.5 rounded-xl border border-indigo-800/80">
-            <span className="text-xs text-indigo-200 font-semibold">Switch Student:</span>
-            <select
-              value={activeStudentId}
-              onChange={(e) => switchActiveStudent(e.target.value)}
-              className="px-3 py-1 rounded-lg bg-indigo-950 text-white text-xs font-bold border border-indigo-600 focus:outline-none cursor-pointer"
-            >
-              {(allStudentsList || []).map(s => (
-                <option key={s.studentId || s.id} value={s.studentId || s.id}>
-                  👤 {s.fullName || s.name} ({s.targetGoal ? s.targetGoal.split('/')[0] : 'Student'})
-                </option>
-              ))}
-            </select>
+          <div className="flex items-center gap-2">
+            <span className="text-[11px] text-slate-300">Switched via sidebar selector</span>
+            <div className="px-2.5 py-1 rounded-lg bg-white/10 text-white text-xs font-bold border border-white/20">
+              {activeStudentId === 'ALL' ? '👥 All Students Active' : `👤 ${activeStudent?.fullName}`}
+            </div>
           </div>
         </div>
 

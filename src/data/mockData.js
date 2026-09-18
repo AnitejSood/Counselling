@@ -1,11 +1,11 @@
-// Mock Data for AspirantHQ Counsellor Marketplace Platform (Chandigarh HQ)
+// Mock Data for matchEd Counsellor Marketplace & Student Success Platform
 
 export const PLATFORM_CONFIG = {
-  companyName: "AspirantHQ Marketplace",
-  tagline: "India's Leading Verified Career & Counsellor Marketplace Platform",
+  companyName: "matchEd",
+  tagline: "Precision Mentor Matching & Student Success Platform",
   headquarters: "Plot 18, Commercial Hub, Sector 17-C, Chandigarh 160017, India",
-  contactEmail: "support@aspiranthq.com",
-  founderEmail: "founders@aspiranthq.com",
+  contactEmail: "support@matched.com",
+  founderEmail: "founders@matched.com",
   helplinePhone: "+91 172 456 7890",
   secondaryPhone: "+91 98888 77665",
   defaultCommissionRate: 0.10, // 10% default platform fee
@@ -658,3 +658,178 @@ export const INITIAL_STUDENT_PROFILE = {
     standardizedTest: { type: "GRE General Test", status: "Scheduled", score: "Target: 325+" }
   }
 };
+
+// ─── TOP UNIVERSITY STUDENT MENTORS ("Peer Match") ──────────
+export const MOCK_PEER_MENTORS = [
+  {
+    id: "peer_101",
+    fullName: "Aarav Singhania",
+    university: "Stanford University",
+    degree: "M.S. in Computer Science (AI Track)",
+    year: "Class of 2026",
+    admitYear: "Fall 2024",
+    undergradCollege: "IIT Bombay (Computer Science)",
+    photoUrl: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=400",
+    rating: 4.95,
+    sessionsCount: 68,
+    badge: "Stanford Scholar",
+    bio: "Current Stanford MS CS student. Received admits to Stanford, CMU, and Berkeley. Specialized in technical SOP crafting, research profile positioning, and navigating Silicon Valley internships.",
+    hourlyRate: 1499,
+    servicesOffered: ["srv_addon_1", "srv_addon_2", "srv_addon_4"]
+  },
+  {
+    id: "peer_102",
+    fullName: "Meera Krishnan",
+    university: "University of Oxford",
+    degree: "M.Sc. in Social Data Science",
+    year: "Class of 2025",
+    admitYear: "Fall 2024",
+    undergradCollege: "Lady Shri Ram College, DU",
+    photoUrl: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=400",
+    rating: 5.0,
+    sessionsCount: 92,
+    badge: "Rhodes Finalist",
+    bio: "Oxford postgraduate scholar. Cracked full Commonwealth funding and Chevening finalist. Guidance on UK Russell Group personal statements, Oxford college selection, and humanities/data conversion.",
+    hourlyRate: 1299,
+    servicesOffered: ["srv_addon_1", "srv_addon_2", "srv_addon_3"]
+  },
+  {
+    id: "peer_103",
+    fullName: "Kabir Sengupta",
+    university: "Imperial College London",
+    degree: "M.Eng. Computing & Artificial Intelligence",
+    year: "Class of 2026",
+    admitYear: "Fall 2023",
+    undergradCollege: "BITS Pilani",
+    photoUrl: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=400",
+    rating: 4.9,
+    sessionsCount: 54,
+    badge: "Imperial Scholar",
+    bio: "Navigated Imperial's rigorous computing admissions & interview drill. Special focus on UK Graduate Route PSW visa realities, London cost of living, and hackathon profile building.",
+    hourlyRate: 999,
+    servicesOffered: ["srv_addon_1", "srv_addon_3", "srv_addon_5"]
+  },
+  {
+    id: "peer_104",
+    fullName: "Sanya Oberoi",
+    university: "Harvard University",
+    degree: "Master in Public Policy (MPP)",
+    year: "Class of 2025",
+    admitYear: "Fall 2023",
+    undergradCollege: "St. Stephen's College, Delhi",
+    photoUrl: "https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&q=80&w=400",
+    rating: 4.98,
+    sessionsCount: 110,
+    badge: "Harvard Kennedy Fellow",
+    bio: "Harvard Kennedy School fellow. Admitted with 70% tuition scholarship. Expert in policy SOPs, diversity essays, and scholarship interview preparation.",
+    hourlyRate: 1799,
+    servicesOffered: ["srv_addon_1", "srv_addon_2", "srv_addon_4"]
+  }
+];
+
+// ─── INDIVIDUAL ADD-ON & QUICK DOUBT SOLVING SERVICES ───────
+export const MOCK_ADDON_SERVICES = [
+  {
+    id: "srv_addon_1",
+    title: "20-Min Quick Doubt Solving & University Reality Check",
+    price: 999,
+    duration: "20 Mins",
+    category: "Quick Doubt Solving",
+    desc: "Have specific questions about course rigor, GPA cutoffs, professors, or part-time campus jobs? Ask a current student studying there directly.",
+    highlights: ["1-on-1 Google Meet Call", "Direct Answers & Insider Secrets", "Session Notes Shared"]
+  },
+  {
+    id: "srv_addon_2",
+    title: "SOP / Personal Statement Peer Roast & Line-by-Line Critique",
+    price: 1499,
+    duration: "Written Review + 15-Min Call",
+    category: "Document Review",
+    desc: "A top admit who cracked the same program reviews your essay draft with brutal honesty, fixing clichés and sharpening your narrative hook.",
+    highlights: ["Line-by-Line Google Docs Comments", "Flow & Impact Optimization", "Post-Review 15-Min Strategy Call"]
+  },
+  {
+    id: "srv_addon_3",
+    title: "Campus Life, Housing & Scholarship Insider Q&A",
+    price: 799,
+    duration: "20 Mins",
+    category: "Campus & Budget",
+    desc: "Real breakdown of dorm costs, off-campus flats, safe neighborhoods, grocery budgets, and hidden university bursaries.",
+    highlights: ["City-Specific Cost Matrix", "Housing Recommendations", "Living Expense Cheat Sheet"]
+  },
+  {
+    id: "srv_addon_4",
+    title: "1-on-1 Mock Admissions & Scholarship Interview Drill",
+    price: 1999,
+    duration: "40 Mins",
+    category: "Interview Drill",
+    desc: "Simulate a live interview with authentic questions asked by Oxford, Harvard, or Imperial admissions committees. Comprehensive feedback rubric provided.",
+    highlights: ["Rigorous 30-Min Drill", "10-Min Live Feedback & Body Language Audit", "Written Evaluation Rubric"]
+  },
+  {
+    id: "srv_addon_5",
+    title: "Resume & Academic Portfolio Polish",
+    price: 1199,
+    duration: "Written Polish + Action Plan",
+    category: "Resume & Portfolio",
+    desc: "Convert your academic CV into the strict 1-page international Ivy / Russell Group format highlighting research, publications, and impact.",
+    highlights: ["ATS-Compliant LaTeX/Word Template", "Impact Metric Rewording", "Turnaround in 48 Hours"]
+  }
+];
+
+// ─── PARTNER ADVERTISEMENTS (Travel, IELTS, TOEFL) ──────────
+export const MOCK_PARTNER_ADS = [
+  {
+    id: "ad_travel_01",
+    category: "Student Travel & Flights",
+    partnerName: "StudentFly Global Travel Agency",
+    tagline: "Extra 10kg Student Baggage Allowance + 15% Off International Flights",
+    promoCode: "MATCHEDFLY",
+    discount: "Up to ₹12,000 Off",
+    ctaText: "Claim Flight Voucher",
+    link: "https://www.studentuniverse.com",
+    badge: "Official Student Travel Partner"
+  },
+  {
+    id: "ad_ielts_02",
+    category: "IELTS Prep Partner",
+    partnerName: "IELTS Masterclass by IDP Certified Trainers",
+    tagline: "Crack 8.0+ Band with 20 Full-Length Mock Tests & Live Speaking Drills",
+    promoCode: "MATCHED8BAND",
+    discount: "Flat 40% Scholarship",
+    ctaText: "Start Free IELTS Diagnostic",
+    link: "https://www.ielts.org",
+    badge: "Official Test Prep Partner"
+  },
+  {
+    id: "ad_toefl_03",
+    category: "TOEFL / GRE Partner",
+    partnerName: "ETS TOEFL iBT Official Prep Voucher",
+    tagline: "Save ₹3,000 on Official ETS Registration + Free Official Guide eBook",
+    promoCode: "MATCHEDTOEFL",
+    discount: "₹3,000 Test Rebate",
+    ctaText: "Redeem Voucher",
+    link: "https://www.ets.org/toefl",
+    badge: "ETS Authorized Discount"
+  }
+];
+
+// ─── COUNSELLOR CERTIFICATION COURSES (Blue Tick Verification) ─
+export const MOCK_COUNSELLOR_COURSES = [
+  {
+    id: "course_cert_01",
+    title: "matchEd Certified Global Admissions Strategist (Level 1)",
+    duration: "4 Hours Self-Paced",
+    modulesCount: 5,
+    badgeEarned: "Verified Blue Tick",
+    desc: "Comprehensive masterclass on ethical counselling, US Common App nuances, UCAS Personal Statement guidelines, and transparent escrow compliance.",
+    modules: [
+      { id: "m1", title: "Global Admissions Ethics & Transparency Standards", duration: "45 mins" },
+      { id: "m2", title: "US Holistic Review: Ivy League & Top 50 Matrix", duration: "60 mins" },
+      { id: "m3", title: "UK UCAS & Russell Group Personal Statement Framework", duration: "45 mins" },
+      { id: "m4", title: "Psychometric Evaluation Mappings (RIASEC & Big Five)", duration: "45 mins" },
+      { id: "m5", title: "matchEd Escrow, Milestone Compliance & Code of Conduct", duration: "45 mins" }
+    ],
+    status: "AVAILABLE"
+  }
+];
+

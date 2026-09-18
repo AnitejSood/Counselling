@@ -17,14 +17,14 @@ export const Contact = () => {
     <div className="py-12 space-y-12 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
       
       <div className="text-center max-w-2xl mx-auto space-y-3">
-        <span className="text-xs font-extrabold uppercase tracking-wider text-indigo-600 bg-indigo-50 px-3.5 py-1.5 rounded-full border border-indigo-100">
-          AspirantHQ Corporate Desk
+        <span className="text-xs font-extrabold uppercase tracking-wider text-[#0B2545] bg-amber-50 px-3.5 py-1.5 rounded-full border border-amber-200">
+          matchEd Corporate Desk
         </span>
         <h1 className="text-3xl font-extrabold text-slate-900">
-          Contact Headquarters & Founder Desk
+          Contact Headquarters & Advisory Desk
         </h1>
         <p className="text-slate-600 text-xs sm:text-sm">
-          Have questions about advisor verification, escrow security, corporate partnerships, or platform listings? Get in touch with our Chandigarh headquarters team.
+          Have questions about advisor verification, escrow security, 1-month counsellor changes, or scholar doubt sessions? Get in touch with our team.
         </p>
       </div>
 

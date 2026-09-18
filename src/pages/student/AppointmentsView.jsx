@@ -3,17 +3,42 @@ import { Link } from 'react-router-dom';
 import { useData } from '../../context/DataContext';
 import {
   Calendar, Clock, Video, ExternalLink,
-  Plus, CheckCircle2, ShieldCheck, AlertTriangle, Sparkles, RefreshCw, FileText
+  Plus, CheckCircle2, ShieldCheck, AlertTriangle, Sparkles, RefreshCw, FileText, HelpCircle
 } from 'lucide-react';
 import { PageHeader } from '../../components/ui/PageHeader';
 import { StatusBadge } from '../../components/ui/StatusBadge';
 import { EmptyState } from '../../components/ui/EmptyState';
 import { formatDate } from '../../lib/formatters';
+import { ChangeCounsellorModal } from '../../components/common/ChangeCounsellorModal';
+import { FirstCallGuideModal } from '../../components/common/FirstCallGuideModal';
+import { ConfirmationModal } from '../../components/common/ConfirmationModal';
 
 export const AppointmentsView = () => {
-  const { appointments, cancelAppointment, rescheduleAppointment, studentConfirmProposedTime, escrowBookings } = useData();
+  const { appointments, cancelAppointment, rescheduleAppointment, studentConfirmProposedTime, escrowBookings, counsellorSwitchState } = useData();
   const [rescheduleModalApt, setRescheduleModalApt] = useState(null);
-  const [newDate, setNewDate] = useState('2026-08-20');
+  const [changeCounsellorOpen, setChangeCounsellorOpen] = useState(false);
+  const [firstCallGuideOpen, setFirstCallGuideOpen] = useState(false);
+
+  const [confirmModal, setConfirmModal] = useState({
+    isOpen: false,
+    title: '',
+    message: '',
+    confirmText: 'Confirm',
+    variant: 'danger',
+    onConfirm: () => {}
+  });
+
+  // Generate upcoming dates for reschedule modal (next 14 days)
+  const upcomingRescheduleDates = Array.from({ length: 14 }, (_, i) => {
+    const d = new Date();
+    d.setDate(d.getDate() + i + 1);
+    return {
+      iso: d.toISOString().split('T')[0],
+      display: d.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })
+    };
+  });
+
+  const [newDate, setNewDate] = useState(upcomingRescheduleDates[0]?.iso || '2026-09-16');
   const [newTimeSlot, setNewTimeSlot] = useState('02:00 PM');
   const [notice, setNotice] = useState('');
 
@@ -31,7 +56,7 @@ export const AppointmentsView = () => {
       const aptTime = new Date(aptDateStr).getTime();
       const now = new Date().getTime();
       const diffHours = (aptTime - now) / (1000 * 60 * 60);
-      return diffHours < 24 && diffHours > 0;
+      return diffHours <= 24;
     } catch (e) {
       return false;
     }
@@ -55,16 +80,33 @@ export const AppointmentsView = () => {
   return (
     <div className="space-y-8 max-w-5xl mx-auto font-sans">
 
-      <PageHeader
-        eyebrow="Calendar & Session Schedule"
-        title="My Appointments"
-        subtitle="Manage live 1-on-1 sessions, meeting links, and session limits."
-        action={
-          <Link to="/book" className="px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold shadow-md flex items-center gap-1.5 transition">
-            <Plus className="w-4 h-4" /> Book Consultation
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <div>
+          <span className="text-xs font-bold text-[#CFA25E] uppercase tracking-wider">Calendar & Session Schedule</span>
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-[#0B2545]">My Appointments</h1>
+          <p className="text-xs text-slate-500">Manage live 1-on-1 sessions, Google Meet links, and 24-hour reschedule rules.</p>
+        </div>
+
+        <div className="flex items-center gap-2.5">
+          <button
+            onClick={() => setFirstCallGuideOpen(true)}
+            className="px-3.5 py-2 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-300 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer"
+          >
+            <HelpCircle className="w-3.5 h-3.5 text-[#CFA25E]" />
+            First Call Guide
+          </button>
+          <button
+            onClick={() => setChangeCounsellorOpen(true)}
+            className="px-3.5 py-2 rounded-xl bg-[#0B2545] hover:bg-slate-800 text-white text-xs font-bold transition flex items-center gap-1.5 cursor-pointer"
+          >
+            <RefreshCw className="w-3.5 h-3.5 text-[#CFA25E]" />
+            Switch Counsellor
+          </button>
+          <Link to="/book" className="px-4 py-2 bg-[#CFA25E] hover:bg-amber-400 text-[#0B2545] rounded-xl text-xs font-extrabold shadow-md flex items-center gap-1.5 transition">
+            <Plus className="w-4 h-4" /> Book Session
           </Link>
-        }
-      />
+        </div>
+      </div>
 
       {notice && (
         <div className="flex items-center gap-2 p-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-bold animate-in fade-in">
@@ -76,7 +118,7 @@ export const AppointmentsView = () => {
       <div className="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm space-y-3">
         <div className="flex justify-between items-center">
           <div className="flex items-center gap-2">
-            <div className="w-9 h-9 rounded-xl bg-indigo-100 text-indigo-700 flex items-center justify-center font-bold">
+            <div className="w-9 h-9 rounded-xl bg-[#0B2545]/10 text-[#0B2545] flex items-center justify-center font-bold">
               <Calendar className="w-5 h-5" />
             </div>
             <div>
@@ -84,27 +126,39 @@ export const AppointmentsView = () => {
               <p className="text-xs text-slate-500">{activeBooking.serviceTitle || 'Comprehensive Admissions Package'}</p>
             </div>
           </div>
-          <span className="text-xs font-extrabold text-indigo-700 bg-indigo-50 px-3 py-1 rounded-full border border-indigo-100">
+          <span className="text-xs font-extrabold text-[#0B2545] bg-amber-50 px-3 py-1 rounded-full border border-amber-200">
             {completedCount} / {maxCap} Sessions Completed ({percent}%)
           </span>
         </div>
 
         <div className="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden">
-          <div className="bg-gradient-to-r from-indigo-600 to-emerald-500 h-full rounded-full transition-all duration-300" style={{ width: `${percent}%` }} />
+          <div className="bg-gradient-to-r from-[#0B2545] to-[#CFA25E] h-full rounded-full transition-all duration-300" style={{ width: `${percent}%` }} />
         </div>
       </div>
 
       {/* Guarantee Status Badge */}
-      <div className="bg-emerald-50 border border-emerald-200 rounded-2xl p-4 flex items-center justify-between">
+      <div className={`border rounded-2xl p-4 flex items-center justify-between ${
+        completedCount >= maxCap
+          ? 'bg-slate-100 border-slate-200 text-slate-700'
+          : 'bg-amber-50 border-amber-200 text-amber-950'
+      }`}>
         <div className="flex items-center gap-3">
-          <ShieldCheck className="w-6 h-6 text-emerald-600 shrink-0" />
+          <ShieldCheck className={`w-6 h-6 shrink-0 ${completedCount >= maxCap ? 'text-slate-400' : 'text-amber-700'}`} />
           <div>
-            <h4 className="text-xs font-bold text-emerald-950">🎉 1st Session Free + 14-Day 100% Money-Back Guarantee</h4>
-            <p className="text-[11px] text-emerald-800">First consultation is 100% free with top verified counsellors. Full refund guarantee active for 14 days.</p>
+            <h4 className="text-xs font-bold">{completedCount >= maxCap ? '1-Month Counsellor Guarantee: Concluded' : 'matchEd 1-Month Counsellor Switch Guarantee'}</h4>
+            <p className="text-[11px] opacity-80">
+              {completedCount >= maxCap
+                ? `All ${maxCap} package consultation sessions have been conducted. The 1-month switch guarantee is concluded.`
+                : 'Within 30 days of onboarding and after completing at least 2 sessions, switch to any same-priced counsellor for ₹0 extra. All rescheduling must be requested at least 24 hours in advance.'}
+            </p>
           </div>
         </div>
-        <span className="px-3 py-1 bg-emerald-600 text-white rounded-full text-[10px] font-extrabold uppercase">
-          Guarantee Active
+        <span className={`px-3 py-1 rounded-full text-[10px] font-extrabold uppercase ${
+          completedCount >= maxCap
+            ? 'bg-slate-200 text-slate-700'
+            : 'bg-[#0B2545] text-white'
+        }`}>
+          {completedCount >= maxCap ? 'Package Completed' : 'Guarantee Active'}
         </span>
       </div>
 
@@ -243,8 +297,21 @@ export const AppointmentsView = () => {
                     </button>
 
                     <button
-                      onClick={() => cancelAppointment(apt.id)}
-                      className="px-3 py-2.5 bg-rose-50 hover:bg-rose-100 text-rose-700 text-xs font-semibold rounded-xl border border-rose-200 transition"
+                      onClick={() => {
+                        setConfirmModal({
+                          isOpen: true,
+                          title: 'Cancel Consultation Session',
+                          message: `Are you sure you want to cancel your ${apt.consultationType} on ${formatDate(apt.date)} at ${apt.timeSlot}? This action will notify your counsellor.`,
+                          confirmText: 'Cancel Session',
+                          variant: 'danger',
+                          onConfirm: () => {
+                            cancelAppointment(apt.id);
+                            setNotice('Appointment cancelled.');
+                            setTimeout(() => setNotice(''), 3000);
+                          }
+                        });
+                      }}
+                      className="px-3 py-2.5 bg-rose-50 hover:bg-rose-100 text-rose-700 text-xs font-semibold rounded-xl border border-rose-200 transition cursor-pointer"
                     >
                       Cancel
                     </button>
@@ -316,13 +383,13 @@ export const AppointmentsView = () => {
                 <button
                   type="button"
                   onClick={() => setRescheduleModalApt(null)}
-                  className="flex-1 py-2.5 text-xs font-bold bg-slate-100 text-slate-700 rounded-xl"
+                  className="flex-1 py-2.5 text-xs font-bold bg-slate-100 text-slate-700 rounded-xl cursor-pointer"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="flex-1 py-2.5 text-xs font-bold bg-indigo-600 text-white rounded-xl shadow-md"
+                  className="flex-1 py-2.5 text-xs font-bold bg-[#0B2545] hover:bg-slate-800 text-white rounded-xl shadow-md cursor-pointer"
                 >
                   Confirm Reschedule
                 </button>
@@ -331,6 +398,29 @@ export const AppointmentsView = () => {
           </div>
         </div>
       )}
+
+      {/* Change Counsellor Modal */}
+      <ChangeCounsellorModal
+        isOpen={changeCounsellorOpen}
+        onClose={() => setChangeCounsellorOpen(false)}
+      />
+
+      {/* First Call Orientation Guide Modal */}
+      <FirstCallGuideModal
+        isOpen={firstCallGuideOpen}
+        onClose={() => setFirstCallGuideOpen(false)}
+      />
+
+      {/* Confirmation Modal */}
+      <ConfirmationModal
+        isOpen={confirmModal.isOpen}
+        title={confirmModal.title}
+        message={confirmModal.message}
+        confirmText={confirmModal.confirmText}
+        variant={confirmModal.variant}
+        onConfirm={confirmModal.onConfirm}
+        onClose={() => setConfirmModal(p => ({ ...p, isOpen: false }))}
+      />
 
     </div>
   );

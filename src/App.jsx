@@ -46,6 +46,8 @@ import { Settings } from './pages/student/Settings';
 import { CounsellorOverview } from './pages/counsellor/CounsellorOverview';
 import { CounsellorProfileBuild } from './pages/counsellor/CounsellorProfileBuild';
 import { CounsellorBookings } from './pages/counsellor/CounsellorBookings';
+import { CounsellorMessaging } from './pages/counsellor/CounsellorMessaging';
+import { CounsellorCertification } from './pages/counsellor/CounsellorCertification';
 import { IntakeReviewer } from './pages/counsellor/IntakeReviewer';
 import { RoadmapBuilder } from './pages/counsellor/RoadmapBuilder';
 import { PipelineTracker } from './pages/counsellor/PipelineTracker';
@@ -55,6 +57,7 @@ import { CounsellorSettings } from './pages/counsellor/CounsellorSettings';
 
 // Admin Pages
 import { AdminDashboard } from './pages/admin/AdminDashboard';
+import { PlatformRatingAdmin } from './pages/admin/PlatformRatingAdmin';
 import { StudentsList } from './pages/admin/StudentsList';
 import { StudentDetail } from './pages/admin/StudentDetail';
 import { AppointmentsAdmin } from './pages/admin/AppointmentsAdmin';
@@ -65,6 +68,7 @@ import { VerificationAdmin } from './pages/admin/VerificationAdmin';
 import { EscrowBillingAdmin } from './pages/admin/EscrowBillingAdmin';
 import { CounsellorBoostAdmin } from './pages/admin/CounsellorBoostAdmin';
 import { CounsellorDetailAdmin } from './pages/admin/CounsellorDetailAdmin';
+import { CounsellorOnboardingAdmin } from './pages/admin/CounsellorOnboardingAdmin';
 
 // Public Wrapper
 const PublicLayout = ({ children }) => (
@@ -133,6 +137,8 @@ export default function App() {
             <Route path="/counsellor" element={<ProtectedCounsellorRoute><CounsellorOverview /></ProtectedCounsellorRoute>} />
             <Route path="/counsellor/profile" element={<ProtectedCounsellorRoute><CounsellorProfileBuild /></ProtectedCounsellorRoute>} />
             <Route path="/counsellor/bookings" element={<ProtectedCounsellorRoute><CounsellorBookings /></ProtectedCounsellorRoute>} />
+            <Route path="/counsellor/messages" element={<ProtectedCounsellorRoute><CounsellorMessaging /></ProtectedCounsellorRoute>} />
+            <Route path="/counsellor/certifications" element={<ProtectedCounsellorRoute><CounsellorCertification /></ProtectedCounsellorRoute>} />
             <Route path="/counsellor/intake" element={<ProtectedCounsellorRoute><IntakeReviewer /></ProtectedCounsellorRoute>} />
             <Route path="/counsellor/roadmap" element={<ProtectedCounsellorRoute><RoadmapBuilder /></ProtectedCounsellorRoute>} />
             <Route path="/counsellor/pipeline" element={<ProtectedCounsellorRoute><PipelineTracker /></ProtectedCounsellorRoute>} />
@@ -142,6 +148,8 @@ export default function App() {
 
             {/* Admin Protected Routes */}
             <Route path="/admin" element={<ProtectedAdminRoute><AdminDashboard /></ProtectedAdminRoute>} />
+            <Route path="/admin/ratings" element={<ProtectedAdminRoute><PlatformRatingAdmin /></ProtectedAdminRoute>} />
+            <Route path="/admin/counsellor-applications" element={<ProtectedAdminRoute><CounsellorOnboardingAdmin /></ProtectedAdminRoute>} />
             <Route path="/admin/students" element={<ProtectedAdminRoute><StudentsList /></ProtectedAdminRoute>} />
             <Route path="/admin/students/:studentId" element={<ProtectedAdminRoute><StudentDetail /></ProtectedAdminRoute>} />
             <Route path="/admin/verifications" element={<ProtectedAdminRoute><VerificationAdmin /></ProtectedAdminRoute>} />

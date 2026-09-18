@@ -95,11 +95,11 @@ export const Messaging = () => {
                 <img
                   src={COUNSELLOR_INFO.photoUrl}
                   alt={msg.senderName}
-                  className="w-8 h-8 rounded-full object-cover shrink-0 mt-1 shadow-sm"
+                  className="w-8 h-8 rounded-full object-cover shrink-0 mt-1 shadow-sm border border-[#CFA25E]"
                 />
               )}
               {isMe && (
-                <div className="w-8 h-8 rounded-full bg-indigo-600 text-white flex items-center justify-center text-[10px] font-bold shrink-0 mt-1 shadow-sm">
+                <div className="w-8 h-8 rounded-full bg-[#0B2545] text-[#CFA25E] flex items-center justify-center text-[10px] font-bold shrink-0 mt-1 shadow-sm border border-[#CFA25E]/40">
                   {getInitials(msg.senderName)}
                 </div>
               )}
@@ -108,15 +108,15 @@ export const Messaging = () => {
               <div className={`max-w-sm group ${isMe ? 'items-end' : 'items-start'} flex flex-col gap-1`}>
                 <div className={`px-4 py-3 rounded-2xl text-xs leading-relaxed font-medium shadow-sm space-y-1.5 ${
                   isMe
-                    ? 'bg-indigo-600 text-white rounded-tr-none'
+                    ? 'bg-[#0B2545] text-white rounded-tr-none'
                     : 'bg-white text-slate-800 border border-slate-200 rounded-tl-none'
                 }`}>
                   {msgText && <p>{msgText}</p>}
                   {msg.fileAttachment && (
                     <div className={`p-2 rounded-xl border flex items-center gap-2 text-[11px] ${
-                      isMe ? 'bg-indigo-700/60 border-indigo-500 text-white' : 'bg-slate-100 border-slate-200 text-slate-800'
+                      isMe ? 'bg-white/10 border-white/20 text-amber-200' : 'bg-slate-100 border-slate-200 text-slate-800'
                     }`}>
-                      <FileText className="w-4 h-4 shrink-0" />
+                      <FileText className="w-4 h-4 shrink-0 text-[#CFA25E]" />
                       <span className="font-semibold truncate">{msg.fileAttachment}</span>
                     </div>
                   )}
@@ -124,7 +124,7 @@ export const Messaging = () => {
                 <div className={`flex items-center gap-1 text-[10px] text-slate-400 ${isMe ? 'flex-row-reverse' : ''}`}>
                   <span>{msg.timestamp}</span>
                   {isMe && (
-                    <CheckCheck className="w-3 h-3 text-indigo-400" />
+                    <CheckCheck className="w-3 h-3 text-[#CFA25E]" />
                   )}
                 </div>
               </div>
@@ -136,12 +136,12 @@ export const Messaging = () => {
 
       {/* Attachment Preview Banner */}
       {attachedFile && (
-        <div className="bg-indigo-50 px-6 py-2 border-x border-t border-indigo-100 flex items-center justify-between text-xs text-indigo-900 font-medium">
+        <div className="bg-amber-50 px-6 py-2 border-x border-t border-amber-200 flex items-center justify-between text-xs text-amber-950 font-medium">
           <div className="flex items-center gap-2">
-            <FileText className="w-4 h-4 text-indigo-600" />
+            <FileText className="w-4 h-4 text-[#CFA25E]" />
             <span>Attachment: <strong>{attachedFile.name}</strong></span>
           </div>
-          <button onClick={() => setAttachedFile(null)} className="p-1 text-slate-400 hover:text-slate-600">
+          <button onClick={() => setAttachedFile(null)} className="p-1 text-slate-400 hover:text-slate-600 cursor-pointer">
             <X className="w-4 h-4" />
           </button>
         </div>
@@ -163,7 +163,7 @@ export const Messaging = () => {
           type="button"
           onClick={() => fileInputRef.current?.click()}
           title="Attach document or transcript"
-          className="p-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-600 transition"
+          className="p-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-600 transition cursor-pointer"
         >
           <Paperclip className="w-4 h-4" />
         </button>
@@ -173,15 +173,15 @@ export const Messaging = () => {
           placeholder={`Message ${COUNSELLOR_INFO.name}...`}
           value={inputText}
           onChange={(e) => setInputText(e.target.value)}
-          className="flex-1 px-4 py-2.5 rounded-xl border border-slate-200 text-xs focus:outline-none focus:border-indigo-500"
+          className="flex-1 px-4 py-2.5 rounded-xl border border-slate-200 text-xs focus:outline-none focus:border-[#0B2545]"
           autoComplete="off"
         />
         <button
           type="submit"
           disabled={!inputText.trim() && !attachedFile}
-          className="p-3 rounded-xl bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed text-white transition shadow-sm"
+          className="p-3 rounded-xl bg-[#0B2545] hover:bg-slate-800 disabled:opacity-50 disabled:cursor-not-allowed text-white transition shadow-sm cursor-pointer"
         >
-          <Send className="w-4 h-4" />
+          <Send className="w-4 h-4 text-[#CFA25E]" />
         </button>
       </form>
     </div>

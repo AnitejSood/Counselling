@@ -10,25 +10,16 @@ export const ApplicationTracker = () => {
   const [flagDiscrepancyModal, setFlagDiscrepancyModal] = useState(null);
   const [flagSubmitted, setFlagSubmitted] = useState(false);
 
-  const visaChecklist = [
-    { id: "v1", title: "Official Admission Offer & Acceptance Letter", done: true },
-    { id: "v2", title: "CAS / I-20 Form Issued by University", done: true },
-    { id: "v3", title: "Proof of Financial Solvency (Bank Statement / Education Loan)", done: true },
-    { id: "v4", title: "Medical Certificate & Biometrics Appointment", done: false },
-    { id: "v5", title: "Visa Interview Drill with Counsellor", done: false },
-    { id: "v6", title: "Student Housing & Pre-Departure Flight Booking", done: false }
-  ];
-
   return (
-    <div className="space-y-8 max-w-5xl mx-auto">
+    <div className="space-y-8 max-w-5xl mx-auto font-sans">
       <div className="flex justify-between items-center">
         <div>
-          <span className="text-xs font-bold uppercase tracking-wider text-indigo-600">Student Step 7</span>
-          <h1 className="text-2xl font-extrabold text-slate-900">Application & Offer Tracker</h1>
+          <span className="text-xs font-bold uppercase tracking-wider text-[#0B2545]">Student Portal</span>
+          <h1 className="text-2xl font-extrabold text-[#0B2545]">Application & Offer Tracker</h1>
         </div>
-        <span className="text-xs font-bold bg-emerald-100 text-emerald-800 px-3 py-1 rounded-full border border-emerald-200 flex items-center gap-1">
-          <ShieldCheck className="w-4 h-4 text-emerald-600" />
-          Single Source of Truth
+        <span className="text-xs font-bold bg-amber-50 text-amber-900 px-3 py-1 rounded-full border border-amber-200 flex items-center gap-1">
+          <ShieldCheck className="w-4 h-4 text-[#CFA25E]" />
+          Verified Single Source of Truth
         </span>
       </div>
 
@@ -52,7 +43,7 @@ export const ApplicationTracker = () => {
 
               <div className="flex items-center gap-3">
                 <span className={`px-3.5 py-1 rounded-full text-xs font-bold ${
-                  app.status === 'Admitted' ? 'bg-emerald-600 text-white' : app.status === 'Submitted' ? 'bg-indigo-600 text-white' : 'bg-slate-800 text-slate-100'
+                  app.status === 'Admitted' ? 'bg-emerald-600 text-white' : app.status === 'Submitted' ? 'bg-[#0B2545] text-white' : 'bg-slate-800 text-slate-100'
                 }`}>
                   {app.status}
                 </span>
@@ -61,11 +52,11 @@ export const ApplicationTracker = () => {
             </div>
 
             {/* Discrepancy Flagging Tool from User Flow Spec */}
-            <div className="flex items-center justify-between bg-slate-50 p-3 rounded-2xl border border-slate-200 text-xs">
+            <div className="flex items-center justify-between bg-slate-50 p-3.5 rounded-2xl border border-slate-200 text-xs">
               <span className="text-slate-600">Need to update status or report a discrepancy with counsellor record?</span>
               <button 
                 onClick={() => setFlagDiscrepancyModal(app.school)}
-                className="text-indigo-600 hover:text-indigo-700 font-bold flex items-center gap-1"
+                className="text-[#0B2545] hover:text-indigo-800 font-bold flex items-center gap-1 cursor-pointer"
               >
                 <AlertTriangle className="w-3.5 h-3.5 text-amber-500" />
                 Flag Status Update
@@ -98,13 +89,13 @@ export const ApplicationTracker = () => {
                 <div className="flex justify-end gap-2">
                   <button 
                     onClick={() => setFlagDiscrepancyModal(null)}
-                    className="px-4 py-2 bg-slate-100 text-slate-700 font-semibold text-xs rounded-xl"
+                    className="px-4 py-2 bg-slate-100 text-slate-700 font-semibold text-xs rounded-xl cursor-pointer"
                   >
                     Cancel
                   </button>
                   <button 
                     onClick={() => setFlagSubmitted(true)}
-                    className="px-4 py-2 bg-indigo-600 text-white font-bold text-xs rounded-xl shadow-md"
+                    className="px-4 py-2 bg-[#0B2545] text-white font-bold text-xs rounded-xl shadow-md cursor-pointer"
                   >
                     Submit Flag
                   </button>
@@ -114,36 +105,6 @@ export const ApplicationTracker = () => {
           </div>
         </div>
       )}
-
-      {/* Post-Admit Visa & Pre-Departure Checklist */}
-      <div className="bg-white rounded-3xl p-8 border border-slate-200 shadow-sm space-y-6">
-        <div className="flex items-center justify-between border-b border-slate-100 pb-4">
-          <div>
-            <h2 className="text-lg font-bold text-slate-900">Post-Admit Visa & Pre-Departure Checklist</h2>
-            <p className="text-xs text-slate-500">Track your essential visa documents and orientation steps</p>
-          </div>
-          <span className="text-xs font-bold text-emerald-700 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-100">
-            3 of 6 Completed
-          </span>
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          {visaChecklist.map(item => (
-            <div key={item.id} className={`p-4 rounded-2xl border flex items-center justify-between text-xs font-medium ${
-              item.done ? 'bg-emerald-50/60 border-emerald-200 text-emerald-950' : 'bg-slate-50 border-slate-200 text-slate-700'
-            }`}>
-              <div className="flex items-center gap-3">
-                <div className={`w-5 h-5 rounded-md flex items-center justify-center font-bold text-xs ${
-                  item.done ? 'bg-emerald-600 text-white' : 'border border-slate-300 bg-white'
-                }`}>
-                  {item.done && <Check className="w-3.5 h-3.5" />}
-                </div>
-                <span>{item.title}</span>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
 
     </div>
   );

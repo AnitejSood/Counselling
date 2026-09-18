@@ -5,6 +5,7 @@ import {
   GraduationCap, LogIn, User, Briefcase, ShieldCheck,
   Eye, EyeOff, ArrowRight, Sparkles, CheckCircle2
 } from 'lucide-react';
+import { MatchEdLogo } from '../../components/common/MatchEdLogo';
 
 const DEMO_ACCOUNTS = [
   {
@@ -32,7 +33,7 @@ const DEMO_ACCOUNTS = [
   {
     role: 'ADMIN',
     label: 'Platform Admin',
-    email: 'admin@aspiranthq.in',
+    email: 'admin@matched.in',
     password: 'admin123',
     redirect: '/admin',
     color: 'purple',
@@ -70,14 +71,15 @@ const COLOR_MAP = {
 };
 
 export const Login = () => {
+  const { login } = useAuth();
+  const navigate = useNavigate();
+
   const [selectedRole, setSelectedRole] = useState('STUDENT');
   const [email, setEmail] = useState('rohan.mehta@example.com');
   const [password, setPassword] = useState('password123');
   const [showPassword, setShowPassword] = useState(false);
-  const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const { login } = useAuth();
-  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
   const selected = DEMO_ACCOUNTS.find(a => a.role === selectedRole);
   const colors = COLOR_MAP[selected.color];
@@ -89,14 +91,15 @@ export const Login = () => {
     setError('');
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    setLoading(true);
     setError('');
+    setLoading(true);
+
     setTimeout(() => {
-      const result = login(email, password, selectedRole);
-      if (result.success) {
-        navigate(result.redirect);
+      const success = login(email, password, selectedRole);
+      if (success) {
+        navigate(selected.redirect);
       } else {
         setError('Invalid credentials. Use the demo accounts below.');
       }
@@ -105,23 +108,20 @@ export const Login = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 flex items-center justify-center py-12 px-4 relative overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-[#0B2545] via-[#081B33] to-[#040D1A] flex items-center justify-center py-12 px-4 relative overflow-hidden">
 
       {/* Background orbs */}
-      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-indigo-600/10 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-600/10 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-[#CFA25E]/10 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-indigo-600/10 rounded-full blur-3xl pointer-events-none" />
 
       <div className="w-full max-w-lg relative z-10">
 
         {/* Brand */}
-        <div className="text-center mb-8">
-          <div className="inline-flex items-center gap-2 mb-4">
-            <div className="w-11 h-11 rounded-2xl bg-gradient-to-tr from-indigo-600 to-amber-500 flex items-center justify-center shadow-lg">
-              <Sparkles className="w-5 h-5 text-white" />
-            </div>
-            <span className="text-2xl font-extrabold text-white tracking-tight">AspirantHQ</span>
+        <div className="text-center mb-8 flex flex-col items-center">
+          <div className="bg-white/90 px-5 py-3 rounded-2xl shadow-xl backdrop-blur-md mb-3 inline-block">
+            <MatchEdLogo size="lg" />
           </div>
-          <p className="text-slate-400 text-sm">India's Verified Counsellor Marketplace</p>
+          <p className="text-slate-300 text-sm font-medium">India's Verified Admissions & Mentorship Marketplace</p>
         </div>
 
         {/* Card */}

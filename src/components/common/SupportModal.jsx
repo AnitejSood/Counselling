@@ -38,8 +38,8 @@ export const SupportModal = ({ isOpen, onClose, userRole = 'STUDENT', userName =
             <HelpCircle className="w-6 h-6" />
           </div>
           <div>
-            <h3 className="text-xl font-bold text-slate-900">AspirantHQ Support Desk</h3>
-            <p className="text-xs text-slate-500">We are here to assist with bookings, escrow, or technical issues.</p>
+            <h3 className="text-xl font-bold text-slate-900">matchEd Support Desk</h3>
+            <p className="text-xs text-slate-500">We are here to assist with bookings, escrow, 1-month switch guarantee, or technical issues.</p>
           </div>
         </div>
 

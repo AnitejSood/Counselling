@@ -2,12 +2,13 @@ import React, { useState } from 'react';
 import { useData } from '../../context/DataContext';
 import {
   Calendar, Video, Lock, Bell, Plus, CheckCircle2,
-  Save, Clock, Link as LinkIcon, Settings, AlertCircle, Check, X, Send, Layers, Sparkles
+  Save, Clock, Link as LinkIcon, Settings, AlertCircle, Check, X, Send, Layers, Sparkles, ShieldCheck, Building, Trash2
 } from 'lucide-react';
 import { PageHeader } from '../../components/ui/PageHeader';
 import { StatusBadge } from '../../components/ui/StatusBadge';
 import { formatDate, formatINR } from '../../lib/formatters';
 import { EmptyState } from '../../components/ui/EmptyState';
+import { ConfirmationModal } from '../../components/common/ConfirmationModal';
 
 export const CounsellorBookings = () => {
   const { 
@@ -20,12 +21,32 @@ export const CounsellorBookings = () => {
     addAppointmentNote,
     updateAppointmentMeetingLink,
     counsellorProfile,
-    updateCounsellorAvailabilitySlots
+    updateCounsellorAvailabilitySlots,
+    counsellorPayoutAccount,
+    updateCounsellorPayoutAccount
   } = useData();
 
   const [notice, setNotice] = useState('');
   const [showAddApt, setShowAddApt] = useState(false);
   const [showSlotsManager, setShowSlotsManager] = useState(false);
+  const [showPayoutAccountModal, setShowPayoutAccountModal] = useState(false);
+  const [payoutForm, setPayoutForm] = useState({
+    accountHolderName: counsellorPayoutAccount?.accountHolderName || 'Arti Sood',
+    bankName: counsellorPayoutAccount?.bankName || 'HDFC Bank Ltd.',
+    accountNumber: counsellorPayoutAccount?.accountNumber || '50100482910481',
+    ifscCode: counsellorPayoutAccount?.ifscCode || 'HDFC0001824',
+    upiId: counsellorPayoutAccount?.upiId || 'artisood@okhdfcbank'
+  });
+
+  const [confirmModal, setConfirmModal] = useState({
+    isOpen: false,
+    title: '',
+    message: '',
+    confirmText: 'Confirm',
+    variant: 'primary',
+    onConfirm: () => {}
+  });
+
   const [noteInputs, setNoteInputs] = useState({});
   const [meetingInputs, setMeetingInputs] = useState({});
 
@@ -65,10 +86,19 @@ export const CounsellorBookings = () => {
     showMsg('Session scheduled and visible to student!');
   };
 
-  const handleApproveSession = (aptId) => {
-    const meetLink = meetingInputs[aptId] || `https://meet.google.com/aspiranthq-${Date.now().toString().slice(-4)}`;
-    approveBookingSession(aptId, meetLink, 'Counsellor approved requested session.');
-    showMsg('Session approved & meeting link sent to student portal!');
+  const handleApproveSession = (aptId, studentName = 'Student', consultationType = 'Session', date = '', timeSlot = '') => {
+    setConfirmModal({
+      isOpen: true,
+      title: 'Approve Consultation Session',
+      message: `Confirm approval for ${consultationType} with ${studentName}${date ? ` on ${formatDate(date)}` : ''}${timeSlot ? ` at ${timeSlot}` : ''}? A secure Google Meet link will be provisioned automatically.`,
+      confirmText: 'Approve & Send Link',
+      variant: 'success',
+      onConfirm: () => {
+        const meetLink = meetingInputs[aptId] || `https://meet.google.com/aspiranthq-${Date.now().toString().slice(-4)}`;
+        approveBookingSession(aptId, meetLink, 'Counsellor approved requested session.');
+        showMsg('Session approved & meeting link sent to student portal!');
+      }
+    });
   };
 
   const handleSendAlternativeTimes = (e) => {
@@ -87,10 +117,22 @@ export const CounsellorBookings = () => {
   const handleRequestEscrowRelease = (e) => {
     e.preventDefault();
     if (!escrowModalBk) return;
-    requestEscrowRelease(escrowModalBk.id, escrowReason);
+    const bk = escrowModalBk;
+    const reason = escrowReason;
     setEscrowModalBk(null);
     setEscrowReason('');
-    showMsg('Escrow payout request submitted to Admin for approval!');
+
+    setConfirmModal({
+      isOpen: true,
+      title: 'Request Escrow Payout Release',
+      message: `Submit release request for ${formatINR(bk.counsellorPayout || bk.amount * 0.9)} from matchEd Escrow for ${bk.studentName}? The funds will be settled into your verified account (${counsellorPayoutAccount?.bankName} ••••${counsellorPayoutAccount?.accountNumber?.slice(-4)}) upon admin audit.`,
+      confirmText: 'Submit Request',
+      variant: 'primary',
+      onConfirm: () => {
+        requestEscrowRelease(bk.id, reason);
+        showMsg('Escrow payout request submitted to Admin for approval!');
+      }
+    });
   };
 
   const handleSaveNote = (aptId) => {
@@ -117,9 +159,26 @@ export const CounsellorBookings = () => {
   };
 
   const handleRemoveSlot = (slotToRemove) => {
-    const updated = slotsList.filter(s => s !== slotToRemove);
-    setSlotsList(updated);
-    updateCounsellorAvailabilitySlots(counsellorProfile?.id || 'counsellor_01', updated);
+    setConfirmModal({
+      isOpen: true,
+      title: 'Remove Availability Slot',
+      message: `Are you sure you want to remove the slot "${slotToRemove}" from your public calendar? Students will no longer be able to book this slot.`,
+      confirmText: 'Remove Slot',
+      variant: 'danger',
+      onConfirm: () => {
+        const updated = slotsList.filter(s => s !== slotToRemove);
+        setSlotsList(updated);
+        updateCounsellorAvailabilitySlots(counsellorProfile?.id || 'counsellor_01', updated);
+        showMsg(`Slot ${slotToRemove} removed.`);
+      }
+    });
+  };
+
+  const handleSavePayoutAccount = (e) => {
+    e.preventDefault();
+    updateCounsellorPayoutAccount(payoutForm);
+    setShowPayoutAccountModal(false);
+    showMsg('Escrow payout account details updated successfully!');
   };
 
   const pendingApprovals = appointments.filter(a => a.status === 'PENDING_APPROVAL');
@@ -248,13 +307,13 @@ export const CounsellorBookings = () => {
                     {apt.studentNotes && <p className="text-[11px] text-slate-600 italic mt-1.5">Note from Student: "{apt.studentNotes}"</p>}
                   </div>
 
-                  <div className="flex flex-col sm:flex-row gap-2 shrink-0">
-                    <button
-                      onClick={() => handleApproveSession(apt.id)}
-                      className="px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold shadow-md transition flex items-center gap-1.5 cursor-pointer"
-                    >
-                      <Check className="w-4 h-4" /> Approve Session
-                    </button>
+                    <div className="flex flex-col sm:flex-row gap-2 shrink-0">
+                      <button
+                        onClick={() => handleApproveSession(apt.id, apt.studentName, apt.consultationType, apt.date, apt.timeSlot)}
+                        className="px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold shadow-md transition flex items-center gap-1.5 cursor-pointer"
+                      >
+                        <Check className="w-4 h-4" /> Approve Session
+                      </button>
                     <button
                       onClick={() => {
                         setProposeModalApt(apt);
@@ -351,13 +410,86 @@ export const CounsellorBookings = () => {
         </div>
       </section>
 
-      {/* SECTION 3: Escrow Payments & Request Release Workflow */}
-      <section>
-        <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xs font-bold uppercase tracking-widest text-slate-500">
-            Escrow Payout Requests & Session Counters ({escrowBookings.length})
-          </h2>
-          <span className="text-[11px] text-slate-500 font-medium">Counsellors request release; Admin verifies & disburses funds</span>
+      {/* SECTION 3: Escrow Payments & Dedicated Payout Account */}
+      <section className="space-y-6">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+          <div>
+            <h2 className="text-xs font-bold uppercase tracking-widest text-[#0B2545]">
+              Escrow Payout Banking & Session Counters ({escrowBookings.length})
+            </h2>
+            <p className="text-xs text-slate-500">Student session fees are held safely in matchEd Escrow and released directly into your designated bank account.</p>
+          </div>
+          <button
+            onClick={() => {
+              setPayoutForm({
+                accountHolderName: counsellorPayoutAccount?.accountHolderName || 'Arti Sood',
+                bankName: counsellorPayoutAccount?.bankName || 'HDFC Bank Ltd.',
+                accountNumber: counsellorPayoutAccount?.accountNumber || '50100482910481',
+                ifscCode: counsellorPayoutAccount?.ifscCode || 'HDFC0001824',
+                upiId: counsellorPayoutAccount?.upiId || 'artisood@okhdfcbank'
+              });
+              setShowPayoutAccountModal(true);
+            }}
+            className="px-3.5 py-2 bg-[#0B2545] hover:bg-slate-800 text-white rounded-xl text-xs font-bold shadow-xs transition flex items-center gap-1.5 cursor-pointer"
+          >
+            <ShieldCheck className="w-4 h-4 text-[#CFA25E]" /> Configure Escrow Bank & UPI
+          </button>
+        </div>
+
+        {/* Dedicated Escrow Payout Account Card */}
+        <div className="bg-gradient-to-br from-[#0B2545] to-slate-900 text-white rounded-3xl p-6 border border-[#CFA25E]/40 shadow-md">
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 pb-4 border-b border-white/10">
+            <div className="flex items-center gap-3">
+              <div className="w-12 h-12 rounded-2xl bg-[#CFA25E]/20 text-[#CFA25E] border border-[#CFA25E]/40 flex items-center justify-center font-black">
+                <Lock className="w-6 h-6 text-[#CFA25E]" />
+              </div>
+              <div>
+                <div className="flex items-center gap-2">
+                  <h3 className="text-base font-extrabold text-white">Dedicated Escrow Settlement Account</h3>
+                  <span className="px-2 py-0.5 rounded-full text-[9px] font-black uppercase bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                    Active & Verified
+                  </span>
+                </div>
+                <p className="text-xs text-slate-300 mt-0.5">Cleared session funds are wired directly to this account upon admin release.</p>
+              </div>
+            </div>
+
+            <button
+              onClick={() => {
+                setPayoutForm({
+                  accountHolderName: counsellorPayoutAccount?.accountHolderName || 'Arti Sood',
+                  bankName: counsellorPayoutAccount?.bankName || 'HDFC Bank Ltd.',
+                  accountNumber: counsellorPayoutAccount?.accountNumber || '50100482910481',
+                  ifscCode: counsellorPayoutAccount?.ifscCode || 'HDFC0001824',
+                  upiId: counsellorPayoutAccount?.upiId || 'artisood@okhdfcbank'
+                });
+                setShowPayoutAccountModal(true);
+              }}
+              className="px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-bold border border-white/20 transition cursor-pointer"
+            >
+              Update Account
+            </button>
+          </div>
+
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-4 text-xs">
+            <div className="space-y-1">
+              <span className="text-[10px] text-slate-400 uppercase font-bold tracking-wider">Account Holder</span>
+              <p className="font-bold text-white text-sm">{counsellorPayoutAccount?.accountHolderName || 'Arti Sood'}</p>
+            </div>
+            <div className="space-y-1">
+              <span className="text-[10px] text-slate-400 uppercase font-bold tracking-wider">Bank Name & IFSC</span>
+              <p className="font-bold text-white text-sm">{counsellorPayoutAccount?.bankName || 'HDFC Bank Ltd.'}</p>
+              <p className="text-[11px] text-[#CFA25E] font-mono">{counsellorPayoutAccount?.ifscCode || 'HDFC0001824'}</p>
+            </div>
+            <div className="space-y-1">
+              <span className="text-[10px] text-slate-400 uppercase font-bold tracking-wider">Account Number</span>
+              <p className="font-mono font-bold text-white text-sm">{counsellorPayoutAccount?.accountNumber || '••••••••4819'}</p>
+            </div>
+            <div className="space-y-1">
+              <span className="text-[10px] text-slate-400 uppercase font-bold tracking-wider">UPI ID</span>
+              <p className="font-mono font-bold text-emerald-300 text-sm">{counsellorPayoutAccount?.upiId || 'artisood@okhdfcbank'}</p>
+            </div>
+          </div>
         </div>
 
         <div className="space-y-4">
@@ -537,6 +669,114 @@ export const CounsellorBookings = () => {
           </div>
         </div>
       )}
+
+      {/* MODAL 3: Configure Escrow Payout Account */}
+      {showPayoutAccountModal && (
+        <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl space-y-4 border border-slate-100 animate-in zoom-in-95">
+            <div className="flex justify-between items-center pb-3 border-b border-slate-100">
+              <div className="flex items-center gap-2">
+                <ShieldCheck className="w-5 h-5 text-[#CFA25E]" />
+                <h3 className="text-base font-bold text-slate-900">Escrow Payout Account Setup</h3>
+              </div>
+              <button onClick={() => setShowPayoutAccountModal(false)} className="text-slate-400 hover:text-slate-600 font-bold text-lg cursor-pointer">×</button>
+            </div>
+
+            <p className="text-xs text-slate-600">
+              Provide your official Indian bank or UPI details for automated escrow disbursement once sessions are cleared.
+            </p>
+
+            <form onSubmit={handleSavePayoutAccount} className="space-y-3 text-xs">
+              <div>
+                <label className="block text-[11px] font-bold uppercase text-slate-500 mb-1">Account Holder Name *</label>
+                <input
+                  type="text"
+                  required
+                  value={payoutForm.accountHolderName}
+                  onChange={e => setPayoutForm(p => ({ ...p, accountHolderName: e.target.value }))}
+                  className="w-full px-3.5 py-2 rounded-xl border border-slate-200 font-semibold focus:outline-none"
+                  placeholder="e.g. Arti Sood"
+                />
+              </div>
+
+              <div>
+                <label className="block text-[11px] font-bold uppercase text-slate-500 mb-1">Bank Name *</label>
+                <input
+                  type="text"
+                  required
+                  value={payoutForm.bankName}
+                  onChange={e => setPayoutForm(p => ({ ...p, bankName: e.target.value }))}
+                  className="w-full px-3.5 py-2 rounded-xl border border-slate-200 font-semibold focus:outline-none"
+                  placeholder="e.g. HDFC Bank Ltd."
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-2">
+                <div>
+                  <label className="block text-[11px] font-bold uppercase text-slate-500 mb-1">Account Number *</label>
+                  <input
+                    type="text"
+                    required
+                    value={payoutForm.accountNumber}
+                    onChange={e => setPayoutForm(p => ({ ...p, accountNumber: e.target.value }))}
+                    className="w-full px-3.5 py-2 rounded-xl border border-slate-200 font-mono font-semibold focus:outline-none"
+                    placeholder="e.g. 50100482910481"
+                  />
+                </div>
+                <div>
+                  <label className="block text-[11px] font-bold uppercase text-slate-500 mb-1">IFSC Code *</label>
+                  <input
+                    type="text"
+                    required
+                    value={payoutForm.ifscCode}
+                    onChange={e => setPayoutForm(p => ({ ...p, ifscCode: e.target.value.toUpperCase() }))}
+                    className="w-full px-3.5 py-2 rounded-xl border border-slate-200 font-mono font-semibold focus:outline-none"
+                    placeholder="e.g. HDFC0001824"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-[11px] font-bold uppercase text-slate-500 mb-1">UPI ID (Optional for fast clearing)</label>
+                <input
+                  type="text"
+                  value={payoutForm.upiId}
+                  onChange={e => setPayoutForm(p => ({ ...p, upiId: e.target.value }))}
+                  className="w-full px-3.5 py-2 rounded-xl border border-slate-200 font-semibold focus:outline-none"
+                  placeholder="e.g. yourname@okhdfcbank"
+                />
+              </div>
+
+              <div className="flex justify-end gap-2 pt-3 border-t border-slate-100">
+                <button
+                  type="button"
+                  onClick={() => setShowPayoutAccountModal(false)}
+                  className="px-4 py-2 bg-slate-100 rounded-xl font-bold cursor-pointer hover:bg-slate-200 transition"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="px-5 py-2 bg-[#0B2545] text-white rounded-xl font-bold shadow-md cursor-pointer hover:bg-slate-800 transition"
+                >
+                  Save Account Details
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Confirmation Modal */}
+      <ConfirmationModal
+        isOpen={confirmModal.isOpen}
+        title={confirmModal.title}
+        message={confirmModal.message}
+        confirmText={confirmModal.confirmText}
+        variant={confirmModal.variant}
+        onConfirm={confirmModal.onConfirm}
+        onClose={() => setConfirmModal(p => ({ ...p, isOpen: false }))}
+      />
     </div>
   );
 };
