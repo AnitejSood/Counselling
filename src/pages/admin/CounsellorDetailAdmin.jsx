@@ -13,7 +13,7 @@ export const CounsellorDetailAdmin = () => {
   const bookings = escrowBookings.filter(b => b.counsellorId === counsellor.id);
 
   return (
-    <div className="space-y-8 max-w-5xl mx-auto font-sans">
+    <div className="space-y-8 w-full font-sans">
       <div className="flex items-center gap-3">
         <Link to="/admin/students" className="p-2 rounded-xl bg-white border border-slate-200 text-slate-600 hover:bg-slate-50">
           <ChevronLeft className="w-5 h-5" />

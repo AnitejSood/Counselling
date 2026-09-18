@@ -79,7 +79,7 @@ export const SupportModal = ({ isOpen, onClose, userRole = 'STUDENT', userName =
 
             <div className="bg-slate-50 p-3 rounded-xl flex items-center gap-2 text-xs text-slate-600 border border-slate-100">
               <ShieldCheck className="w-4 h-4 text-emerald-600 flex-shrink-0" />
-              <span>AspirantHQ Escrow Protection & Support SLA applies to all tickets.</span>
+              <span>matchEd Escrow Protection & Support SLA applies to all tickets.</span>
             </div>
 
             <div className="flex gap-3 pt-2">

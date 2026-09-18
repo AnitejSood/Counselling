@@ -98,7 +98,7 @@ export const CounsellorOnboardingAdmin = () => {
   const verifiedCount = verificationApps.filter(a => a.status === 'VERIFIED').length;
 
   return (
-    <div className="space-y-8 max-w-6xl mx-auto font-sans">
+    <div className="space-y-8 w-full font-sans">
       <PageHeader
         eyebrow="matchEd Counsellor Intake Desk"
         title="Counsellor Onboarding & Verification Applications"

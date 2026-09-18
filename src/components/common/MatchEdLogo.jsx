@@ -11,9 +11,13 @@ import { Link } from 'react-router-dom';
 export const MatchEdLogo = ({ 
   size = 'md', 
   theme = 'dark', // 'dark' (navy on light) | 'light' (white on dark)
+  variant, // alias for theme
   showLink = true,
   className = ''
 }) => {
+  const effectiveTheme = variant || theme || 'dark';
+  const isLight = effectiveTheme === 'light';
+
   const sizeClasses = {
     sm: { text: 'text-xl tracking-tight', bar: 'h-1 w-7 -mt-0.5' },
     md: { text: 'text-2xl tracking-tight', bar: 'h-1.5 w-9 -mt-0.5' },
@@ -22,13 +26,16 @@ export const MatchEdLogo = ({
   };
 
   const currentSize = sizeClasses[size] || sizeClasses.md;
-  const textColor = theme === 'light' ? 'text-white' : 'text-[#0B2545]';
+  const textColorStyle = isLight ? '#FFFFFF' : '#0B2545';
 
   const logoContent = (
     <div className={`inline-flex flex-col items-center select-none font-sans group ${className}`}>
-      <div className={`font-black ${currentSize.text} ${textColor} leading-none transition-transform group-hover:scale-[1.02]`}>
+      <div 
+        className={`font-black ${currentSize.text} leading-none transition-transform group-hover:scale-[1.02] flex items-center`}
+        style={{ color: textColorStyle }}
+      >
         <span>match</span>
-        <span className="text-[#0B2545] dark:text-white" style={{ color: theme === 'light' ? '#FFFFFF' : '#0B2545' }}>Ed</span>
+        <span className="font-black">Ed</span>
       </div>
       {/* Warm Golden / Honey Accent Bar */}
       <div 

@@ -4,7 +4,7 @@ import { useData } from '../../context/DataContext';
 export const ServicesAdmin = () => {
   const { services } = useData();
   return (
-    <div className="space-y-6 max-w-5xl mx-auto">
+    <div className="space-y-6 w-full">
       <span className="text-xs font-bold uppercase text-purple-600">Offerings Management</span>
       <h1 className="text-2xl font-extrabold text-slate-900">Services Catalog ({services.length} Active Services)</h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

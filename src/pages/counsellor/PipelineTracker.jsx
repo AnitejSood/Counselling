@@ -64,7 +64,7 @@ export const PipelineTracker = () => {
   const submittedCount = applications.filter(a => a.status === 'Submitted').length;
 
   return (
-    <div className="space-y-8 max-w-5xl mx-auto font-sans">
+    <div className="space-y-8 w-full font-sans">
       
       {/* Top Header with Global Student Placeholder (Highlighted) */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">

@@ -28,7 +28,7 @@ export const CounsellorAnalytics = () => {
   const totalEarnings = escrowBookings.reduce((sum, b) => sum + b.amount, 0);
 
   return (
-    <div className="space-y-8 max-w-5xl mx-auto font-sans">
+    <div className="space-y-8 w-full font-sans">
       {/* matchEd Brand Header Banner */}
       <div className="bg-[#0B2545] p-6 rounded-3xl border border-[#CFA25E]/40 text-white flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-md">
         <div className="flex items-center gap-4">

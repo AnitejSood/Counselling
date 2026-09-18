@@ -62,7 +62,7 @@ export const PsychometricTests = () => {
   ];
 
   return (
-    <div className="space-y-8 max-w-5xl mx-auto font-sans">
+    <div className="space-y-8 w-full font-sans">
       
       {/* Header Banner */}
       <div className="bg-gradient-to-r from-[#0B2545] via-[#133E6D] to-[#0B2545] text-white rounded-3xl p-8 border border-white/10 shadow-xl space-y-3">

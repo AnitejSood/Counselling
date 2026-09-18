@@ -94,7 +94,7 @@ export const CounsellorBookings = () => {
       confirmText: 'Approve & Send Link',
       variant: 'success',
       onConfirm: () => {
-        const meetLink = meetingInputs[aptId] || `https://meet.google.com/aspiranthq-${Date.now().toString().slice(-4)}`;
+        const meetLink = meetingInputs[aptId] || `https://meet.google.com/matched-${Date.now().toString().slice(-4)}`;
         approveBookingSession(aptId, meetLink, 'Counsellor approved requested session.');
         showMsg('Session approved & meeting link sent to student portal!');
       }
@@ -185,7 +185,7 @@ export const CounsellorBookings = () => {
   const upcomingSessions = appointments.filter(a => a.status === 'UPCOMING');
 
   return (
-    <div className="space-y-8 max-w-5xl mx-auto font-sans">
+    <div className="space-y-8 w-full font-sans">
       <PageHeader
         eyebrow="Session Management & Slots"
         title="Bookings & Availability"

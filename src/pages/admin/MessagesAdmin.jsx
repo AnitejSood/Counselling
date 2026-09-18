@@ -173,7 +173,7 @@ export const MessagesAdmin = () => {
   const inProgress = tickets.filter(t => t.status === 'IN_PROGRESS').length;
 
   return (
-    <div className="max-w-7xl mx-auto space-y-6 font-sans animate-fade-in">
+    <div className="w-full space-y-6 font-sans animate-fade-in">
       <PageHeader
         eyebrow="matchEd Operations & Comms"
         title="Support & Broadcast Communications"

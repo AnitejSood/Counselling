@@ -25,7 +25,7 @@ export const CounsellorBoostAdmin = () => {
   };
 
   return (
-    <div className="space-y-8 max-w-6xl mx-auto font-sans">
+    <div className="space-y-8 w-full font-sans">
       <PageHeader
         eyebrow="matchEd Marketplace Promotion Control"
         title="Counsellor Boost & Subscription Tier Manager"

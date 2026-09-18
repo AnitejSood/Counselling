@@ -112,7 +112,7 @@ export const AdminDashboard = () => {
   const bookingTrend = chartDataMap[timeRange] || chartDataMap['ALL'];
 
   return (
-    <div className="space-y-8 max-w-6xl mx-auto font-sans">
+    <div className="space-y-8 w-full font-sans">
 
       {/* Header & Controls */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white p-6 rounded-3xl border border-slate-200 shadow-xs">

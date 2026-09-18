@@ -46,7 +46,7 @@ export const CounsellorMessaging = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto flex flex-col h-[calc(100vh-8rem)] gap-0 font-sans">
+    <div className="w-full flex flex-col h-[calc(100vh-8rem)] gap-0 font-sans">
       
       {/* Header with Active Student Switcher */}
       <div className="bg-white rounded-t-3xl border border-slate-200 px-6 py-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-xs">

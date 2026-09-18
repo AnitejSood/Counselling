@@ -509,7 +509,7 @@ export const DataProvider = ({ children }) => {
       sessionDate: date,
       sessionTime: timeSlot,
       trialGuaranteeEndDate: new Date(Date.now() + STUDENT_GUARANTEE_POLICY.maxRefundDays * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
-      meetingLink: `https://meet.google.com/aspiranthq-session-${Date.now().toString().slice(-4)}`,
+      meetingLink: `https://meet.google.com/matched-session-${Date.now().toString().slice(-4)}`,
       createdAt: new Date().toISOString().split('T')[0]
     };
     setEscrowBookings(prev => [newBooking, ...prev]);
@@ -995,7 +995,7 @@ export const DataProvider = ({ children }) => {
         return {
           ...a,
           status: 'UPCOMING',
-          meetingLink: meetingLink || `https://meet.google.com/aspiranthq-session-${Date.now().toString().slice(-4)}`,
+          meetingLink: meetingLink || `https://meet.google.com/matched-session-${Date.now().toString().slice(-4)}`,
           counsellorNotes: counsellorNotes || 'Session confirmed by counsellor.',
           meetingMode: 'Google Meet Video Call'
         };
@@ -1040,7 +1040,7 @@ export const DataProvider = ({ children }) => {
           date: chosenDate,
           timeSlot: chosenTimeSlot,
           status: 'UPCOMING',
-          meetingLink: a.meetingLink || `https://meet.google.com/aspiranthq-session-${Date.now().toString().slice(-4)}`
+          meetingLink: a.meetingLink || `https://meet.google.com/matched-session-${Date.now().toString().slice(-4)}`
         };
       }
       return a;
@@ -1170,7 +1170,7 @@ export const DataProvider = ({ children }) => {
       documentName: fileName || 'Offer_Letter_Proof.pdf',
       uploadedAt: new Date().toISOString().split('T')[0],
       verificationStatus: 'VERIFIED',
-      verifiedBy: 'AspirantHQ Verification Desk'
+      verifiedBy: 'matchEd Verification Desk'
     };
     setVerifiedProofs(prev => [newProof, ...prev]);
     setCounsellors(prev => prev.map(c => c.id === counsellorId ? { ...c, verifiedPlacementsCount: (c.verifiedPlacementsCount || 0) + 1 } : c));

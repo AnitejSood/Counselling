@@ -31,7 +31,7 @@ export const CounsellorCertification = () => {
   };
 
   return (
-    <div className="space-y-8 max-w-5xl mx-auto font-sans">
+    <div className="space-y-8 w-full font-sans">
       <PageHeader
         eyebrow="Admissions Excellence & Credentials"
         title="matchEd Certified Counsellor Course & Blue Tick Accreditation"

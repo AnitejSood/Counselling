@@ -2,7 +2,7 @@ import React from 'react';
 import { CheckSquare } from 'lucide-react';
 
 export const TasksAdmin = () => (
-  <div className="space-y-6 max-w-5xl mx-auto">
+  <div className="space-y-6 w-full">
     <span className="text-xs font-bold uppercase text-purple-600">Task Management</span>
     <h1 className="text-2xl font-extrabold text-slate-900">Counsellor Action Tasks</h1>
     <div className="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm space-y-3">

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import {
   GraduationCap, LogIn, User, Briefcase, ShieldCheck,
@@ -73,6 +73,8 @@ const COLOR_MAP = {
 export const Login = () => {
   const { login } = useAuth();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const redirectUrl = searchParams.get('redirect');
 
   const [selectedRole, setSelectedRole] = useState('STUDENT');
   const [email, setEmail] = useState('rohan.mehta@example.com');
@@ -99,7 +101,7 @@ export const Login = () => {
     setTimeout(() => {
       const success = login(email, password, selectedRole);
       if (success) {
-        navigate(selected.redirect);
+        navigate(redirectUrl || selected.redirect);
       } else {
         setError('Invalid credentials. Use the demo accounts below.');
       }

@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
 import { Search, Filter, RefreshCw, Send, AlertCircle, Sparkles, Scale, GraduationCap, Users } from 'lucide-react';
 import { useData } from '../../context/DataContext';
@@ -11,8 +11,28 @@ export const Explore = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const { counsellors } = useData();
 
-  // Tab State: 'COUNSELLORS' or 'SCHOLARS_ADDONS'
-  const [activeTab, setActiveTab] = useState('COUNSELLORS');
+  // Tab State: Synchronized with ?tab=scholars or ?tab=counsellors
+  const tabParam = searchParams.get('tab');
+  const [activeTab, setActiveTab] = useState(() => tabParam === 'scholars' ? 'SCHOLARS_ADDONS' : 'COUNSELLORS');
+
+  useEffect(() => {
+    if (tabParam === 'scholars') {
+      setActiveTab('SCHOLARS_ADDONS');
+    } else if (tabParam === 'counsellors') {
+      setActiveTab('COUNSELLORS');
+    }
+  }, [tabParam]);
+
+  const handleTabChange = (newTab) => {
+    setActiveTab(newTab);
+    const updatedParams = new URLSearchParams(searchParams);
+    if (newTab === 'SCHOLARS_ADDONS') {
+      updatedParams.set('tab', 'scholars');
+    } else {
+      updatedParams.delete('tab');
+    }
+    setSearchParams(updatedParams);
+  };
 
   // Filters State
   const [destination, setDestination] = useState(searchParams.get('destination') || '');
@@ -52,7 +72,9 @@ export const Explore = () => {
     setTrack('');
     setBudget('');
     setSortBy('bestMatch');
-    setSearchParams({});
+    const updatedParams = new URLSearchParams();
+    if (activeTab === 'SCHOLARS_ADDONS') updatedParams.set('tab', 'scholars');
+    setSearchParams(updatedParams);
   };
 
   const handleLeadSubmit = (e) => {
@@ -62,23 +84,31 @@ export const Explore = () => {
 
   return (
     <div className="bg-slate-50 min-h-screen py-10 font-sans">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="w-full max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12">
         
         {/* Header */}
         <div className="mb-8">
           <div className="flex items-center gap-2 text-[#CFA25E] text-xs font-bold uppercase tracking-wider mb-2">
             <Sparkles className="w-4 h-4" /> matchEd Discovery Marketplace
           </div>
-          <h1 className="text-3xl font-extrabold text-[#0B2545]">Browse Guidance & Mentorship</h1>
-          <p className="text-slate-600 text-sm mt-1">
-            Choose between verified admissions strategists or connect with student scholars at top universities for quick doubt-solving.
-          </p>
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+              <h1 className="text-3xl sm:text-4xl font-black text-[#0B2545]">
+                {activeTab === 'SCHOLARS_ADDONS' ? 'Top University Scholars & Fast Doubt Solvers' : 'Find Your Perfect Verified Counsellor'}
+              </h1>
+              <p className="text-sm text-slate-600 mt-2 max-w-2xl font-medium">
+                {activeTab === 'SCHOLARS_ADDONS' 
+                  ? 'Connect with verified scholars from Harvard, Oxford, Stanford & Cambridge for quick 20-min doubt sessions, SOP critique, and add-on advisory.'
+                  : 'Every counsellor is verified with background checks, proven placements, escrow-guaranteed payments, and 1-month swap protection.'}
+              </p>
+            </div>
+          </div>
         </div>
 
-        {/* Tab Switcher: Verified Counsellors vs Top Scholars & Doubt Solving */}
-        <div className="flex bg-slate-200/80 p-1 rounded-2xl max-w-xl mb-8">
+        {/* Tab Switcher Pills */}
+        <div className="flex bg-slate-200/80 p-1.5 rounded-2xl mb-8 max-w-lg shadow-inner">
           <button
-            onClick={() => setActiveTab('COUNSELLORS')}
+            onClick={() => handleTabChange('COUNSELLORS')}
             className={`flex-1 py-3 px-4 rounded-xl text-xs font-bold transition flex items-center justify-center gap-2 cursor-pointer ${
               activeTab === 'COUNSELLORS'
                 ? 'bg-[#0B2545] text-white shadow-md'
@@ -89,7 +119,7 @@ export const Explore = () => {
             <span>Verified Counsellors ({counsellors.length})</span>
           </button>
           <button
-            onClick={() => setActiveTab('SCHOLARS_ADDONS')}
+            onClick={() => handleTabChange('SCHOLARS_ADDONS')}
             className={`flex-1 py-3 px-4 rounded-xl text-xs font-bold transition flex items-center justify-center gap-2 cursor-pointer ${
               activeTab === 'SCHOLARS_ADDONS'
                 ? 'bg-[#0B2545] text-white shadow-md'

@@ -39,7 +39,7 @@ export const CounsellorSettings = () => {
     destinations: (counsellor?.destinations || ['United States', 'United Kingdom', 'Canada']).join(', '),
     track: counsellor?.track || 'Study abroad admissions',
     phone: counsellor?.contact?.phone || '+91 98765 43210',
-    email: counsellor?.contact?.email || 'arti.sood@aspiranthq.com',
+    email: counsellor?.contact?.email || 'arti.sood@matched.com',
     office: counsellor?.contact?.office || 'Virtual Global Desk'
   });
 
@@ -125,7 +125,7 @@ export const CounsellorSettings = () => {
   };
 
   return (
-    <div className="space-y-8 max-w-5xl mx-auto font-sans">
+    <div className="space-y-8 w-full font-sans">
       <PageHeader
         eyebrow="Admissions Strategist Portal"
         title="Portal & Public Profile Settings"

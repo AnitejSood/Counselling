@@ -15,7 +15,7 @@ export const PlatformRatingAdmin = () => {
   const averageRating = (ratingsList.reduce((sum, r) => sum + r.rating, 0) / ratingsList.length).toFixed(1);
 
   return (
-    <div className="space-y-8 max-w-6xl mx-auto font-sans">
+    <div className="space-y-8 w-full font-sans">
       <PageHeader
         eyebrow="Marketplace Quality & Feedback"
         title="Platform Ratings & User Reviews"

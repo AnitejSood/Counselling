@@ -19,10 +19,10 @@ export const ServicesView = () => {
   );
 
   return (
-    <div className="space-y-8 max-w-6xl mx-auto">
+    <div className="space-y-8 w-full">
       <div>
-        <span className="text-xs font-extrabold uppercase tracking-wider text-indigo-600 bg-indigo-50 px-3.5 py-1.5 rounded-full border border-indigo-100">
-          AspirantHQ Mentorship Packages
+        <span className="text-xs font-extrabold uppercase tracking-wider text-[#0B2545] bg-amber-50 px-3.5 py-1.5 rounded-full border border-amber-200">
+          matchEd Mentorship Packages
         </span>
         <h1 className="text-3xl font-extrabold text-slate-900 mt-2">Marketplace Counselling Services</h1>
         <p className="text-xs text-slate-500 mt-1">Browse fixed-rate consultation packages offered by verified marketplace advisors.</p>

@@ -47,12 +47,12 @@ export const Home = () => {
       {/* Hero Section */}
       <section className="relative overflow-hidden bg-[#0B2545] text-white pt-16 pb-24 border-b border-white/10">
         
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-full pointer-events-none opacity-25">
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-[1600px] h-full pointer-events-none opacity-25">
           <div className="absolute top-10 left-1/4 w-96 h-96 bg-[#CFA25E] rounded-full blur-3xl opacity-30" />
           <div className="absolute bottom-10 right-1/4 w-96 h-96 bg-blue-400 rounded-full blur-3xl opacity-20" />
         </div>
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div className="w-full max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 relative z-10">
           <div className="text-center max-w-3xl mx-auto mb-10">
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 border border-[#CFA25E]/50 text-amber-200 text-xs font-extrabold mb-6 shadow-md">
               <Sparkles className="w-4 h-4 text-[#CFA25E] animate-pulse" />
@@ -149,20 +149,20 @@ export const Home = () => {
 
       {/* Featured Boosted Counsellors Hero Carousel */}
       <section className="py-12 bg-slate-900 border-b border-slate-800">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="w-full max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12">
           <HeroBoostCarousel />
         </div>
       </section>
 
       {/* Top University Scholars & Quick Doubt Solving Add-ons Section */}
       <section className="py-14 bg-gradient-to-b from-slate-50 to-amber-50/40 border-b border-slate-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="w-full max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12">
           <TopScholarsAddonsSection />
         </div>
       </section>
 
       {/* Value Proposition Banners */}
-      <section className="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="py-16 w-full max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           
           <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm hover:shadow-md transition space-y-3">
@@ -199,13 +199,13 @@ export const Home = () => {
       </section>
 
       {/* Partner Ads Banner (Travel, IELTS, TOEFL) */}
-      <section className="py-6 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="py-6 w-full max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12">
         <PartnerAdsBanner />
       </section>
 
       {/* Directory Grid Preview */}
       <section className="py-12 bg-white border-t border-slate-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="w-full max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12">
           <div className="flex justify-between items-end mb-8">
             <div>
               <span className="text-xs text-[#0B2545] font-bold uppercase tracking-wider">Top Counsellors</span>

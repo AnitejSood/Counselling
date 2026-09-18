@@ -33,7 +33,7 @@ export const Shortlist = () => {
   });
 
   return (
-    <div className="space-y-8 max-w-5xl mx-auto">
+    <div className="space-y-8 w-full">
       
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
@@ -119,17 +119,17 @@ export const Shortlist = () => {
                   </div>
 
                   <div>
-                    <span className="text-[10px] font-bold text-slate-400 uppercase block">Tuition:</span>
-                    <span className="font-bold text-blue-600">{item.tuition}</span>
+                    <span className="text-[10px] font-bold text-slate-600 uppercase block">Tuition:</span>
+                    <span className="font-bold text-[#0B2545]">{item.tuition}</span>
                   </div>
 
                   <div>
-                    <span className="text-[10px] font-bold text-slate-400 uppercase block">Target Intake:</span>
+                    <span className="text-[10px] font-bold text-slate-600 uppercase block">Target Intake:</span>
                     <span className="font-semibold text-slate-800">{item.intake}</span>
                   </div>
 
                   <div>
-                    <span className="text-[10px] font-bold text-slate-400 uppercase block">Deadline:</span>
+                    <span className="text-[10px] font-bold text-slate-600 uppercase block">Deadline:</span>
                     <span className="font-semibold text-rose-600">{item.deadline}</span>
                   </div>
 

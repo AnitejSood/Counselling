@@ -47,7 +47,7 @@ export const Messaging = () => {
   const unreadCount = messages.filter(m => m.senderRole === 'COUNSELLOR' && m.unread).length;
 
   return (
-    <div className="max-w-4xl mx-auto flex flex-col h-[calc(100vh-8rem)] gap-0 font-sans">
+    <div className="w-full flex flex-col h-[calc(100vh-8rem)] gap-0 font-sans">
 
       {/* Chat Header */}
       <div className="bg-white rounded-t-3xl border border-slate-200 px-6 py-4 flex items-center justify-between shadow-sm">

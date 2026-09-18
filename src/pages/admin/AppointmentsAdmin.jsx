@@ -16,7 +16,7 @@ export const AppointmentsAdmin = () => {
   const totalValue = escrowBookings.reduce((s, b) => s + (b.amount || 0), 0);
 
   return (
-    <div className="space-y-8 max-w-6xl mx-auto animate-fade-in">
+    <div className="space-y-8 w-full animate-fade-in">
       <PageHeader
         eyebrow="Calendar Management"
         title="Appointments Ledger"

@@ -11,7 +11,7 @@ export const ApplicationTracker = () => {
   const [flagSubmitted, setFlagSubmitted] = useState(false);
 
   return (
-    <div className="space-y-8 max-w-5xl mx-auto font-sans">
+    <div className="space-y-8 w-full font-sans">
       <div className="flex justify-between items-center">
         <div>
           <span className="text-xs font-bold uppercase tracking-wider text-[#0B2545]">Student Portal</span>

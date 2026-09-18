@@ -70,7 +70,7 @@ export const DocumentCentre = () => {
   };
 
   return (
-    <div className="space-y-8 max-w-5xl mx-auto font-sans">
+    <div className="space-y-8 w-full font-sans">
       
       <div className="flex justify-between items-center">
         <div>

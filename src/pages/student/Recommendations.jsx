@@ -6,15 +6,15 @@ export const Recommendations = () => {
   const { recommendations, addToShortlist } = useData();
 
   return (
-    <div className="space-y-8 max-w-5xl mx-auto">
+    <div className="space-y-8 w-full">
       <div className="flex justify-between items-center">
         <div>
-          <span className="text-xs font-bold uppercase tracking-wider text-blue-600">Personalised Mentorship</span>
-          <h1 className="text-2xl font-extrabold text-slate-900">My Recommendations</h1>
+          <span className="text-xs font-bold uppercase tracking-wider text-[#0B2545]">Personalised Mentorship</span>
+          <h1 className="text-2xl font-extrabold text-[#0B2545]">My Recommendations</h1>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
         {recommendations.map((rec) => (
           <div key={rec.id} className="bg-white rounded-3xl p-7 border border-slate-200/80 shadow-sm space-y-4 flex flex-col justify-between">
             <div className="space-y-4">
@@ -31,19 +31,19 @@ export const Recommendations = () => {
               {rec.universityDetails && (
                 <div className="bg-slate-50 p-4 rounded-2xl border border-slate-100 grid grid-cols-2 gap-3 text-xs">
                   <div>
-                    <span className="text-[10px] font-bold text-slate-400 uppercase block">Course</span>
+                    <span className="text-[10px] font-bold text-slate-600 uppercase block">Course</span>
                     <span className="font-bold text-slate-900">{rec.universityDetails.course}</span>
                   </div>
                   <div>
-                    <span className="text-[10px] font-bold text-slate-400 uppercase block">Tuition</span>
-                    <span className="font-bold text-blue-600">{rec.universityDetails.approxTuitionUSD}</span>
+                    <span className="text-[10px] font-bold text-slate-600 uppercase block">Tuition</span>
+                    <span className="font-bold text-[#0B2545]">{rec.universityDetails.approxTuitionUSD}</span>
                   </div>
                   <div>
-                    <span className="text-[10px] font-bold text-slate-400 uppercase block">Deadline</span>
+                    <span className="text-[10px] font-bold text-slate-600 uppercase block">Deadline</span>
                     <span className="font-bold text-rose-600">{rec.universityDetails.applicationDeadline}</span>
                   </div>
                   <div>
-                    <span className="text-[10px] font-bold text-slate-400 uppercase block">Intake</span>
+                    <span className="text-[10px] font-bold text-slate-600 uppercase block">Intake</span>
                     <span className="font-semibold text-slate-700">{rec.universityDetails.intake}</span>
                   </div>
                 </div>

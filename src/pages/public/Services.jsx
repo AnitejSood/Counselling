@@ -30,7 +30,7 @@ export const Services = () => {
   };
 
   return (
-    <div className="py-12 space-y-12 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="py-12 space-y-12 w-full max-w-[1500px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12">
       
       {/* Page Header */}
       <div className="text-center max-w-2xl mx-auto space-y-3">

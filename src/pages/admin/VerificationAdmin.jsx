@@ -68,7 +68,7 @@ export const VerificationAdmin = () => {
   };
 
   return (
-    <div className="space-y-8 max-w-6xl mx-auto font-sans">
+    <div className="space-y-8 w-full font-sans">
       <PageHeader
         eyebrow="matchEd Identity & Document Audit"
         title="Counsellor ID Verification & Offer Letter Audit"

@@ -135,7 +135,7 @@ export const RoadmapBuilder = () => {
   };
 
   return (
-    <div className="space-y-8 max-w-6xl mx-auto font-sans">
+    <div className="space-y-8 w-full font-sans">
       <PageHeader
         eyebrow="matchEd Tabular Roadmap Engine"
         title={`Student Roadmap Table — ${studentProfile?.personalInfo?.fullName || 'Rohan Mehta'}`}

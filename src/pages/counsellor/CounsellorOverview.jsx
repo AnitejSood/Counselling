@@ -93,7 +93,7 @@ export const CounsellorOverview = () => {
   };
 
   return (
-    <div className="space-y-8 max-w-6xl mx-auto font-sans">
+    <div className="space-y-8 w-full font-sans">
       
       {/* Page Header */}
       <PageHeader
@@ -369,7 +369,7 @@ export const CounsellorOverview = () => {
                             confirmText: 'Approve & Confirm',
                             variant: 'success',
                             onConfirm: () => {
-                              approveBookingSession(apt.id, `https://meet.google.com/aspiranthq-${Date.now().toString().slice(-4)}`, 'Approved from Overview');
+                              approveBookingSession(apt.id, `https://meet.google.com/matched-${Date.now().toString().slice(-4)}`, 'Approved from Overview');
                               showMsg(`Approved session for ${apt.studentName}!`);
                             }
                           });

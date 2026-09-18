@@ -23,7 +23,7 @@ export const AvailabilityAdmin = () => {
   };
 
   return (
-    <div className="space-y-8 max-w-5xl mx-auto">
+    <div className="space-y-8 w-full">
       
       <div className="flex justify-between items-center">
         <div>

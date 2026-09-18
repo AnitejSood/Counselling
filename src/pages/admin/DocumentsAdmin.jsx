@@ -26,7 +26,7 @@ export const DocumentsAdmin = () => {
   const verified = documents.filter(d => d.status === 'Verified').length;
 
   return (
-    <div className="space-y-8 max-w-6xl mx-auto animate-fade-in">
+    <div className="space-y-8 w-full animate-fade-in">
       <PageHeader
         eyebrow="Document Audit"
         title="Offer Letter & Document Audits"

@@ -95,7 +95,7 @@ export const IntakeReviewer = () => {
   const ts = studentProfile?.testScores || {};
 
   return (
-    <div className="space-y-8 max-w-5xl mx-auto font-sans">
+    <div className="space-y-8 w-full font-sans">
       <PageHeader
         eyebrow="Student Intake & Diagnostics"
         title="Review Student Profile & Assign Tests"

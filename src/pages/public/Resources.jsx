@@ -38,16 +38,16 @@ export const Resources = () => {
   };
 
   return (
-    <div className="py-12 space-y-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 font-sans">
+    <div className="py-12 space-y-12 w-full max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 font-sans">
       
       <div className="text-center max-w-3xl mx-auto space-y-4">
-        <span className="text-xs font-bold uppercase tracking-wider text-indigo-600 bg-indigo-50 px-3.5 py-1.5 rounded-full border border-indigo-100">
-          AspirantHQ Knowledge & Blog Hub
+        <span className="text-xs font-bold uppercase tracking-wider text-[#0B2545] bg-amber-50 px-3.5 py-1.5 rounded-full border border-amber-200">
+          matchEd Knowledge & Blog Hub
         </span>
-        <h1 className="text-4xl font-extrabold text-slate-900">
+        <h1 className="text-4xl font-extrabold text-[#0B2545]">
           Expert Articles & Counsellor Insights
         </h1>
-        <p className="text-slate-600 text-base leading-relaxed">
+        <p className="text-slate-600 text-base leading-relaxed font-medium">
           Read actionable insights and research articles written personally by verified counsellors.
         </p>
 

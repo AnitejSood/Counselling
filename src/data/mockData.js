@@ -103,7 +103,7 @@ export const MOCK_USERS_LIST = [
   { id: "usr_101", name: "Rohan Mehta", email: "rohan.mehta@example.com", role: "STUDENT", status: "ACTIVE", joinedDate: "2026-05-10" },
   { id: "usr_102", name: "Simran Kaur", email: "simran.k@example.com", role: "STUDENT", status: "ACTIVE", joinedDate: "2026-06-01" },
   { id: "usr_201", name: "Arti Sood", email: "arti.sood@careerguide.com", role: "COUNSELLOR", status: "ACTIVE", joinedDate: "2026-01-15", tier: "PRO" },
-  { id: "usr_401", name: "AspirantHQ Founders Desk", email: "founders@aspiranthq.com", role: "SUPER_ADMIN", status: "ACTIVE", joinedDate: "2026-01-01" }
+  { id: "usr_401", name: "matchEd Executive Desk", email: "founders@matched.com", role: "SUPER_ADMIN", status: "ACTIVE", joinedDate: "2026-01-01" }
 ];
 
 export const MOCK_SUBSCRIPTION_LOGS = [
@@ -127,7 +127,7 @@ export const MOCK_ESCROW_BOOKINGS = [
     requestNotes: "Completed Stage 1-3 milestones and 3 1-on-1 strategy sessions.",
     sessionDate: "2026-08-10",
     sessionTime: "11:00 AM",
-    meetingLink: "https://meet.google.com/aspiranthq-1on1-meet",
+    meetingLink: "https://meet.google.com/matched-1on1-meet",
     createdAt: "2026-08-04"
   },
   {
@@ -146,7 +146,7 @@ export const MOCK_ESCROW_BOOKINGS = [
     requestNotes: null,
     sessionDate: "2026-08-15",
     sessionTime: "04:00 PM",
-    meetingLink: "https://meet.google.com/aspiranthq-sop-review",
+    meetingLink: "https://meet.google.com/matched-sop-review",
     createdAt: "2026-08-02"
   },
   {
@@ -165,7 +165,7 @@ export const MOCK_ESCROW_BOOKINGS = [
     requestNotes: "All 4 sessions delivered successfully.",
     sessionDate: "2026-07-28",
     sessionTime: "02:00 PM",
-    meetingLink: "https://meet.google.com/aspiranthq-completed",
+    meetingLink: "https://meet.google.com/matched-completed",
     createdAt: "2026-07-15"
   }
 ];
@@ -429,7 +429,7 @@ export const MOCK_VERIFIED_PROOFS = [
     documentName: "Imperial_Offer_Letter_Rohan.pdf",
     uploadedAt: "2026-07-31",
     verificationStatus: "VERIFIED",
-    verifiedBy: "AspirantHQ Verification Desk"
+    verifiedBy: "matchEd Verification Desk"
   }
 ];
 
@@ -458,7 +458,7 @@ export const INITIAL_RESOURCES = [
     summary: "Step-by-step framework for structuring narrative essays, highlighting research impact, and framing career goals.",
     category: "Study Abroad",
     readTime: "6 min read",
-    author: "AspirantHQ Editorial Board",
+    author: "matchEd Editorial Board",
     date: "2026-07-15",
     tags: ["SOP Mentorship", "US Admissions", "STEM Master's"],
     content: "Writing a compelling Statement of Purpose requires avoiding generic praise and focusing on concrete technical project outcomes."
@@ -492,7 +492,7 @@ export const INITIAL_APPOINTMENTS = [
     durationMinutes: 45,
     status: "UPCOMING",
     meetingMode: "Google Meet Video Call",
-    meetingLink: "https://meet.google.com/aspiranthq-1on1-meet",
+    meetingLink: "https://meet.google.com/matched-1on1-meet",
     studentNotes: "Discussing Fall 2027 shortlisting.",
     counsellorNotes: "Meeting link generated."
   },
@@ -610,7 +610,7 @@ export const INITIAL_NOTIFICATIONS = [
     id: "notif_4",
     type: "ADMISSION",
     title: "🎉 Admission confirmed — Imperial College London",
-    message: "Your offer letter for MS AI at Imperial College London has been verified by AspirantHQ. Congratulations!",
+    message: "Your offer letter for MS AI at Imperial College London has been verified by matchEd. Congratulations!",
     link: "/dashboard/applications",
     read: true,
     createdAt: "2026-07-31T12:00:00Z"
@@ -618,7 +618,7 @@ export const INITIAL_NOTIFICATIONS = [
   {
     id: "notif_5",
     type: "PLATFORM",
-    title: "AspirantHQ platform update",
+    title: "matchEd platform update",
     message: "We've launched Psychometric Assessments (RIASEC + Big Five) to help personalise your counsellor match. Try it now!",
     link: "/dashboard/assessments",
     read: true,

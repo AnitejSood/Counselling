@@ -76,7 +76,7 @@ export const SettingsAdmin = () => {
   );
 
   return (
-    <div className="max-w-3xl mx-auto space-y-8 font-sans animate-fade-in">
+    <div className="w-full max-w-5xl mx-auto space-y-8 font-sans animate-fade-in">
       <PageHeader
         eyebrow="matchEd System Governance"
         title="Platform & Financial Configuration"

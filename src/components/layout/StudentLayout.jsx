@@ -96,6 +96,7 @@ export const StudentLayout = ({ children }) => {
           {/* Nav List */}
           <nav className="px-3 space-y-1 overflow-y-auto max-h-[calc(100vh-320px)] pt-1">
             {studentNavItems.map((item) => {
+              const Icon = item.icon;
               const basePath = item.path.split('?')[0];
               const query = item.path.includes('?') ? item.path.split('?')[1] : null;
               const isActive = item.path === '/dashboard'
@@ -181,7 +182,7 @@ export const StudentLayout = ({ children }) => {
 
         {/* Content Page */}
         <main className="flex-1 overflow-y-auto">
-          <div className="p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto">
+          <div className="w-full max-w-[1720px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-10 py-6 sm:py-8">
             {children}
           </div>
         </main>

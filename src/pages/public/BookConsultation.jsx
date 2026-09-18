@@ -105,7 +105,7 @@ export const BookConsultation = () => {
 
   return (
     <div className="bg-slate-50 min-h-screen py-10 font-sans">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Header */}
         <div className="text-center mb-8">

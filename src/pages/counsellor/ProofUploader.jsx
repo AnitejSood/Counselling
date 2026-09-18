@@ -79,7 +79,7 @@ export const ProofUploader = () => {
   const verifiedCount = verifiedProofs.length;
 
   return (
-    <div className="space-y-8 max-w-5xl mx-auto font-sans">
+    <div className="space-y-8 w-full font-sans">
       <PageHeader
         eyebrow="matchEd Placement Audit & Proof Counter"
         title="Offer Letter Audit & Verified Proof Counter"

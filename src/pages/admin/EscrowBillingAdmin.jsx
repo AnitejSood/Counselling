@@ -17,7 +17,7 @@ export const EscrowBillingAdmin = () => {
   const pendingRequests = escrowBookings.filter(b => b.escrowStatus === 'RELEASE_REQUESTED');
 
   return (
-    <div className="space-y-8 max-w-6xl mx-auto font-sans">
+    <div className="space-y-8 w-full font-sans">
       <PageHeader
         eyebrow="Escrow Ledger & Payments Governance"
         title="Escrow & Billing Payments Manager"

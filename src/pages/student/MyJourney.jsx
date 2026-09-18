@@ -6,11 +6,11 @@ export const MyJourney = () => {
   const { milestones, studentProfile } = useData();
 
   return (
-    <div className="space-y-8 max-w-5xl mx-auto">
+    <div className="space-y-8 w-full">
       
       {/* Header Banner */}
-      <div className="bg-gradient-to-r from-slate-900 to-slate-950 text-white rounded-3xl p-8 border border-slate-800 shadow-xl space-y-3">
-        <span className="px-3 py-1 rounded-full bg-blue-500/20 text-blue-300 text-xs font-semibold border border-blue-500/30">
+      <div className="bg-gradient-to-r from-[#0B2545] via-[#133E6D] to-[#0B2545] text-white rounded-3xl p-8 border border-white/10 shadow-xl space-y-3">
+        <span className="px-3 py-1 rounded-full bg-[#CFA25E]/20 text-[#CFA25E] text-xs font-bold border border-[#CFA25E]/30">
           Signature Feature • Journey Tracker
         </span>
         <h1 className="text-3xl font-extrabold">My Education & Admission Journey</h1>

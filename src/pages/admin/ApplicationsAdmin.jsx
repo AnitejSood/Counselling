@@ -24,7 +24,7 @@ export const ApplicationsAdmin = () => {
   };
 
   return (
-    <div className="space-y-8 max-w-5xl mx-auto">
+    <div className="space-y-8 w-full">
       <div className="flex justify-between items-center">
         <div>
           <span className="text-xs font-bold uppercase tracking-wider text-purple-600">Global Applications</span>

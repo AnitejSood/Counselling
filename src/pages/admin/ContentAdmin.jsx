@@ -4,7 +4,7 @@ import { useData } from '../../context/DataContext';
 export const ContentAdmin = () => {
   const { resources } = useData();
   return (
-    <div className="space-y-6 max-w-5xl mx-auto">
+    <div className="space-y-6 w-full">
       <span className="text-xs font-bold uppercase text-purple-600">Content Management</span>
       <h1 className="text-2xl font-extrabold text-slate-900">Resource Articles & Guides ({resources.length})</h1>
       <div className="space-y-3">

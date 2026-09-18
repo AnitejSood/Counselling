@@ -14,16 +14,16 @@ export const Contact = () => {
   };
 
   return (
-    <div className="py-12 space-y-12 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="py-12 space-y-12 w-full max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 font-sans">
       
-      <div className="text-center max-w-2xl mx-auto space-y-3">
+      <div className="text-center max-w-3xl mx-auto space-y-3">
         <span className="text-xs font-extrabold uppercase tracking-wider text-[#0B2545] bg-amber-50 px-3.5 py-1.5 rounded-full border border-amber-200">
           matchEd Corporate Desk
         </span>
-        <h1 className="text-3xl font-extrabold text-slate-900">
+        <h1 className="text-3xl sm:text-4xl font-black text-[#0B2545]">
           Contact Headquarters & Advisory Desk
         </h1>
-        <p className="text-slate-600 text-xs sm:text-sm">
+        <p className="text-slate-600 text-xs sm:text-sm font-medium">
           Have questions about advisor verification, escrow security, 1-month counsellor changes, or scholar doubt sessions? Get in touch with our team.
         </p>
       </div>
@@ -32,16 +32,16 @@ export const Contact = () => {
         
         {/* Contact Info */}
         <div className="lg:col-span-5 space-y-6">
-          <div className="bg-slate-950 text-white rounded-3xl p-7 border border-slate-800 shadow-xl space-y-6">
-            <div className="flex items-center gap-2 border-b border-slate-800 pb-4">
-              <Building2 className="w-5 h-5 text-indigo-400" />
+          <div className="bg-[#0B2545] text-white rounded-3xl p-7 border border-white/10 shadow-xl space-y-6">
+            <div className="flex items-center gap-2 border-b border-white/10 pb-4">
+              <Building2 className="w-5 h-5 text-[#CFA25E]" />
               <h3 className="text-base font-bold text-white">Chandigarh Corporate Office</h3>
             </div>
             
             <div className="space-y-4 text-xs text-slate-300">
               <div className="flex items-start gap-3">
-                <div className="w-9 h-9 rounded-xl bg-indigo-900/60 text-indigo-400 flex items-center justify-center shrink-0 border border-indigo-700/40">
-                  <MapPin className="w-5 h-5 text-amber-400" />
+                <div className="w-9 h-9 rounded-xl bg-white/10 text-[#CFA25E] flex items-center justify-center shrink-0 border border-white/10">
+                  <MapPin className="w-5 h-5 text-[#CFA25E]" />
                 </div>
                 <div>
                   <strong className="text-white block text-xs mb-0.5">Physical Headquarters Address:</strong>
@@ -50,13 +50,13 @@ export const Contact = () => {
               </div>
 
               <div className="flex items-start gap-3">
-                <div className="w-9 h-9 rounded-xl bg-indigo-900/60 text-indigo-400 flex items-center justify-center shrink-0 border border-indigo-700/40">
-                  <Mail className="w-5 h-5 text-indigo-400" />
+                <div className="w-9 h-9 rounded-xl bg-white/10 text-[#CFA25E] flex items-center justify-center shrink-0 border border-white/10">
+                  <Mail className="w-5 h-5 text-[#CFA25E]" />
                 </div>
                 <div>
                   <strong className="text-white block text-xs mb-0.5">Corporate & Support Email:</strong>
-                  <span>{platformConfig?.contactEmail || "support@aspiranthq.com"}</span>
-                  <span className="block text-[10px] text-slate-400 mt-0.5">Founders: {platformConfig?.founderEmail || "founders@aspiranthq.com"}</span>
+                  <span>{platformConfig?.contactEmail || "support@matched.com"}</span>
+                  <span className="block text-[10px] text-amber-200/80 mt-0.5">Founders: {platformConfig?.founderEmail || "founders@matched.com"}</span>
                 </div>
               </div>
 
@@ -103,7 +103,7 @@ export const Contact = () => {
                 <CheckCircle className="w-10 h-10 text-emerald-600 mx-auto" />
                 <h4 className="text-base font-bold text-emerald-900">Inquiry Delivered!</h4>
                 <p className="text-xs text-emerald-800">
-                  Thank you for reaching out to AspirantHQ. Our Chandigarh team will review your inquiry and respond within 24 business hours.
+                  Thank you for reaching out to matchEd. Our team will review your inquiry and respond within 24 business hours.
                 </p>
                 <button
                   onClick={() => setSubmitted(false)}

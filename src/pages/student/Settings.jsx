@@ -81,7 +81,7 @@ export const Settings = () => {
   };
 
   return (
-    <div className="max-w-3xl mx-auto space-y-8 animate-fade-in">
+    <div className="w-full max-w-5xl mx-auto space-y-8 animate-fade-in">
 
       <PageHeader
         eyebrow="Account"
@@ -171,7 +171,7 @@ export const Settings = () => {
             enabled={studentSettings?.marketingEmails ?? false}
             onChange={() => handleToggle('marketingEmails')}
             label="Platform News & Updates"
-            description="AspirantHQ newsletters, counsellor spotlights, and admission tips."
+            description="matchEd newsletters, counsellor spotlights, and admission tips."
           />
         </div>
       </Section>
@@ -246,7 +246,7 @@ export const Settings = () => {
           <div className="p-4 rounded-2xl bg-rose-50/60 border border-rose-100 space-y-1">
             <p className="text-xs font-bold text-rose-700">Delete Account</p>
             <p className="text-[11px] text-rose-600">
-              Permanently delete your AspirantHQ account, profile, and all associated data. This action cannot be undone.
+              Permanently delete your matchEd account, profile, and all associated data. This action cannot be undone.
             </p>
             <button
               onClick={() => alert('Account deletion request submitted. (Demo — not executed)')}
@@ -261,7 +261,7 @@ export const Settings = () => {
               onClick={logout}
               className="btn btn-ghost w-full justify-center"
             >
-              <LogOut className="w-4 h-4" /> Sign Out of AspirantHQ
+              <LogOut className="w-4 h-4" /> Sign Out of matchEd
             </button>
           </div>
         </div>
