@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { useData } from '../../context/DataContext';
 import {
   Calendar, Clock, Video, ExternalLink,
-  Plus, CheckCircle2, ShieldCheck, AlertTriangle, Sparkles, RefreshCw, FileText, HelpCircle
+  Plus, CheckCircle2, ShieldCheck, AlertTriangle, Sparkles, RefreshCw, FileText, HelpCircle, Star
 } from 'lucide-react';
 import { PageHeader } from '../../components/ui/PageHeader';
 import { StatusBadge } from '../../components/ui/StatusBadge';
@@ -12,12 +12,14 @@ import { formatDate } from '../../lib/formatters';
 import { ChangeCounsellorModal } from '../../components/common/ChangeCounsellorModal';
 import { FirstCallGuideModal } from '../../components/common/FirstCallGuideModal';
 import { ConfirmationModal } from '../../components/common/ConfirmationModal';
+import { LeaveReviewModal } from '../../components/student/LeaveReviewModal';
 
 export const AppointmentsView = () => {
-  const { appointments, cancelAppointment, rescheduleAppointment, studentConfirmProposedTime, escrowBookings, counsellorSwitchState } = useData();
+  const { appointments, cancelAppointment, rescheduleAppointment, studentConfirmProposedTime, escrowBookings, counsellorSwitchState, counsellors } = useData();
   const [rescheduleModalApt, setRescheduleModalApt] = useState(null);
   const [changeCounsellorOpen, setChangeCounsellorOpen] = useState(false);
   const [firstCallGuideOpen, setFirstCallGuideOpen] = useState(false);
+  const [reviewModalSession, setReviewModalSession] = useState(null);
 
   const [confirmModal, setConfirmModal] = useState({
     isOpen: false,
@@ -339,7 +341,16 @@ export const AppointmentsView = () => {
                   </p>
                   <p className="text-xs text-slate-500">{apt.durationMinutes} mins · {apt.meetingMode}</p>
                 </div>
-                <StatusBadge status={apt.status} />
+                <div className="flex items-center gap-3">
+                  <StatusBadge status={apt.status} />
+                  <button
+                    onClick={() => setReviewModalSession(apt)}
+                    className="px-3.5 py-1.5 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-300 font-bold text-xs flex items-center gap-1.5 transition cursor-pointer shadow-sm"
+                  >
+                    <Star className="w-3.5 h-3.5 fill-amber-500 text-amber-500" />
+                    Leave Verified Review
+                  </button>
+                </div>
               </div>
             ))}
           </div>
@@ -421,6 +432,15 @@ export const AppointmentsView = () => {
         onConfirm={confirmModal.onConfirm}
         onClose={() => setConfirmModal(p => ({ ...p, isOpen: false }))}
       />
+
+      {/* Leave Verified Review Modal */}
+      {reviewModalSession && (
+        <LeaveReviewModal
+          counsellorId={reviewModalSession.counsellorId || counsellorSwitchState?.assignedCounsellorId || 'counsellor_01'}
+          counsellorName={reviewModalSession.counsellorName || (counsellors.find(c => c.id === (reviewModalSession.counsellorId || counsellorSwitchState?.assignedCounsellorId))?.fullName) || 'Assigned Counsellor'}
+          onClose={() => setReviewModalSession(null)}
+        />
+      )}
 
     </div>
   );

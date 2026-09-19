@@ -3,7 +3,6 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useData } from '../../context/DataContext';
 import { MatchEdLogo } from '../common/MatchEdLogo';
-import { NotificationBellPopup } from '../common/NotificationBellPopup';
 import { 
   Users, 
   Menu, 
@@ -101,31 +100,27 @@ export const Navbar = () => {
             })}
           </nav>
 
-          {/* Right Actions: Notifications Bell & Portals */}
+          {/* Right Actions: Portals */}
           <div className="hidden md:flex items-center gap-3">
-            <NotificationBellPopup theme="light" />
-
-            <Link
-              to="/counsellor"
-              className="px-3.5 py-2 rounded-xl text-xs font-bold text-emerald-800 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200/60 transition flex items-center gap-1.5 shadow-2xs"
+            <button
+              onClick={() => { switchRole('COUNSELLOR'); navigate('/counsellor'); }}
+              className="px-3.5 py-2 rounded-xl text-xs font-bold text-emerald-800 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200/60 transition flex items-center gap-1.5 shadow-2xs cursor-pointer"
             >
               <Briefcase className="w-3.5 h-3.5 text-emerald-600" />
               Counsellor Portal
-            </Link>
+            </button>
 
-            <Link
-              to="/dashboard"
-              className="px-4 py-2 rounded-xl text-xs font-bold text-white bg-[#0B2545] hover:bg-[#133E68] transition flex items-center gap-1.5 shadow-sm"
+            <button
+              onClick={() => { switchRole('STUDENT'); navigate('/dashboard'); }}
+              className="px-4 py-2 rounded-xl text-xs font-bold text-white bg-[#0B2545] hover:bg-[#133E68] transition flex items-center gap-1.5 shadow-sm cursor-pointer"
             >
               <User className="w-3.5 h-3.5 text-[#CFA25E]" />
               Student Portal
-            </Link>
+            </button>
           </div>
 
-          {/* Mobile menu and bell */}
+          {/* Mobile menu button */}
           <div className="md:hidden flex items-center gap-2">
-            <NotificationBellPopup theme="light" />
-
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className="p-2 rounded-xl text-slate-700 hover:bg-slate-100"

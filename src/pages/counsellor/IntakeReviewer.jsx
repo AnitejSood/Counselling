@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useAuth } from '../../context/AuthContext';
 import { useData } from '../../context/DataContext';
 import {
   UserCheck, Save, CheckCircle2, Edit3,
@@ -43,6 +44,7 @@ const Field = ({ label, value, onSave }) => {
 };
 
 export const IntakeReviewer = () => {
+  const { currentUser } = useAuth();
   const { studentProfile, updateStudentProfileField, sendMessage, assignedPsychometrics, assignPsychometricTests } = useData();
   const [requestNote, setRequestNote] = useState('');
   const [requestSent, setRequestSent] = useState(false);
@@ -82,7 +84,7 @@ export const IntakeReviewer = () => {
   const handleSendRequest = (e) => {
     e.preventDefault();
     if (!requestNote.trim()) return;
-    sendMessage('COUNSELLOR', 'Arti Sood', requestNote);
+    sendMessage('COUNSELLOR', currentUser?.fullName || 'Assigned Counsellor', requestNote);
     setRequestSent(true);
     setRequestNote('');
     setTimeout(() => setRequestSent(false), 3000);

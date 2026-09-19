@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useData } from '../../context/DataContext';
@@ -26,7 +26,13 @@ const navItems = [
 export const CounsellorLayout = ({ children }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [supportModalOpen, setSupportModalOpen] = useState(false);
-  const { logout } = useAuth();
+  const { currentUser, switchRole, logout } = useAuth();
+
+  useEffect(() => {
+    if (currentUser?.role && currentUser.role !== 'COUNSELLOR') {
+      switchRole('COUNSELLOR');
+    }
+  }, [currentUser?.role]);
   const { 
     counsellorProfile, 
     hasPortalAccess, 

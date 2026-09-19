@@ -25,13 +25,21 @@ export const RoadmapBuilder = () => {
     reorderMilestones,
     studentProfile,
     assignedPsychometrics,
-    assignPsychometricTests
+    assignPsychometricTests,
+    roadmapTemplates,
+    applyRoadmapTemplate,
+    activeStudentId,
+    activeStudent
   } = useData();
 
   const [showAddForm, setShowAddForm] = useState(false);
   const [editingMilestoneId, setEditingMilestoneId] = useState(null);
   const [savedNotice, setSavedNotice] = useState('');
   const [form, setForm] = useState({ title: '', dueDate: '', notes: '', tasks: '' });
+
+  // Template Modal State
+  const [showTemplateModal, setShowTemplateModal] = useState(false);
+  const [selectedTemplateId, setSelectedTemplateId] = useState('tpl_us_stem_pg');
 
   // HTML5 Drag-and-drop state
   const [draggedIndex, setDraggedIndex] = useState(null);
@@ -141,16 +149,22 @@ export const RoadmapBuilder = () => {
         title={`Student Roadmap Table — ${studentProfile?.personalInfo?.fullName || 'Rohan Mehta'}`}
         subtitle="Manage student journey milestones in a structured table with drag-and-drop reordering. Assign standardized psychometric tests directly to their portal."
         action={
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 flex-wrap">
+            <button 
+              onClick={() => setShowTemplateModal(true)}
+              className="px-4 py-2.5 bg-amber-50 border border-amber-300 hover:bg-amber-100 text-[#0B2545] rounded-xl text-xs font-bold shadow-sm flex items-center gap-1.5 transition cursor-pointer"
+            >
+              <Compass className="w-4 h-4 text-[#CFA25E]" /> Load Track Template
+            </button>
             <button 
               onClick={() => { setSelectedTests(assignedPsychometrics || ['riasec', 'bigFive']); setShowPsychModal(true); }}
-              className="px-4 py-2.5 bg-indigo-50 border border-indigo-200 hover:bg-indigo-100 text-[#0B2545] rounded-xl text-xs font-bold shadow-sm flex items-center gap-1.5 transition"
+              className="px-4 py-2.5 bg-indigo-50 border border-indigo-200 hover:bg-indigo-100 text-[#0B2545] rounded-xl text-xs font-bold shadow-sm flex items-center gap-1.5 transition cursor-pointer"
             >
               <Brain className="w-4 h-4 text-[#CFA25E]" /> Assign Psychometrics ({(assignedPsychometrics || []).length}/5)
             </button>
             <button 
               onClick={() => { setEditingMilestoneId(null); setForm({ title: '', dueDate: '', notes: '', tasks: '' }); setShowAddForm(!showAddForm); }} 
-              className="px-4 py-2.5 bg-[#0B2545] hover:bg-[#133E6D] text-white rounded-xl text-xs font-bold shadow-md flex items-center gap-1.5 transition"
+              className="px-4 py-2.5 bg-[#0B2545] hover:bg-[#133E6D] text-white rounded-xl text-xs font-bold shadow-md flex items-center gap-1.5 transition cursor-pointer"
             >
               <Plus className="w-4 h-4 text-[#CFA25E]" /> Add Roadmap Stage
             </button>
@@ -420,6 +434,75 @@ export const RoadmapBuilder = () => {
           </table>
         </div>
       </div>
+
+      {/* Track Roadmap Template Selector Modal */}
+      {showTemplateModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in">
+          <div className="bg-white rounded-3xl p-6 sm:p-7 max-w-xl w-full border border-slate-200 shadow-2xl space-y-5">
+            <div className="flex items-center justify-between pb-3 border-b border-slate-100">
+              <div className="flex items-center gap-2">
+                <div className="w-9 h-9 rounded-xl bg-amber-50 border border-amber-200 flex items-center justify-center text-[#0B2545]">
+                  <Compass className="w-5 h-5 text-[#0B2545]" />
+                </div>
+                <div>
+                  <h3 className="text-base font-bold text-[#0B2545]">Load Pre-Built Roadmap Template</h3>
+                  <p className="text-[11px] text-slate-500">Auto-populate student timeline stages tailored to their track</p>
+                </div>
+              </div>
+              <button onClick={() => setShowTemplateModal(false)} className="text-slate-400 hover:text-slate-600 font-bold">✕</button>
+            </div>
+
+            <div className="space-y-3">
+              <label className="block uppercase text-slate-500 text-[10px] font-bold">Select Specialization Pathway *</label>
+              <div className="grid grid-cols-1 gap-2.5 max-h-64 overflow-y-auto">
+                {(roadmapTemplates || []).map(tpl => (
+                  <div
+                    key={tpl.id}
+                    onClick={() => setSelectedTemplateId(tpl.id)}
+                    className={`p-3.5 rounded-2xl border cursor-pointer transition ${
+                      selectedTemplateId === tpl.id
+                        ? 'bg-amber-50/80 border-[#CFA25E] ring-1 ring-[#CFA25E]'
+                        : 'bg-slate-50 border-slate-200 hover:bg-slate-100'
+                    }`}
+                  >
+                    <div className="flex justify-between items-center mb-1">
+                      <span className="font-bold text-xs text-slate-900">{tpl.name}</span>
+                      <span className="text-[10px] font-extrabold px-2 py-0.5 rounded bg-white text-slate-700 border border-slate-200">
+                        {tpl.milestones?.length || 0} Stages
+                      </span>
+                    </div>
+                    <p className="text-[11px] text-slate-500">{tpl.description}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="flex gap-2.5 pt-2">
+              <button
+                type="button"
+                onClick={() => setShowTemplateModal(false)}
+                className="flex-1 py-2.5 bg-slate-100 text-slate-700 font-bold rounded-xl text-xs cursor-pointer"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  const res = applyRoadmapTemplate(selectedTemplateId, activeStudentId);
+                  setShowTemplateModal(false);
+                  if (res?.success) {
+                    showMsg(`Applied "${res.templateName}" with ${res.count} stages to student roadmap!`);
+                  }
+                }}
+                className="flex-1 py-2.5 bg-[#0B2545] hover:bg-slate-800 text-white font-extrabold rounded-xl text-xs shadow-md transition cursor-pointer"
+              >
+                Apply Template to Student
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
     </div>
   );
 };

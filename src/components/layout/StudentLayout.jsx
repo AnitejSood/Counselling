@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useData } from '../../context/DataContext';
@@ -28,10 +28,20 @@ import {
 export const StudentLayout = ({ children }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [supportModalOpen, setSupportModalOpen] = useState(false);
-  const { currentUser, logout } = useAuth();
+  const { currentUser, switchRole, logout } = useAuth();
   const { studentProfile, messages, appointments } = useData();
   const location = useLocation();
   const navigate = useNavigate();
+
+  // Enforce student role when inside student portal
+  useEffect(() => {
+    if (currentUser?.role && currentUser.role !== 'STUDENT') {
+      switchRole('STUDENT');
+    }
+  }, [currentUser?.role]);
+
+  const studentDisplayName = (currentUser?.role === 'STUDENT' ? currentUser.fullName : null) || studentProfile?.personalInfo?.fullName || 'Rohan Mehta';
+  const studentAvatarUrl = (currentUser?.role === 'STUDENT' ? currentUser.avatarUrl : null) || "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&q=80&w=400";
 
   const unreadMessagesCount = (messages || []).filter(m => m.senderRole === 'COUNSELLOR' && m.unread).length;
   const upcomingAppts = (appointments || []).filter(a => a.status === 'UPCOMING');
@@ -83,12 +93,12 @@ export const StudentLayout = ({ children }) => {
           {/* User Card */}
           <div className="p-3 mx-3 my-3 rounded-xl bg-white/5 border border-white/10 flex items-center gap-3">
             <img
-              src={currentUser?.avatarUrl || "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&q=80&w=400"}
-              alt={currentUser?.fullName || "Student"}
+              src={studentAvatarUrl}
+              alt={studentDisplayName}
               className="w-10 h-10 rounded-full object-cover border border-[#CFA25E]/60"
             />
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-semibold text-white truncate">{currentUser?.fullName || "Rohan Mehta"}</p>
+              <p className="text-sm font-semibold text-white truncate">{studentDisplayName}</p>
               <p className="text-[11px] text-amber-200/80 truncate">Student Portal</p>
             </div>
           </div>
@@ -161,7 +171,7 @@ export const StudentLayout = ({ children }) => {
         <header className="hidden md:flex items-center justify-between px-8 py-3 bg-white border-b border-slate-200/80 sticky top-0 z-30 shadow-xs">
           <div className="flex items-center gap-2 text-xs font-medium text-slate-500">
             <span>Welcome back,</span>
-            <span className="font-bold text-[#0B2545]">{currentUser?.fullName || 'Student'}</span>
+            <span className="font-bold text-[#0B2545]">{studentDisplayName}</span>
             <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-50 text-amber-800 border border-amber-200">
               1-Month Switch Guarantee Active
             </span>
@@ -171,7 +181,7 @@ export const StudentLayout = ({ children }) => {
             <div className="h-5 w-px bg-slate-200"></div>
             <Link to="/dashboard/profile" className="flex items-center gap-2 text-xs font-semibold text-slate-700 hover:text-[#0B2545]">
               <img
-                src={currentUser?.avatarUrl || "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&q=80&w=400"}
+                src={studentAvatarUrl}
                 alt=""
                 className="w-7 h-7 rounded-full object-cover border border-slate-300"
               />

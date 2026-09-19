@@ -25,7 +25,10 @@ import {
   MOCK_PEER_MENTORS,
   MOCK_ADDON_SERVICES,
   MOCK_COUNSELLOR_COURSES,
-  MOCK_PARTNER_ADS
+  MOCK_PARTNER_ADS,
+  INITIAL_SOP_CYCLES,
+  INITIAL_POST_ADMIT_TASKS,
+  INITIAL_ROADMAP_CHANGELOG
 } from '../data/mockData';
 import { COUNSELLOR_SUBSCRIPTION_TIERS, PLATFORM_COMMISSION, STUDENT_GUARANTEE_POLICY } from '../config/subscriptionConfig';
 
@@ -226,6 +229,24 @@ export const DataProvider = ({ children }) => {
     return saved ? JSON.parse(saved) : [];
   });
 
+  // SOP Mentorship Cycles (Spec Step 6: 3-stage Story-Mining -> Structural Review -> Line Edit)
+  const [sopCycles, setSopCycles] = useState(() => {
+    const saved = localStorage.getItem('matched_sop_cycles');
+    return saved ? JSON.parse(saved) : INITIAL_SOP_CYCLES;
+  });
+
+  // Post-Admit Checklist (Spec Step 7: Visa & Pre-Departure Checklist)
+  const [postAdmitTasks, setPostAdmitTasks] = useState(() => {
+    const saved = localStorage.getItem('matched_post_admit_tasks');
+    return saved ? JSON.parse(saved) : INITIAL_POST_ADMIT_TASKS;
+  });
+
+  // Roadmap Changelog / Revision History (Spec Step 5: Transparent Milestone History)
+  const [roadmapChangelog, setRoadmapChangelog] = useState(() => {
+    const saved = localStorage.getItem('matched_roadmap_changelog');
+    return saved ? JSON.parse(saved) : INITIAL_ROADMAP_CHANGELOG;
+  });
+
   // Mutable student data
   const [milestones, setMilestones] = useState(INITIAL_MILESTONES);
   const [documents, setDocuments] = useState(INITIAL_DOCUMENTS);
@@ -354,7 +375,10 @@ export const DataProvider = ({ children }) => {
     localStorage.setItem('matched_counsellor_switch', JSON.stringify(counsellorSwitchState));
     localStorage.setItem('matched_counsellor_courses', JSON.stringify(counsellorCourses));
     localStorage.setItem('matched_platform_ratings', JSON.stringify(platformRatings));
-  }, [platformConfig, counsellors, reviews, verificationApps, escrowBookings, pipelineStudents, verifiedProofs, usersList, subscriptionLogs, studentProfile, studentSettings, assignedPsychometrics, supportTickets, counsellorBlogs, peerMentors, addonServices, bookedAddons, counsellorSwitchState, counsellorCourses, platformRatings]);
+    localStorage.setItem('matched_sop_cycles', JSON.stringify(sopCycles));
+    localStorage.setItem('matched_post_admit_tasks', JSON.stringify(postAdmitTasks));
+    localStorage.setItem('matched_roadmap_changelog', JSON.stringify(roadmapChangelog));
+  }, [platformConfig, counsellors, reviews, verificationApps, escrowBookings, pipelineStudents, verifiedProofs, usersList, subscriptionLogs, studentProfile, studentSettings, assignedPsychometrics, supportTickets, counsellorBlogs, peerMentors, addonServices, bookedAddons, counsellorSwitchState, counsellorCourses, platformRatings, sopCycles, postAdmitTasks, roadmapChangelog]);
 
   // Check if counsellor has portal access (Tier 2 PRO or Tier 3 PREMIUM_BOOST)
   const hasPortalAccess = (counsellorOrId) => {
@@ -895,6 +919,183 @@ export const DataProvider = ({ children }) => {
     }));
   };
 
+  // ─── Roadmap Versioning & Changelog (Spec Step 5) ─────────
+  const addRoadmapChangelog = (summary, affectedStages = []) => {
+    const activeCounsellor = counsellors.find(c => c.id === counsellorSwitchState.assignedCounsellorId) || counsellors[0];
+    const newLog = {
+      id: `log_${Date.now()}`,
+      date: new Date().toISOString().split('T')[0],
+      counsellorName: activeCounsellor?.fullName || 'Verified Counsellor',
+      summary,
+      affectedStages: affectedStages.length > 0 ? affectedStages : ['Roadmap Milestones']
+    };
+    setRoadmapChangelog(prev => [newLog, ...prev]);
+  };
+
+  // ─── Pre-Built Roadmap Track Templates (Spec Step 5) ─────
+  const applyRoadmapTemplate = (templateId, targetStudentId) => {
+    const template = MOCK_ROADMAP_TEMPLATES.find(t => t.id === templateId);
+    if (!template) return { success: false, message: 'Template not found' };
+
+    const studentToUpdateId = targetStudentId || activeStudentId;
+    const formattedMilestones = template.milestones.map((m, index) => ({
+      id: `m_${Date.now()}_${index + 1}`,
+      stageNumber: index + 1,
+      title: m.title,
+      status: index === 0 ? 'IN_PROGRESS' : 'UPCOMING',
+      dueDate: m.dueDate || new Date(Date.now() + (index + 1) * 20 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+      notes: m.notes || `Milestone generated from ${template.name}`,
+      tasks: m.tasks || []
+    }));
+
+    setMilestones(formattedMilestones);
+    setPipelineStudents(prev => prev.map(s => {
+      if ((s.studentId || s.id) === studentToUpdateId) {
+        return { ...s, milestones: formattedMilestones, targetTrack: template.track };
+      }
+      return s;
+    }));
+
+    addRoadmapChangelog(`Applied template: "${template.name}"`, formattedMilestones.map(m => `Stage ${m.stageNumber}: ${m.title}`));
+
+    addNotification(
+      'ROADMAP',
+      `Roadmap Template Applied: ${template.name}`,
+      `Your counsellor applied the ${template.name} (${formattedMilestones.length} stages) to your admission roadmap.`,
+      '/dashboard/journey',
+      'STUDENT'
+    );
+
+    return { success: true, count: formattedMilestones.length, templateName: template.name };
+  };
+
+  // ─── SOP Mentorship 3-Stage Lifecycle (Spec Step 6) ──────
+  const submitSopDraft = (sopId, draftData) => {
+    const newVersionObj = {
+      version: draftData.version || `v${Date.now().toString().slice(-2)}`,
+      stage: draftData.stage || 'STRUCTURAL_REVIEW',
+      fileName: draftData.fileName || 'SOP_Draft_Upload.docx',
+      submittedAt: new Date().toISOString().split('T')[0],
+      studentNotes: draftData.studentNotes || 'New draft uploaded for mentor critique.',
+      counsellorFeedback: 'Draft received. Review queued with assigned counsellor.',
+      status: 'IN_REVIEW'
+    };
+
+    setSopCycles(prev => prev.map(sop => {
+      if (sop.id === sopId || !sopId) {
+        return {
+          ...sop,
+          currentStage: draftData.stage || sop.currentStage,
+          versions: [newVersionObj, ...(sop.versions || [])]
+        };
+      }
+      return sop;
+    }));
+
+    addNotification(
+      'DOCUMENT',
+      'New SOP Version Submitted for Review',
+      `Uploaded ${newVersionObj.fileName} for ${draftData.stage || 'SOP'} review.`,
+      '/dashboard/documents',
+      'COUNSELLOR'
+    );
+  };
+
+  const updateSopStage = (sopId, newStage, feedbackText) => {
+    setSopCycles(prev => prev.map(sop => {
+      if (sop.id === sopId) {
+        const updatedVersions = (sop.versions || []).map((v, i) => {
+          if (i === 0) {
+            return {
+              ...v,
+              counsellorFeedback: feedbackText || v.counsellorFeedback,
+              status: newStage === 'APPROVED_FINAL' ? 'APPROVED' : 'REVIEWED'
+            };
+          }
+          return v;
+        });
+        return {
+          ...sop,
+          currentStage: newStage,
+          versions: updatedVersions
+        };
+      }
+      return sop;
+    }));
+
+    addNotification(
+      'DOCUMENT',
+      `SOP Mentorship Update: Moved to ${newStage}`,
+      `Your counsellor updated your SOP stage: "${feedbackText || 'Stage completed.'}"`,
+      '/dashboard/documents',
+      'STUDENT'
+    );
+  };
+
+  // ─── Post-Admit Checklist (Spec Step 7) ───────────────────
+  const togglePostAdmitTask = (taskId) => {
+    setPostAdmitTasks(prev => prev.map(t => t.id === taskId ? { ...t, completed: !t.completed } : t));
+  };
+
+  const addPostAdmitTask = (taskData) => {
+    const newTask = {
+      id: `task_${Date.now()}`,
+      school: taskData.school || 'Admitted University',
+      title: taskData.title,
+      dueDate: taskData.dueDate || new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+      category: taskData.category || 'Visa',
+      completed: false
+    };
+    setPostAdmitTasks(prev => [...prev, newTask]);
+    return newTask;
+  };
+
+  const deletePostAdmitTask = (taskId) => {
+    setPostAdmitTasks(prev => prev.filter(t => t.id !== taskId));
+  };
+
+  // ─── Cohort Pipeline Bulk Actions (Spec Step 6) ───────────
+  const cohortBulkAction = (actionType, studentIds = [], payload = {}) => {
+    const targetSet = new Set(studentIds.length > 0 ? studentIds : pipelineStudents.map(s => s.studentId || s.id));
+    
+    if (actionType === 'MARK_MILESTONE_COMPLETE') {
+      const stageIdx = payload.stageIndex || 0;
+      setPipelineStudents(prev => prev.map(s => {
+        if (targetSet.has(s.studentId || s.id) && s.milestones && s.milestones[stageIdx]) {
+          const updatedM = [...s.milestones];
+          updatedM[stageIdx] = { ...updatedM[stageIdx], status: 'COMPLETED', completedDate: new Date().toISOString().split('T')[0] };
+          return { ...s, milestones: updatedM };
+        }
+        return s;
+      }));
+      addNotification(
+        'BROADCAST',
+        'Bulk Milestone Signoff',
+        `Counsellor signed off Stage ${stageIdx + 1} across ${targetSet.size} students.`,
+        '/dashboard/journey',
+        'STUDENT'
+      );
+      return { success: true, message: `Marked stage ${stageIdx + 1} complete for ${targetSet.size} students.` };
+    }
+
+    if (actionType === 'SEND_DEADLINE_REMINDER') {
+      const reminderMsg = payload.message || 'Friendly reminder: You have upcoming university admissions deadlines this week. Please review your roadmap tasks!';
+      targetSet.forEach(sid => {
+        addNotification(
+          'DEADLINE',
+          '⏰ Priority Deadline Reminder',
+          reminderMsg,
+          '/dashboard/journey',
+          'STUDENT',
+          sid
+        );
+      });
+      return { success: true, message: `Dispatched deadline alerts to ${targetSet.size} cohort students.` };
+    }
+
+    return { success: false, message: 'Unknown bulk action' };
+  };
+
   // ─── COUNSELLOR: Recommendations Dispatch ───────────────
   const sendUniversityRecommendation = (schoolName, program, category, description) => {
     const newRec = {
@@ -918,6 +1119,32 @@ export const DataProvider = ({ children }) => {
       `Your counsellor recommended ${schoolName} for ${program}. View it in your shortlist.`,
       '/dashboard/recommendations'
     );
+  };
+
+  // ─── STUDENT: Shortlist Management ────────────────────────
+  const addToShortlist = (item) => {
+    const newSl = {
+      id: `sl_${Date.now()}`,
+      name: item.name || item.university || item.title,
+      country: item.universityDetails?.country || item.country || item.region || 'Global',
+      tuition: item.universityDetails?.approxTuitionUSD || item.tuition || 'Varies',
+      deadline: item.universityDetails?.applicationDeadline || item.deadline || 'Rolling',
+      intake: item.universityDetails?.intake || item.intake || 'Upcoming Intake',
+      counsellorNotes: item.whyIRecommendThis || item.counsellorNotes || item.description || 'Saved by student for admissions review'
+    };
+    setShortlists(prev => [newSl, ...prev]);
+    addNotification(
+      'SHORTLIST',
+      `Saved to Shortlist: ${newSl.name}`,
+      `Successfully added ${newSl.name} to your shortlisted comparator.`,
+      '/dashboard/shortlist',
+      'STUDENT'
+    );
+    return newSl;
+  };
+
+  const removeFromShortlist = (id) => {
+    setShortlists(prev => prev.filter(item => item.id !== id));
   };
 
   // ─── COUNSELLOR: Availability Slots & Meeting Link ────────
@@ -1367,6 +1594,8 @@ export const DataProvider = ({ children }) => {
       updateAppointmentMeetingLink,
       recommendations: activeStudent?.recommendations || recommendations,
       shortlists,
+      addToShortlist,
+      removeFromShortlist,
       applications: activeStudent?.applications || applications,
       messages,
       sendMessage,
@@ -1391,6 +1620,25 @@ export const DataProvider = ({ children }) => {
       updateApplicationStatus,
       addAppointmentNote,
       addAppointment,
+
+      // SOP Mentorship Lifecycle (Spec Step 6)
+      sopCycles,
+      submitSopDraft,
+      updateSopStage,
+
+      // Post-Admit Checklist (Spec Step 7)
+      postAdmitTasks,
+      togglePostAdmitTask,
+      addPostAdmitTask,
+      deletePostAdmitTask,
+
+      // Roadmap Changelog & Templates (Spec Step 5)
+      roadmapChangelog,
+      addRoadmapChangelog,
+      applyRoadmapTemplate,
+
+      // Cohort Bulk Actions (Spec Step 6)
+      cohortBulkAction,
 
       // Static Data
       psychometricResults: DEFAULT_PSYCHOMETRICS,

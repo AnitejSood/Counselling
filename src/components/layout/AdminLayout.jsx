@@ -24,10 +24,16 @@ import {
 
 export const AdminLayout = ({ children }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const { logout, switchRole } = useAuth();
+  const { currentUser, logout, switchRole } = useAuth();
   const { verificationApps, escrowBookings, usersList } = useData();
   const location = useLocation();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (currentUser?.role && currentUser.role !== 'ADMIN') {
+      switchRole('ADMIN');
+    }
+  }, [currentUser?.role]);
 
   const [adminRole, setAdminRole] = useState(() => {
     return localStorage.getItem('matched_admin_role') || 'SUPER_ADMIN';

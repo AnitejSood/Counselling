@@ -3,9 +3,12 @@ import { useData } from '../../context/DataContext';
 import { Bookmark, Trash2, CheckCircle, ArrowRightLeft, Sparkles } from 'lucide-react';
 
 export const Shortlist = () => {
-  const { shortlists, removeFromShortlist, recommendations } = useData();
+  const { shortlists, removeFromShortlist, recommendations, counsellors, counsellorSwitchState } = useData();
   const [selectedForCompare, setSelectedForCompare] = useState([]);
   const [compareModalOpen, setCompareModalOpen] = useState(false);
+
+  const assignedCounsellor = counsellors?.find(c => c.id === counsellorSwitchState?.assignedCounsellorId) || counsellors?.[0];
+  const counsellorName = assignedCounsellor?.fullName || 'Assigned Counsellor';
 
   const toggleCompareSelect = (item) => {
     if (selectedForCompare.some(i => i.id === item.id)) {
@@ -74,7 +77,7 @@ export const Shortlist = () => {
                     <h3 className="text-base font-bold text-slate-900">{item.name}</h3>
                     <p className="text-xs text-slate-500">Tuition: {item.tuition} • Intake: {item.intake} • Deadline: {item.deadline}</p>
                     {item.counsellorNotes && (
-                      <p className="text-xs text-slate-700 italic mt-1">"Arti Sood: {item.counsellorNotes}"</p>
+                      <p className="text-xs text-slate-700 italic mt-1">"{counsellorName}: {item.counsellorNotes}"</p>
                     )}
                   </div>
                 </div>

@@ -47,7 +47,7 @@ export const DashboardOverview = () => {
   const [changeCounsellorOpen, setChangeCounsellorOpen] = useState(false);
   const [firstCallGuideOpen, setFirstCallGuideOpen] = useState(false);
 
-  const studentName = currentUser?.fullName || "Rohan Mehta";
+  const studentName = (currentUser?.role === 'STUDENT' ? currentUser.fullName : null) || studentProfile?.personalInfo?.fullName || "Rohan Mehta";
   const nextAppt = (appointments || []).find(a => a.status === 'UPCOMING') || appointments[0];
   const activeMilestone = (milestones || []).find(m => m.status === 'IN_PROGRESS') || milestones[0] || {
     stageNumber: 4,
@@ -60,11 +60,16 @@ export const DashboardOverview = () => {
   const currentCounsellor = counsellors.find(c => c.id === counsellorSwitchState?.currentCounsellorId) || counsellors[0];
 
   // 1-month switch calculation
-  const onboardedTime = new Date(counsellorSwitchState?.onboardedDate || '2026-09-01').getTime();
-  const now = new Date().getTime();
-  const daysElapsed = Math.floor((now - onboardedTime) / (1000 * 3600 * 24));
-  const daysRemaining = Math.max(0, 30 - daysElapsed);
-  const isSwitchEligible = daysRemaining > 0 && (counsellorSwitchState?.changeCount || 0) < 3;
+  const daysRemaining = (() => {
+    const onboardedDateStr = counsellorSwitchState?.onboardedDate;
+    if (!onboardedDateStr) return 18;
+    const onboardedTime = new Date(onboardedDateStr).getTime();
+    const now = new Date().getTime();
+    const daysElapsed = Math.floor((now - onboardedTime) / (1000 * 3600 * 24));
+    const rem = 30 - daysElapsed;
+    return rem > 0 ? rem : 18;
+  })();
+  const isSwitchEligible = daysRemaining > 0 && (counsellorSwitchState?.changesCount ?? counsellorSwitchState?.changeCount ?? 0) < 3;
 
   return (
     <div className="space-y-8 font-sans">
@@ -108,39 +113,41 @@ export const DashboardOverview = () => {
       </div>
 
       {/* 1-MONTH COUNSELLOR SWITCH GUARANTEE STATUS BANNER */}
-      <div className="bg-gradient-to-r from-amber-500/10 via-slate-900 to-[#0B2545] border border-amber-500/30 rounded-3xl p-6 text-white shadow-md flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+      <div className="bg-gradient-to-r from-amber-50/90 via-amber-100/40 to-amber-50/90 border border-amber-300/80 rounded-3xl p-6 shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-5">
         <div className="flex items-center gap-4">
-          <div className="w-12 h-12 rounded-2xl bg-[#CFA25E] text-[#0B2545] flex items-center justify-center shrink-0 shadow-md">
+          <div className="w-12 h-12 rounded-2xl bg-[#0B2545] text-[#CFA25E] flex items-center justify-center shrink-0 shadow-md">
             <ShieldCheck className="w-6 h-6" />
           </div>
           <div className="space-y-1">
-            <div className="flex items-center gap-2">
-              <span className="text-xs uppercase font-extrabold text-amber-300 tracking-wider">matchEd 1-Month Switch Guarantee:</span>
-              <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-400/20 text-amber-200 border border-amber-400/30">
+            <div className="flex items-center gap-2 flex-wrap">
+              <span className="text-xs uppercase font-black text-[#0B2545] tracking-wider">
+                matchEd 1-Month Switch Guarantee:
+              </span>
+              <span className="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-amber-200 text-amber-950 border border-amber-300 shadow-2xs">
                 {daysRemaining} Days Left
               </span>
             </div>
-            <p className="text-xs text-slate-200">
-              Current Mentor: <strong>{currentCounsellor?.fullName}</strong> (₹{currentCounsellor?.pricePerSession?.toLocaleString('en-IN')}) · Switches Used: {counsellorSwitchState?.changeCount || 0}/3
+            <p className="text-xs text-slate-800 font-medium">
+              Current Mentor: <strong className="font-bold text-[#0B2545]">{currentCounsellor?.fullName}</strong> (₹{currentCounsellor?.pricePerSession?.toLocaleString('en-IN')}) · Switches Used: <span className="font-bold text-[#0B2545]">{counsellorSwitchState?.changesCount ?? counsellorSwitchState?.changeCount ?? 0}/3</span>
             </p>
-            <p className="text-[11px] text-slate-400">
-              Change to any same-priced mentor for <strong>₹0 extra</strong>. If higher, pay difference; if lower, permitted with no refund.
+            <p className="text-[11px] text-slate-600 leading-relaxed">
+              Change to any same-priced mentor for <strong className="text-amber-900 font-bold">₹0 extra</strong> within your 30-day trial window.
             </p>
           </div>
         </div>
 
-        <div className="flex items-center gap-2.5 shrink-0">
+        <div className="flex items-center gap-2.5 shrink-0 w-full sm:w-auto justify-end">
           <button
             onClick={() => setFirstCallGuideOpen(true)}
-            className="px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/15 text-amber-200 border border-amber-300/30 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer"
+            className="px-4 py-2.5 rounded-xl bg-white hover:bg-slate-50 text-slate-800 border border-slate-300 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer shadow-2xs"
           >
-            <HelpCircle className="w-3.5 h-3.5" /> First Call Guide
+            <HelpCircle className="w-3.5 h-3.5 text-amber-600" /> First Call Guide
           </button>
           <button
             onClick={() => setChangeCounsellorOpen(true)}
-            className="px-4 py-2.5 rounded-xl bg-[#CFA25E] hover:bg-amber-400 text-[#0B2545] font-extrabold text-xs shadow-md transition flex items-center gap-1.5 cursor-pointer"
+            className="px-4 py-2.5 rounded-xl bg-[#0B2545] hover:bg-slate-800 text-white font-extrabold text-xs shadow-md transition flex items-center gap-1.5 cursor-pointer"
           >
-            <RefreshCw className="w-3.5 h-3.5" /> Switch Mentor (₹0)
+            <RefreshCw className="w-3.5 h-3.5 text-[#CFA25E]" /> Switch Mentor (₹0)
           </button>
         </div>
       </div>

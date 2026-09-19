@@ -436,11 +436,124 @@ export const MOCK_VERIFIED_PROOFS = [
 export const MOCK_ROADMAP_TEMPLATES = [
   {
     id: "tpl_uk_ug",
-    name: "UK Undergraduate Standard Timeline",
+    name: "UK Undergraduate (UCAS 5-Choice Standard)",
     track: "Study abroad admissions",
+    targetDegree: "Undergraduate (BSc / BEng / BA)",
+    description: "UCAS focused timeline including Personal Statement drafting, 5 university selections, predicted grades, and CAS visa clearance.",
     milestones: [
-      { title: "UCAS Account & Personal Statement Brainstorming", targetDays: 14 }
+      { stageNumber: 1, title: "Diagnostic Academic Profiling & Predicted Grades", dueDate: "2026-06-15", notes: "Review CBSE/IB scores and extracurriculars.", tasks: ["Submit Class 11/12 marksheets", "Identify academic strengths"] },
+      { stageNumber: 2, title: "UCAS 5-Choice Course Research & Budgeting", dueDate: "2026-07-05", notes: "Select 2 aspirational, 2 target, 1 safety UK university.", tasks: ["Research Russell Group entry requirements", "Calculate £ tuition & living fees"] },
+      { stageNumber: 3, title: "UCAS Personal Statement Mentorship (4,000 chars)", dueDate: "2026-08-20", notes: "Work through Story-Mining -> Structure -> Final Edit.", tasks: ["Draft narrative essay", "Obtain counsellor signoff"] },
+      { stageNumber: 4, title: "Teacher Reference & Academic LOR Finalization", dueDate: "2026-09-15", notes: "Ensure teacher recommendation letter meets UCAS guidelines.", tasks: ["Coordinate with school counsellor", "Upload verified LOR"] },
+      { stageNumber: 5, title: "Official UCAS Portal Submission & Fee Clearance", dueDate: "2026-10-15", notes: "Verify all 5 choices and submit before deadline.", tasks: ["Pay UCAS application fee", "Record 10-digit UCAS Personal ID"] },
+      { stageNumber: 6, title: "Offer Tracking & Firm / Insurance Selection", dueDate: "2027-01-20", notes: "Evaluate conditional offers and lock in Firm choice.", tasks: ["Compare conditional offer terms", "Select Firm & Insurance"] },
+      { stageNumber: 7, title: "CAS Issuance & UK Student Visa (VFS Biometrics)", dueDate: "2027-04-15", notes: "Complete 28-day financial fund maintenance and TB test.", tasks: ["Request CAS statement", "Book biometric visa appointment"] },
+      { stageNumber: 8, title: "Pre-Departure Briefing & Student Accommodation", dueDate: "2027-06-10", notes: "Book university halls and Forex student card.", tasks: ["Book on-campus dorm", "Attend pre-departure webinar"] }
     ]
+  },
+  {
+    id: "tpl_us_stem_pg",
+    name: "US STEM Master's & Postgraduate Track",
+    track: "Study abroad admissions",
+    targetDegree: "Postgraduate (MS / M.Eng)",
+    description: "Standard US graduate school admissions covering GRE/TOEFL, Technical Statement of Purpose, 3 LORs, and I-20 F1 visa processing.",
+    milestones: [
+      { stageNumber: 1, title: "Initial Diagnostic Profiling & Research Fit", dueDate: "2026-06-15", notes: "Audit GPA, technical projects, publications, and internships.", tasks: ["Complete Intake Form", "Audit research experience"] },
+      { stageNumber: 2, title: "Standardized Testing (GRE / TOEFL / IELTS)", dueDate: "2026-07-15", notes: "Target 325+ GRE and 105+ TOEFL for top 30 US programs.", tasks: ["Verify test score reports", "Send ETS official score recipients"] },
+      { stageNumber: 3, title: "Dream / Target / Safety Shortlisting (10-12 Schools)", dueDate: "2026-08-10", notes: "Calibrate faculty research alignment and OPT STEM job markets.", tasks: ["Shortlist 10 US universities", "Review faculty papers"] },
+      { stageNumber: 4, title: "Technical SOP Mentorship (Story -> Structure -> Polish)", dueDate: "2026-09-01", notes: "3-stage review cycle highlighting technical impact.", tasks: ["Submit Draft v1", "Incorporate mentor line-edits", "Finalize bespoke versions"] },
+      { stageNumber: 5, title: "Academic & Professional LOR Management (3 Recommenders)", dueDate: "2026-09-25", notes: "Draft recommender bullet points for professors and managers.", tasks: ["Send LOR packets to professors", "Confirm submission via portals"] },
+      { stageNumber: 6, title: "Graduate Application Submissions (Priority Deadlines)", dueDate: "2026-11-15", notes: "Complete individual college portals (Slate / ApplyWeb).", tasks: ["Submit all 10 applications", "Record application receipt IDs"] },
+      { stageNumber: 7, title: "Admissions Verification & Scholarship Negotiations", dueDate: "2027-02-15", notes: "Upload admitted offer letters for verified platform seal.", tasks: ["Verify admit decisions", "Submit fellowship appeals"] },
+      { stageNumber: 8, title: "I-20 Form Request & US F1 Visa Interview Prep", dueDate: "2027-04-30", notes: "Pay SEVIS I-901 fee and schedule US Embassy interview.", tasks: ["Obtain official I-20", "Mock visa interview with counsellor"] },
+      { stageNumber: 9, title: "Pre-Departure Logistics, Immunizations & Housing", dueDate: "2027-06-30", notes: "Health insurance, immunization clearance, and flights.", tasks: ["Submit university immunization form", "Book student flight tickets"] }
+    ]
+  },
+  {
+    id: "tpl_athletic_scholarship",
+    name: "International Athletic Scholarship (NCAA / NAIA)",
+    track: "International athletic scholarships",
+    targetDegree: "Undergraduate / Graduate Athletics",
+    description: "Specialized sports recruitment track covering NCAA Eligibility Center, athletic highlight reels, coach outreach, and scholarship offers.",
+    milestones: [
+      { stageNumber: 1, title: "NCAA Eligibility Center Registration & ID", dueDate: "2026-06-20", notes: "Create official NCAA account and register amateurism status.", tasks: ["Register at eligibilitycenter.org", "Upload high school transcript"] },
+      { stageNumber: 2, title: "Athletic Highlight Video Reel & Stat Portfolio", dueDate: "2026-07-20", notes: "Produce 3-5 minute competition footage highlight reel.", tasks: ["Compile verified competition stats", "Upload HD highlight reel to YouTube/Hudl"] },
+      { stageNumber: 3, title: "Division 1 / Division 2 Head Coach Outreach Campaign", dueDate: "2026-08-25", notes: "Send bespoke emails to 30+ collegiate head coaches.", tasks: ["Draft athletic resume & coach pitch", "Initiate coach outreach emails"] },
+      { stageNumber: 4, title: "Coach Calls & Official Campus Visit Coordination", dueDate: "2026-10-15", notes: "Prepare for virtual coach interviews and visit offers.", tasks: ["Conduct mock coach interview", "Review athletic budget and roster spots"] },
+      { stageNumber: 5, title: "National Letter of Intent (NLI) & Scholarship Signing", dueDate: "2026-12-10", notes: "Review grant-in-aid contract and tuition scholarship percentage.", tasks: ["Execute National Letter of Intent", "Confirm scholarship allocation"] },
+      { stageNumber: 6, title: "Academic Admission & I-20 Student-Athlete Visa", dueDate: "2027-03-30", notes: "Coordinate with university athletic department compliance officers.", tasks: ["Clear university admissions", "Obtain athletic sponsored I-20"] }
+    ]
+  },
+  {
+    id: "tpl_india_domestic",
+    name: "Domestic India Admissions (CUET / Top Private / Central)",
+    track: "Domestic India admissions",
+    targetDegree: "Undergraduate (BA / B.Tech / BBA)",
+    description: "Indian university admissions journey covering CUET registration, domain subjects, Ashoka/Plaksha/NMIMS private applications, and seat allocation.",
+    milestones: [
+      { stageNumber: 1, title: "Career Stream Selection & Diagnostic Test", dueDate: "2026-06-20", notes: "Align Class 12 subjects with target Indian college degrees.", tasks: ["Take RIASEC career test", "Determine private vs central college mix"] },
+      { stageNumber: 2, title: "CUET Samarth Portal Registration & Subject Choice", dueDate: "2026-08-10", notes: "Select general test, language, and core domain subjects.", tasks: ["Register on cuet.samarth.ac.in", "Verify syllabus coverage"] },
+      { stageNumber: 3, title: "Private University Applications (Ashoka, Plaksha, Krea)", dueDate: "2026-10-15", notes: "Complete holistic Round 1 applications and essays.", tasks: ["Write personal statement", "Upload extracurricular certificates"] },
+      { stageNumber: 4, title: "Interviews, On-the-Spot Assessments & Offers", dueDate: "2026-12-20", notes: "Prepare for liberal arts and tech interview rounds.", tasks: ["Mock interview with counsellor", "Review conditional offers"] },
+      { stageNumber: 5, title: "CSAS Common Seat Allocation & Seat Freeze", dueDate: "2027-05-15", notes: "Preference filling for Delhi University central colleges.", tasks: ["Submit college preference list", "Freeze or float round allocation"] }
+    ]
+  }
+];
+
+export const INITIAL_SOP_CYCLES = [
+  {
+    id: "sop_101",
+    studentId: "std_101",
+    currentStage: "STRUCTURAL_REVIEW", // STORY_MINING, STRUCTURAL_REVIEW, LINE_EDIT, APPROVED_FINAL
+    title: "Master of Science in Computer Science SOP",
+    targetUniversities: ["Carnegie Mellon University", "Imperial College London", "University of Toronto"],
+    versions: [
+      {
+        version: "v1.0",
+        stage: "STORY_MINING",
+        fileName: "Rohan_Mehta_SOP_StoryMining_v1.docx",
+        submittedAt: "2026-07-18",
+        studentNotes: "Initial draft focusing on undergraduate distributed systems project and open-source contributions.",
+        counsellorFeedback: "Strong technical foundation. Shift paragraph 2 focus from coursework to leadership on the compiler optimization project. Needs more specific connection to CMU faculty.",
+        status: "REVIEWED"
+      },
+      {
+        version: "v2.0",
+        stage: "STRUCTURAL_REVIEW",
+        fileName: "Rohan_Mehta_SOP_StructuralReview_v2.docx",
+        submittedAt: "2026-08-02",
+        studentNotes: "Revised paragraph 2 as discussed; integrated Professor research papers from CMU and Imperial.",
+        counsellorFeedback: "Structure is vastly improved. Flow between undergraduate research and post-grad career goals is compelling. Next step: line-by-line stylistic tightening and word-count reduction.",
+        status: "IN_REVIEW"
+      }
+    ]
+  }
+];
+
+export const INITIAL_POST_ADMIT_TASKS = [
+  { id: "task_1", school: "Imperial College London", title: "Accept Official Offer & Pay Seat Deposit", dueDate: "2026-08-30", category: "Acceptance", completed: true },
+  { id: "task_2", school: "Imperial College London", title: "Request & Verify CAS (Confirmation of Acceptance for Studies)", dueDate: "2026-09-05", category: "Visa", completed: true },
+  { id: "task_3", school: "Imperial College London", title: "Prepare Bank Solvency Certificate & 28-Day Holding Period", dueDate: "2026-09-12", category: "Finance", completed: false },
+  { id: "task_4", school: "Imperial College London", title: "Book UK Student Visa Biometrics Appointment (VFS Global)", dueDate: "2026-09-20", category: "Visa", completed: false },
+  { id: "task_5", school: "Imperial College London", title: "Apply for Imperial On-Campus Graduate Housing", dueDate: "2026-09-25", category: "Accommodation", completed: false },
+  { id: "task_6", school: "Imperial College London", title: "Complete TB Screening & NHS Health Surcharge Payment", dueDate: "2026-09-28", category: "Health", completed: false },
+  { id: "task_7", school: "Imperial College London", title: "Attend matchEd Pre-Departure Cultural & Forex Briefing", dueDate: "2026-10-05", category: "Pre-Departure", completed: false }
+];
+
+export const INITIAL_ROADMAP_CHANGELOG = [
+  {
+    id: "log_1",
+    date: "2026-08-10",
+    counsellorName: "Arti Sood",
+    summary: "Adjusted Stage 4 & 5 timelines following GRE score verification (328/340).",
+    affectedStages: ["Stage 4: SOP Draft 1", "Stage 5: University Shortlisting"]
+  },
+  {
+    id: "log_2",
+    date: "2026-07-28",
+    counsellorName: "Arti Sood",
+    summary: "Initial 10-stage customized roadmap published after intake evaluation.",
+    affectedStages: ["All 10 Stages"]
   }
 ];
 
@@ -480,6 +593,22 @@ export const INITIAL_DOCUMENTS = [
 ];
 
 export const INITIAL_APPOINTMENTS = [
+  {
+    id: "apt_100",
+    studentId: "std_101",
+    studentName: "Rohan Mehta",
+    counsellorId: "counsellor_01",
+    counsellorName: "Arti Sood",
+    consultationType: "1-on-1 Comprehensive Profile Audit",
+    date: "2026-07-25",
+    timeSlot: "02:00 PM",
+    durationMinutes: 45,
+    status: "COMPLETED",
+    meetingMode: "Google Meet Video Call",
+    meetingLink: "https://meet.google.com/matched-past-audit",
+    studentNotes: "Discussed research publications and GRE preparation roadmap.",
+    counsellorNotes: "Session conducted successfully. Student advised to start SOP outline."
+  },
   {
     id: "apt_101",
     studentId: "std_101",

@@ -1,9 +1,18 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useMemo } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { useData } from '../../context/DataContext';
-import { Send, Paperclip, FileText, CheckCheck, X, User } from 'lucide-react';
+import { Send, Paperclip, FileText, CheckCheck, X, User, Hash } from 'lucide-react';
 import { getInitials } from '../../lib/formatters';
 import { EmptyState } from '../../components/ui/EmptyState';
+
+const MILESTONE_CHANNELS = [
+  'All Messages',
+  'Stage 1: Profile & Diagnostic',
+  'Stage 4: SOP & Essays',
+  'Stage 6: University Applications',
+  'Stage 8: Visa & Pre-Departure',
+  'General Discussion'
+];
 
 export const CounsellorMessaging = () => {
   const { currentUser } = useAuth();
@@ -13,9 +22,11 @@ export const CounsellorMessaging = () => {
     activeStudent, 
     pipelineStudents, 
     activeStudentId, 
-    switchActiveStudent 
+    switchActiveStudent,
+    counsellors 
   } = useData();
 
+  const [activeChannel, setActiveChannel] = useState('All Messages');
   const [inputText, setInputText] = useState('');
   const [attachedFile, setAttachedFile] = useState(null);
   const endRef = useRef(null);
@@ -25,13 +36,17 @@ export const CounsellorMessaging = () => {
     endRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
+  const counsellorSenderName = currentUser?.fullName || counsellors?.[0]?.fullName || 'Admissions Counsellor';
+
   const handleSend = (e) => {
     e.preventDefault();
     if (!inputText.trim() && !attachedFile) return;
+
+    const channelPrefix = activeChannel !== 'All Messages' ? `[${activeChannel}] ` : '';
     sendMessage(
       'COUNSELLOR',
-      currentUser?.fullName || 'Arti Sood',
-      inputText.trim(),
+      counsellorSenderName,
+      `${channelPrefix}${inputText.trim()}`,
       attachedFile ? attachedFile.name : null
     );
     setInputText('');
@@ -44,6 +59,15 @@ export const CounsellorMessaging = () => {
       setAttachedFile(file);
     }
   };
+
+  const filteredMessages = useMemo(() => {
+    if (activeChannel === 'All Messages') return messages;
+    return messages.filter(m => {
+      const content = m.content || m.text || '';
+      return content.toLowerCase().includes(activeChannel.toLowerCase().slice(0, 7)) ||
+             content.toLowerCase().includes(activeChannel.toLowerCase());
+    });
+  }, [messages, activeChannel]);
 
   return (
     <div className="w-full flex flex-col h-[calc(100vh-8rem)] gap-0 font-sans">
@@ -70,31 +94,53 @@ export const CounsellorMessaging = () => {
           </div>
         </div>
 
-        <div className="flex items-center gap-2">
-          <span className="text-xs text-slate-500 font-medium">Chat With:</span>
-          <select
-            value={activeStudentId}
-            onChange={(e) => switchActiveStudent(e.target.value)}
-            className="px-3 py-1.5 rounded-xl bg-slate-50 border border-slate-200 text-xs font-bold text-slate-900 focus:outline-none cursor-pointer"
-          >
-            {(pipelineStudents || []).map(s => (
-              <option key={s.studentId || s.id} value={s.studentId || s.id}>
-                👤 {s.fullName || s.name}
-              </option>
-            ))}
-          </select>
+        <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2">
+            <span className="text-xs text-slate-500 font-medium">Chat With:</span>
+            <select
+              value={activeStudentId}
+              onChange={(e) => switchActiveStudent(e.target.value)}
+              className="px-3 py-1.5 rounded-xl bg-slate-50 border border-slate-200 text-xs font-bold text-slate-900 focus:outline-none cursor-pointer"
+            >
+              {(pipelineStudents || []).map(s => (
+                <option key={s.studentId || s.id} value={s.studentId || s.id}>
+                  👤 {s.fullName || s.name}
+                </option>
+              ))}
+            </select>
+          </div>
         </div>
+      </div>
+
+      {/* Milestone Scoped Channel Switcher (Spec Step 6) */}
+      <div className="bg-slate-100 border-x border-slate-200 px-5 py-2.5 flex items-center gap-2 overflow-x-auto text-xs font-bold no-scrollbar">
+        <span className="text-[10px] uppercase tracking-wider text-slate-500 shrink-0 flex items-center gap-1">
+          <Hash className="w-3 h-3 text-[#CFA25E]" /> Threads:
+        </span>
+        {MILESTONE_CHANNELS.map(ch => (
+          <button
+            key={ch}
+            onClick={() => setActiveChannel(ch)}
+            className={`px-3 py-1 rounded-xl text-xs whitespace-nowrap transition cursor-pointer ${
+              activeChannel === ch
+                ? 'bg-[#0B2545] text-white shadow-xs'
+                : 'bg-white text-slate-700 hover:bg-slate-200 border border-slate-200'
+            }`}
+          >
+            {ch}
+          </button>
+        ))}
       </div>
 
       {/* Messages Feed */}
       <div className="flex-1 overflow-y-auto bg-slate-50 border-x border-slate-200 px-5 py-5 space-y-4 min-h-0">
-        {(!messages || messages.length === 0) ? (
+        {(!filteredMessages || filteredMessages.length === 0) ? (
           <EmptyState
-            title="No messages yet"
-            message={`Start a conversation with ${activeStudent?.fullName || 'your student'}.`}
+            title={`No messages in ${activeChannel}`}
+            message={`Start a conversation with ${activeStudent?.fullName || 'your student'} on ${activeChannel}.`}
           />
         ) : (
-          messages.map((msg) => {
+          filteredMessages.map((msg) => {
             const isMe = msg.senderRole === 'COUNSELLOR';
             const msgText = msg.content || msg.text || '';
 
@@ -176,7 +222,7 @@ export const CounsellorMessaging = () => {
 
         <input
           type="text"
-          placeholder={`Message ${activeStudent?.fullName || 'student'}...`}
+          placeholder={`Message ${activeStudent?.fullName || 'student'} on #${activeChannel}...`}
           value={inputText}
           onChange={(e) => setInputText(e.target.value)}
           className="flex-1 px-4 py-2.5 rounded-xl border border-slate-200 text-xs focus:outline-none focus:border-[#0B2545]"
