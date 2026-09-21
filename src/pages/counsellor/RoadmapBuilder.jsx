@@ -146,7 +146,7 @@ export const RoadmapBuilder = () => {
     <div className="space-y-8 w-full font-sans">
       <PageHeader
         eyebrow="matchEd Tabular Roadmap Engine"
-        title={`Student Roadmap Table — ${studentProfile?.personalInfo?.fullName || 'Rohan Mehta'}`}
+        title={`Student Roadmap Table: ${studentProfile?.personalInfo?.fullName || 'Rohan Mehta'}`}
         subtitle="Manage student journey milestones in a structured table with drag-and-drop reordering. Assign standardized psychometric tests directly to their portal."
         action={
           <div className="flex items-center gap-2 flex-wrap">

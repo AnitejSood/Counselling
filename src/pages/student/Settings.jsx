@@ -249,7 +249,7 @@ export const Settings = () => {
               Permanently delete your matchEd account, profile, and all associated data. This action cannot be undone.
             </p>
             <button
-              onClick={() => alert('Account deletion request submitted. (Demo — not executed)')}
+              onClick={() => alert('Account deletion request submitted. (Demo mode: not executed)')}
               className="btn btn-danger mt-2 text-[11px]"
             >
               <AlertTriangle className="w-3.5 h-3.5" /> Request Account Deletion

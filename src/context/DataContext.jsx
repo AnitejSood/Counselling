@@ -64,12 +64,12 @@ const DataContext = createContext();
 
 export const DataProvider = ({ children }) => {
   const [platformConfig, setPlatformConfig] = useState(() => {
-    const saved = localStorage.getItem('aspiranthq_platform_config');
+    const saved = localStorage.getItem('matched_platform_config') || localStorage.getItem('aspiranthq_platform_config');
     return saved ? JSON.parse(saved) : PLATFORM_CONFIG;
   });
 
   const [counsellors, setCounsellors] = useState(() => {
-    const saved = localStorage.getItem('aspiranthq_counsellors');
+    const saved = localStorage.getItem('matched_counsellors') || localStorage.getItem('aspiranthq_counsellors');
     return saved ? JSON.parse(saved) : MOCK_COUNSELLORS;
   });
 
@@ -77,22 +77,22 @@ export const DataProvider = ({ children }) => {
   const [isCompareOpen, setIsCompareOpen] = useState(false);
 
   const [reviews, setReviews] = useState(() => {
-    const saved = localStorage.getItem('aspiranthq_reviews');
+    const saved = localStorage.getItem('matched_reviews') || localStorage.getItem('aspiranthq_reviews');
     return saved ? JSON.parse(saved) : MOCK_REVIEWS;
   });
 
   const [verificationApps, setVerificationApps] = useState(() => {
-    const saved = localStorage.getItem('aspiranthq_verification_apps');
+    const saved = localStorage.getItem('matched_verification_apps') || localStorage.getItem('aspiranthq_verification_apps');
     return saved ? JSON.parse(saved) : MOCK_VERIFICATION_APPLICATIONS;
   });
 
   const [escrowBookings, setEscrowBookings] = useState(() => {
-    const saved = localStorage.getItem('aspiranthq_escrow_bookings');
+    const saved = localStorage.getItem('matched_escrow_bookings') || localStorage.getItem('aspiranthq_escrow_bookings');
     return saved ? JSON.parse(saved) : MOCK_ESCROW_BOOKINGS;
   });
 
   const [pipelineStudents, setPipelineStudents] = useState(() => {
-    const saved = localStorage.getItem('aspiranthq_pipeline_students');
+    const saved = localStorage.getItem('matched_pipeline_students') || localStorage.getItem('aspiranthq_pipeline_students');
     if (saved) {
       try {
         const parsed = JSON.parse(saved);
@@ -105,45 +105,45 @@ export const DataProvider = ({ children }) => {
   });
 
   const [adminStudentsList, setAdminStudentsList] = useState(() => {
-    const saved = localStorage.getItem('aspiranthq_admin_students');
+    const saved = localStorage.getItem('matched_admin_students') || localStorage.getItem('aspiranthq_admin_students');
     return saved ? JSON.parse(saved) : MOCK_PIPELINE_STUDENTS;
   });
 
   const [verifiedProofs, setVerifiedProofs] = useState(() => {
-    const saved = localStorage.getItem('aspiranthq_verified_proofs');
+    const saved = localStorage.getItem('matched_verified_proofs') || localStorage.getItem('aspiranthq_verified_proofs');
     return saved ? JSON.parse(saved) : MOCK_VERIFIED_PROOFS;
   });
 
   const [usersList, setUsersList] = useState(() => {
-    const saved = localStorage.getItem('aspiranthq_users_list');
+    const saved = localStorage.getItem('matched_users_list') || localStorage.getItem('aspiranthq_users_list');
     return saved ? JSON.parse(saved) : MOCK_USERS_LIST;
   });
 
   const [subscriptionLogs, setSubscriptionLogs] = useState(() => {
-    const saved = localStorage.getItem('aspiranthq_subscription_logs');
+    const saved = localStorage.getItem('matched_subscription_logs') || localStorage.getItem('aspiranthq_subscription_logs');
     return saved ? JSON.parse(saved) : MOCK_SUBSCRIPTION_LOGS;
   });
 
   const [studentProfile, setStudentProfile] = useState(() => {
-    const saved = localStorage.getItem('aspiranthq_student_profile');
+    const saved = localStorage.getItem('matched_student_profile') || localStorage.getItem('aspiranthq_student_profile');
     return saved ? JSON.parse(saved) : INITIAL_STUDENT_PROFILE;
   });
 
   // Counsellor Services & Packages State
   const [counsellorServices, setCounsellorServices] = useState(() => {
-    const saved = localStorage.getItem('aspiranthq_counsellor_services');
+    const saved = localStorage.getItem('matched_counsellor_services') || localStorage.getItem('aspiranthq_counsellor_services');
     return saved ? JSON.parse(saved) : INITIAL_COUNSELLOR_SERVICES;
   });
 
   // Active Student Selection for Counsellor Portal Adaptation
   const [activeStudentId, setActiveStudentId] = useState(() => {
-    const saved = localStorage.getItem('aspiranthq_active_student_id');
+    const saved = localStorage.getItem('matched_active_student_id') || localStorage.getItem('aspiranthq_active_student_id');
     return saved ? JSON.parse(saved) : 'std_101';
   });
 
   const switchActiveStudent = (id) => {
     setActiveStudentId(id);
-    localStorage.setItem('aspiranthq_active_student_id', JSON.stringify(id));
+    localStorage.setItem('matched_active_student_id', JSON.stringify(id));
   };
 
   const addCounsellorService = (serviceData) => {
@@ -153,30 +153,30 @@ export const DataProvider = ({ children }) => {
     };
     const updated = [...counsellorServices, newSrv];
     setCounsellorServices(updated);
-    localStorage.setItem('aspiranthq_counsellor_services', JSON.stringify(updated));
+    localStorage.setItem('matched_counsellor_services', JSON.stringify(updated));
   };
 
   const updateCounsellorService = (id, updatedFields) => {
     const updated = counsellorServices.map(s => s.id === id ? { ...s, ...updatedFields } : s);
     setCounsellorServices(updated);
-    localStorage.setItem('aspiranthq_counsellor_services', JSON.stringify(updated));
+    localStorage.setItem('matched_counsellor_services', JSON.stringify(updated));
   };
 
   const deleteCounsellorService = (id) => {
     const updated = counsellorServices.filter(s => s.id !== id);
     setCounsellorServices(updated);
-    localStorage.setItem('aspiranthq_counsellor_services', JSON.stringify(updated));
+    localStorage.setItem('matched_counsellor_services', JSON.stringify(updated));
   };
 
   // Psychometric Assigned Tests (Counsellor assigns 2 or 3 of 5 tests)
   const [assignedPsychometrics, setAssignedPsychometrics] = useState(() => {
-    const saved = localStorage.getItem('aspiranthq_assigned_psychometrics');
+    const saved = localStorage.getItem('matched_assigned_psychometrics') || localStorage.getItem('aspiranthq_assigned_psychometrics');
     return saved ? JSON.parse(saved) : ['riasec', 'bigFive', 'learningStyle'];
   });
 
   // Support Tickets State
   const [supportTickets, setSupportTickets] = useState(() => {
-    const saved = localStorage.getItem('aspiranthq_support_tickets');
+    const saved = localStorage.getItem('matched_support_tickets') || localStorage.getItem('aspiranthq_support_tickets');
     return saved ? JSON.parse(saved) : [
       { id: 'ticket_101', userRole: 'STUDENT', userName: 'Rohan Mehta', userEmail: 'rohan.mehta@example.com', subject: 'Document review timeline', message: 'How long does SOP verification take?', status: 'OPEN', createdAt: '2026-08-25' }
     ];
@@ -184,7 +184,7 @@ export const DataProvider = ({ children }) => {
 
   // Counsellor Blog Posts linked to Resources
   const [counsellorBlogs, setCounsellorBlogs] = useState(() => {
-    const saved = localStorage.getItem('aspiranthq_counsellor_blogs');
+    const saved = localStorage.getItem('matched_counsellor_blogs') || localStorage.getItem('aspiranthq_counsellor_blogs');
     return saved ? JSON.parse(saved) : INITIAL_RESOURCES;
   });
 
@@ -285,7 +285,7 @@ export const DataProvider = ({ children }) => {
 
   // Student account settings state
   const [studentSettings, setStudentSettings] = useState(() => {
-    const saved = localStorage.getItem('aspiranthq_student_settings');
+    const saved = localStorage.getItem('matched_student_settings') || localStorage.getItem('aspiranthq_student_settings');
     return saved ? JSON.parse(saved) : {
       emailNotifications: true,
       whatsappAlerts: false,
@@ -348,27 +348,27 @@ export const DataProvider = ({ children }) => {
         }
         return c;
       });
-      localStorage.setItem('aspiranthq_counsellors', JSON.stringify(updated));
+      localStorage.setItem('matched_counsellors', JSON.stringify(updated));
       return updated;
     });
   };
 
   // Persist to localStorage
   useEffect(() => {
-    localStorage.setItem('aspiranthq_platform_config', JSON.stringify(platformConfig));
-    localStorage.setItem('aspiranthq_counsellors', JSON.stringify(counsellors));
-    localStorage.setItem('aspiranthq_reviews', JSON.stringify(reviews));
-    localStorage.setItem('aspiranthq_verification_apps', JSON.stringify(verificationApps));
-    localStorage.setItem('aspiranthq_escrow_bookings', JSON.stringify(escrowBookings));
-    localStorage.setItem('aspiranthq_pipeline_students', JSON.stringify(pipelineStudents));
-    localStorage.setItem('aspiranthq_verified_proofs', JSON.stringify(verifiedProofs));
-    localStorage.setItem('aspiranthq_users_list', JSON.stringify(usersList));
-    localStorage.setItem('aspiranthq_subscription_logs', JSON.stringify(subscriptionLogs));
-    localStorage.setItem('aspiranthq_student_profile', JSON.stringify(studentProfile));
-    localStorage.setItem('aspiranthq_student_settings', JSON.stringify(studentSettings));
-    localStorage.setItem('aspiranthq_assigned_psychometrics', JSON.stringify(assignedPsychometrics));
-    localStorage.setItem('aspiranthq_support_tickets', JSON.stringify(supportTickets));
-    localStorage.setItem('aspiranthq_counsellor_blogs', JSON.stringify(counsellorBlogs));
+    localStorage.setItem('matched_platform_config', JSON.stringify(platformConfig));
+    localStorage.setItem('matched_counsellors', JSON.stringify(counsellors));
+    localStorage.setItem('matched_reviews', JSON.stringify(reviews));
+    localStorage.setItem('matched_verification_apps', JSON.stringify(verificationApps));
+    localStorage.setItem('matched_escrow_bookings', JSON.stringify(escrowBookings));
+    localStorage.setItem('matched_pipeline_students', JSON.stringify(pipelineStudents));
+    localStorage.setItem('matched_verified_proofs', JSON.stringify(verifiedProofs));
+    localStorage.setItem('matched_users_list', JSON.stringify(usersList));
+    localStorage.setItem('matched_subscription_logs', JSON.stringify(subscriptionLogs));
+    localStorage.setItem('matched_student_profile', JSON.stringify(studentProfile));
+    localStorage.setItem('matched_student_settings', JSON.stringify(studentSettings));
+    localStorage.setItem('matched_assigned_psychometrics', JSON.stringify(assignedPsychometrics));
+    localStorage.setItem('matched_support_tickets', JSON.stringify(supportTickets));
+    localStorage.setItem('matched_counsellor_blogs', JSON.stringify(counsellorBlogs));
     localStorage.setItem('matched_peer_mentors', JSON.stringify(peerMentors));
     localStorage.setItem('matched_addon_services', JSON.stringify(addonServices));
     localStorage.setItem('matched_booked_addons', JSON.stringify(bookedAddons));

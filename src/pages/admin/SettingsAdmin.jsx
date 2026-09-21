@@ -30,7 +30,7 @@ export const SettingsAdmin = () => {
     headquartersCity: platformConfig?.headquarters?.city || 'Chandigarh',
     headquartersAddress: platformConfig?.headquarters?.address || 'SCO 15-16, Sector 17C, Chandigarh',
     headquartersPhone: platformConfig?.headquarters?.phone || '+91 172 401 8800',
-    headquartersEmail: platformConfig?.headquarters?.email || 'support@matchEd.in',
+    headquartersEmail: platformConfig?.headquarters?.email || 'support@matched.company',
     defaultCommissionRate: platformConfig?.defaultCommissionRate || 15,
     escrowHoldDays: platformConfig?.escrowHoldDays || 30,
     maxBoostDays: platformConfig?.maxBoostDays || 30,

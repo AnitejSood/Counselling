@@ -40,7 +40,7 @@ export const FirstCallGuideModal = ({ isOpen, onClose, counsellorName = 'Your Co
               <li><strong>Academic marksheets:</strong> Have your semester marksheets or 10th/12th percentages handy.</li>
               <li><strong>Test status:</strong> Note down your current or target IELTS/TOEFL and GRE/GMAT scores.</li>
               <li><strong>Target intake & countries:</strong> Clarify whether you are aiming for Fall 2026, Spring 2027, etc.</li>
-              <li><strong>Annual budget:</strong> Have a realistic family budget range in mind (e.g. ₹30L–₹50L/year).</li>
+              <li><strong>Annual budget:</strong> Have a realistic family budget range in mind (e.g. ₹30L to ₹50L per year).</li>
             </ul>
           </div>
 
@@ -78,7 +78,7 @@ export const FirstCallGuideModal = ({ isOpen, onClose, counsellorName = 'Your Co
               <span>4. Next Steps After the Call</span>
             </div>
             <p className="text-slate-600 leading-relaxed">
-              Within 24–48 hours post-call, your counsellor will publish your customized <strong>Tabular Journey Roadmap</strong> and dispatch your first <strong>University Recommendations</strong> right into your matchEd portal.
+              Within 24 to 48 hours post-call, your counsellor will publish your customized <strong>Tabular Journey Roadmap</strong> and dispatch your first <strong>University Recommendations</strong> right into your matchEd portal.
             </p>
           </div>
 

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import {
@@ -16,7 +16,7 @@ const DEMO_ACCOUNTS = [
     redirect: '/dashboard',
     color: 'indigo',
     icon: User,
-    description: 'View the student portal — profile, journey, applications',
+    description: 'View the student portal: profile, journey, and applications',
     tag: 'Student Portal'
   },
   {
@@ -75,13 +75,22 @@ export const Login = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const redirectUrl = searchParams.get('redirect');
+  const roleParam = (searchParams.get('role') || 'STUDENT').toUpperCase();
+  const initialAccount = DEMO_ACCOUNTS.find(a => a.role === roleParam) || DEMO_ACCOUNTS[0];
 
-  const [selectedRole, setSelectedRole] = useState('STUDENT');
-  const [email, setEmail] = useState('rohan.mehta@example.com');
-  const [password, setPassword] = useState('password123');
+  const [selectedRole, setSelectedRole] = useState(initialAccount.role);
+  const [email, setEmail] = useState(initialAccount.email);
+  const [password, setPassword] = useState(initialAccount.password);
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const account = DEMO_ACCOUNTS.find(a => a.role === roleParam) || DEMO_ACCOUNTS[0];
+    setSelectedRole(account.role);
+    setEmail(account.email);
+    setPassword(account.password);
+  }, [roleParam]);
 
   const selected = DEMO_ACCOUNTS.find(a => a.role === selectedRole);
   const colors = COLOR_MAP[selected.color];
@@ -123,7 +132,7 @@ export const Login = () => {
           <div className="bg-white/90 px-5 py-3 rounded-2xl shadow-xl backdrop-blur-md mb-3 inline-block">
             <MatchEdLogo size="lg" />
           </div>
-          <p className="text-slate-300 text-sm font-medium">India's Verified Admissions & Mentorship Marketplace</p>
+          <p className="text-slate-300 text-sm font-medium">Marketplace FOR Verified Admissions & Mentorship</p>
         </div>
 
         {/* Card */}

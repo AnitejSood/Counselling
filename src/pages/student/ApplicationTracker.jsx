@@ -429,7 +429,7 @@ export const ApplicationTracker = () => {
         <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
           <div className="bg-white rounded-3xl p-6 sm:p-7 max-w-md w-full shadow-2xl border border-slate-200 animate-in zoom-in-95 duration-150">
             <h3 className="font-extrabold text-slate-900 text-base mb-1">
-              Report Status Update — {flagDiscrepancyModal}
+              Report Status Update: {flagDiscrepancyModal}
             </h3>
             <p className="text-xs text-slate-600 mb-4">
               If your application status differs from your counsellor's records or an offer letter was issued, alert your mentor immediately.

@@ -72,7 +72,7 @@ export const CounsellorBookings = () => {
     date: '2026-08-15',
     timeSlot: '11:00 AM',
     durationMinutes: 45,
-    meetingMode: 'Online — Google Meet',
+    meetingMode: 'Online (Google Meet)',
     meetingLink: '',
     studentNotes: ''
   });
