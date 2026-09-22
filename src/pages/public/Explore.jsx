@@ -158,7 +158,7 @@ export const Explore = () => {
                     <option value="Canada">Canada</option>
                     <option value="Australia">Australia</option>
                     <option value="New Zealand">New Zealand</option>
-                    <option value="Domestic — India">Domestic — India</option>
+                    <option value="Domestic (India)">Domestic (India)</option>
                   </select>
                 </div>
 
@@ -188,7 +188,7 @@ export const Explore = () => {
                   >
                     <option value="">Any Budget</option>
                     <option value="Under ₹15,000/session">Under ₹15,000 / package</option>
-                    <option value="₹15,000–25,000">₹15,000–25,000 / package</option>
+                    <option value="₹15,000 - ₹25,000">₹15,000 to ₹25,000 / package</option>
                     <option value="₹25,000+">₹25,000+ / package</option>
                   </select>
                 </div>

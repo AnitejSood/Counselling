@@ -55,8 +55,8 @@ export const Contact = () => {
                 </div>
                 <div>
                   <strong className="text-white block text-xs mb-0.5">Corporate & Support Email:</strong>
-                  <span>{platformConfig?.contactEmail || "support@matched.com"}</span>
-                  <span className="block text-[10px] text-amber-200/80 mt-0.5">Founders: {platformConfig?.founderEmail || "founders@matched.com"}</span>
+                  <span>{platformConfig?.contactEmail || "support@matched.company"}</span>
+                  <span className="block text-[10px] text-amber-200/80 mt-0.5">Founders: {platformConfig?.founderEmail || "founders@matched.company"}</span>
                 </div>
               </div>
 
@@ -161,6 +161,7 @@ export const Contact = () => {
                       <option>Counsellor Verification & Listing</option>
                       <option>Escrow Payment Holding Policy</option>
                       <option>Institutional Partnership</option>
+                      <option>Other</option>
                     </select>
                   </div>
                 </div>

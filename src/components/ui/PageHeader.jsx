@@ -1,13 +1,13 @@
 import React from 'react';
 
 /**
- * PageHeader — Reusable branded page section header
+ * PageHeader: Reusable branded page section header
  * Props:
- *   eyebrow  {string}  — small uppercase label above title
- *   title    {string}  — main page title (h1)
- *   subtitle {string}  — optional description below title
- *   action   {React.ReactNode} — optional right-side button/element
- *   className {string} — extra classes on wrapper
+ *   eyebrow  {string}  : small uppercase label above title
+ *   title    {string}  : main page title (h1)
+ *   subtitle {string}  : optional description below title
+ *   action   {React.ReactNode} : optional right-side button/element
+ *   className {string} : extra classes on wrapper
  */
 export const PageHeader = ({ eyebrow, title, subtitle, action, className = '' }) => (
   <div className={`flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4 ${className}`}>

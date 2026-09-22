@@ -70,7 +70,7 @@ export const CounsellorApply = () => {
   const [newTrackInput, setNewTrackInput] = useState('');
 
   const [form, setForm] = useState({
-    // Step 1 — Personal
+    // Step 1: Personal
     fullName: '',
     email: '',
     phone: '',
@@ -78,14 +78,14 @@ export const CounsellorApply = () => {
     state: '',
     photoFile: '',
 
-    // Step 2 — Tracks & Bio
+    // Step 2: Tracks & Bio
     tracks: ['Study abroad admissions (US, UK, Canada)'],
     experienceYears: 5,
     claimedPlacements: 120,
     subscriptionTier: 'PRO', // FREE or PRO
     bio: '',
 
-    // Step 3 — Links & Credentials
+    // Step 3: Links & Credentials
     credentials: '',
     linkedinUrl: '',
     websiteUrl: '',
@@ -93,7 +93,7 @@ export const CounsellorApply = () => {
     additionalLinks: [{ label: '', url: '' }],
     sampleFileName: '',
 
-    // Step 4 — Front & Back ID
+    // Step 4: Front & Back ID
     govIdType: 'Aadhaar Card',
     govIdNumber: '',
     frontIdUrl: '',

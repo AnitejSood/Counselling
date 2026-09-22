@@ -90,6 +90,8 @@ export const Footer = () => {
               <li><Link to="/dashboard" className="hover:text-[#CFA25E] transition">Student Portal</Link></li>
               <li><Link to="/counsellor" className="hover:text-[#CFA25E] transition">Counsellor Portal</Link></li>
               <li><Link to="/contact" className="hover:text-[#CFA25E] transition">Support & Contact</Link></li>
+              <li><Link to="/privacy" className="hover:text-[#CFA25E] transition">Privacy Policy</Link></li>
+              <li><Link to="/terms" className="hover:text-[#CFA25E] transition">Terms of Service</Link></li>
             </ul>
           </div>
 
@@ -105,7 +107,7 @@ export const Footer = () => {
               </div>
               <div className="flex items-center gap-2.5">
                 <Mail className="w-4 h-4 text-[#CFA25E] shrink-0" />
-                <a href={`mailto:${platformConfig?.contactEmail || 'support@matched.com'}`} className="hover:text-white transition">{platformConfig?.contactEmail || "support@matched.com"}</a>
+                <a href={`mailto:${platformConfig?.contactEmail || 'support@matched.company'}`} className="hover:text-white transition">{platformConfig?.contactEmail || "support@matched.company"}</a>
               </div>
               <div className="flex items-center gap-2.5">
                 <Phone className="w-4 h-4 text-[#CFA25E] shrink-0" />
@@ -127,7 +129,7 @@ export const Footer = () => {
         {/* Bottom Rights */}
         <div className="pt-8 flex flex-col sm:flex-row justify-between items-center text-xs text-slate-400 gap-4">
           <p>© 2026 {platformConfig?.companyName || "matchEd Platform Technologies Pvt. Ltd."} All Rights Reserved. Chandigarh HQ, India.</p>
-          <div className="flex gap-6">
+          <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6">
             <button
               onClick={handleOpenEscrowTerms}
               className="hover:text-[#CFA25E] text-slate-300 font-medium transition cursor-pointer underline-offset-4 hover:underline"

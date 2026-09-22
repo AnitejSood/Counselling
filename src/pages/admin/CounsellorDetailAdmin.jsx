@@ -20,7 +20,7 @@ export const CounsellorDetailAdmin = () => {
         </Link>
         <div>
           <span className="text-xs font-bold uppercase tracking-wider text-purple-600">Internal Team Background Desk</span>
-          <h1 className="text-2xl font-black text-slate-900">{counsellor.fullName} — Deep-Dive Background View</h1>
+          <h1 className="text-2xl font-black text-slate-900">{counsellor.fullName}: Deep-Dive Background View</h1>
         </div>
       </div>
 

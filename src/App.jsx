@@ -18,6 +18,8 @@ import { BookConsultation } from './pages/public/BookConsultation';
 import { CounsellorApply } from './pages/public/CounsellorApply';
 import { Resources } from './pages/public/Resources';
 import { Contact } from './pages/public/Contact';
+import { PrivacyPolicy } from './pages/public/PrivacyPolicy';
+import { TermsOfService } from './pages/public/TermsOfService';
 
 // Auth Pages
 import { Login } from './pages/auth/Login';
@@ -108,6 +110,8 @@ export default function App() {
             <Route path="/apply-counsellor" element={<PublicLayout><CounsellorApply /></PublicLayout>} />
             <Route path="/resources" element={<PublicLayout><Resources /></PublicLayout>} />
             <Route path="/contact" element={<PublicLayout><Contact /></PublicLayout>} />
+            <Route path="/privacy" element={<PublicLayout><PrivacyPolicy /></PublicLayout>} />
+            <Route path="/terms" element={<PublicLayout><TermsOfService /></PublicLayout>} />
 
             {/* Auth Routes */}
             <Route path="/login" element={<PublicLayout><Login /></PublicLayout>} />

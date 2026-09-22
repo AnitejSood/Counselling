@@ -4,8 +4,8 @@ export const PLATFORM_CONFIG = {
   companyName: "matchEd",
   tagline: "Precision Mentor Matching & Student Success Platform",
   headquarters: "Plot 18, Commercial Hub, Sector 17-C, Chandigarh 160017, India",
-  contactEmail: "support@matched.com",
-  founderEmail: "founders@matched.com",
+  contactEmail: "support@matched.company",
+  founderEmail: "founders@matched.company",
   helplinePhone: "+91 172 456 7890",
   secondaryPhone: "+91 98888 77665",
   defaultCommissionRate: 0.10, // 10% default platform fee
@@ -73,7 +73,7 @@ export const MOCK_COUNSELLORS = [
     responseTime: "< 4 hours",
     pricePerSession: 12000,
     priceCategory: "Under ₹15,000/session",
-    destinations: ["Domestic — India"],
+    destinations: ["Domestic (India)"],
     track: "Domestic India admissions",
     tags: ["CUET Prep", "Ashoka & Krea Essays", "IIT/NIT Counselling"],
     isSponsored: false,
@@ -239,8 +239,8 @@ export const MOCK_PIPELINE_STUDENTS = [
       { id: "app_101_2", universityName: "Imperial College London", courseName: "MS in Artificial Intelligence", country: "United Kingdom", applicationDeadline: "2026-07-30", status: "Admitted" }
     ],
     recommendations: [
-      { id: "rec_101_1", name: "Stanford University — M.S. Artificial Intelligence", category: "Dream School", description: "World-class NLP & computer vision research labs." },
-      { id: "rec_101_2", name: "University of Toronto — M.Sc. Applied Computing", category: "Target School", description: "Top AI faculty with 3-year PGWP work visa." }
+      { id: "rec_101_1", name: "Stanford University: M.S. Artificial Intelligence", category: "Dream School", description: "World-class NLP & computer vision research labs." },
+      { id: "rec_101_2", name: "University of Toronto: M.Sc. Applied Computing", category: "Target School", description: "Top AI faculty with 3-year PGWP work visa." }
     ]
   },
   {
@@ -276,8 +276,8 @@ export const MOCK_PIPELINE_STUDENTS = [
       { id: "app_102_1", universityName: "London Business School", courseName: "Masters in Financial Analysis", country: "United Kingdom", applicationDeadline: "2026-08-25", status: "Under Review" }
     ],
     recommendations: [
-      { id: "rec_102_1", name: "INSEAD — Master in Management", category: "Dream School", description: "Top global business school with dual Europe & Asia campus." },
-      { id: "rec_102_2", name: "HEC Paris — MSc International Finance", category: "Target School", description: "#1 ranked finance master's program in Europe." }
+      { id: "rec_102_1", name: "INSEAD: Master in Management", category: "Dream School", description: "Top global business school with dual Europe & Asia campus." },
+      { id: "rec_102_2", name: "HEC Paris: MSc International Finance", category: "Target School", description: "Top-ranked finance master's program in Europe." }
     ]
   },
   {
@@ -314,7 +314,7 @@ export const MOCK_PIPELINE_STUDENTS = [
       { id: "app_103_2", universityName: "University of Melbourne", courseName: "Bachelor of Computer Science", country: "Australia", applicationDeadline: "2026-08-01", status: "Admitted" }
     ],
     recommendations: [
-      { id: "rec_103_1", name: "University of Sydney — B.S. Advanced Computing", category: "Safety School", description: "Direct admission with $10k Merit Scholarship." }
+      { id: "rec_103_1", name: "University of Sydney: B.S. Advanced Computing", category: "Safety School", description: "Direct admission with $10k Merit Scholarship." }
     ]
   },
   {
@@ -349,8 +349,8 @@ export const MOCK_PIPELINE_STUDENTS = [
       { id: "app_104_1", universityName: "TU Munich", courseName: "M.Sc. Robotics & Autonomous Systems", country: "Germany", applicationDeadline: "2026-09-30", status: "In Progress" }
     ],
     recommendations: [
-      { id: "rec_104_1", name: "RWTH Aachen — M.Sc. Mechanical Engineering", category: "Dream School", description: "#1 ranked engineering university in Germany with zero tuition fees." },
-      { id: "rec_104_2", name: "TU Delft — M.Sc. Robotics", category: "Target School", description: "Leading European polytechnic with strong industry ties." }
+      { id: "rec_104_1", name: "RWTH Aachen: M.Sc. Mechanical Engineering", category: "Dream School", description: "Top-ranked engineering university in Germany with zero tuition fees." },
+      { id: "rec_104_2", name: "TU Delft: M.Sc. Robotics", category: "Target School", description: "Leading European polytechnic with strong industry ties." }
     ]
   }
 ];
@@ -730,7 +730,7 @@ export const INITIAL_NOTIFICATIONS = [
     id: "notif_3",
     type: "DOCUMENT",
     title: "Document review completed",
-    message: "Your B.Tech Semester 1-6 Marksheets have been reviewed. Status: Under Review — counsellor feedback pending.",
+    message: "Your B.Tech Semester 1-6 Marksheets have been reviewed. Status: Under Review (counsellor feedback pending).",
     link: "/dashboard/documents",
     read: true,
     createdAt: "2026-08-03T14:00:00Z"
@@ -738,7 +738,7 @@ export const INITIAL_NOTIFICATIONS = [
   {
     id: "notif_4",
     type: "ADMISSION",
-    title: "🎉 Admission confirmed — Imperial College London",
+    title: "🎉 Admission confirmed: Imperial College London",
     message: "Your offer letter for MS AI at Imperial College London has been verified by matchEd. Congratulations!",
     link: "/dashboard/applications",
     read: true,

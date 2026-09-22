@@ -2,12 +2,12 @@ import React from 'react';
 import { InboxIcon } from 'lucide-react';
 
 /**
- * EmptyState — Clean empty list state
+ * EmptyState: Clean empty list state
  * Props:
- *   icon     {React.ComponentType} — Lucide icon component
+ *   icon     {React.ComponentType} : Lucide icon component
  *   title    {string}
  *   message  {string}
- *   action   {React.ReactNode} — optional CTA element
+ *   action   {React.ReactNode} : optional CTA element
  */
 export const EmptyState = ({ icon: Icon = InboxIcon, title = 'Nothing here yet', message, action }) => (
   <div className="flex flex-col items-center justify-center py-16 px-4 text-center animate-fade-in">

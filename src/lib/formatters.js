@@ -19,7 +19,7 @@ export const formatINR = (amount) => {
  * @returns {string} e.g. "Aug 10, 2026"
  */
 export const formatDate = (dateStr) => {
-  if (!dateStr) return '—';
+  if (!dateStr) return '-';
   const date = new Date(dateStr);
   if (isNaN(date.getTime())) return dateStr;
   return date.toLocaleDateString('en-IN', {

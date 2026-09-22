@@ -41,7 +41,7 @@ export const StudyInIndia = () => {
           Strategic Guidance for Top Indian Institutions
         </h1>
         <p className="text-slate-600 text-base leading-relaxed">
-          From CUET preference optimization to Ashoka essays and IPMAT interview drills—get expert domestic admission mentorship.
+          From CUET preference optimization to Ashoka essays and IPMAT interview drills, get expert guidance for admissions across top Indian universities.
         </p>
       </div>
 
